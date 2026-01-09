@@ -127,20 +127,22 @@
   }
 
   // lightbox 全体でスワイプを取る
-  lightbox.addEventListener("touchstart", (e) => {
+  lightbox.addEventListener("touchstart", (e) => {if (scale > 1.01 || e.touches.length > 1) return;
+
     if (!lightbox.classList.contains("open")) return;
     touchStartX = e.changedTouches[0].screenX;
     touchStartY = e.changedTouches[0].screenY;
   }, { passive: true });
 
-  lightbox.addEventListener("touchend", (e) => {
+  lightbox.addEventListener("touchend", (e) => {if (scale > 1.01) return;
+
     if (!lightbox.classList.contains("open")) return;
     touchEndX = e.changedTouches[0].screenX;
     touchEndY = e.changedTouches[0].screenY;
     handleSwipe();
   }, { passive: true });
   // --- Zoom (double click / double tap) + drag to pan ---
-    // --- Zoom: double tap/click + pinch zoom + pan ---
+   // --- Zoom: double tap/click + pinch zoom + pan ---
   let scale = 1;
   let panX = 0, panY = 0;
 
@@ -228,9 +230,7 @@
   }
 
   // touch start: pan or pinch
-
-
-  lightboxImg.addEventListener("touchstart", (e) => {  if (scale > 1.01 || e.touches.length > 1) return;
+  lightboxImg.addEventListener("touchstart", (e) => {
     if (e.touches.length === 2) {
       // begin pinch
       pinching = true;
@@ -285,8 +285,7 @@
     }
   }, { passive: false });
 
-  lightboxImg.addEventListener("touchend", (e) => {if (scale > 1.01) return;
-
+  lightboxImg.addEventListener("touchend", (e) => {
     if (e.touches.length < 2) pinching = false;
     if (e.touches.length === 0) isPanning = false;
 
@@ -306,7 +305,6 @@
     resetZoom();
     _showAt2(index);
   };
-
 </script>
 
 
