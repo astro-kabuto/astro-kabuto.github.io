@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>育て方 | Astro Kabuto</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- Header（index / gallery と共通） -->
+    <header class="header">
+      <a class="brand" href="index.html">
+        <div class="logo"></div>
+        <div>
+          <h1>Astro Kabuto</h1>
+          <p>兜丸の成長記録サイト</p>
+        </div>
+      </a>
+
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="growth-log.html">Growth Log</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="care.html">Care</a>
+        <a href="about.html">About</a>
+      </nav>
+    </header>
+
+    <!-- Page Title -->
+    <section class="hero">
+      <h2>兜丸の育て方</h2>
+      <p class="sub">
+        Astrophytum asterias を健康に育てるための管理メモ。
+        実体験ベースで随時更新。
+      </p>
+    </section>
+<section class="card toc">
+  <h3>目次</h3>
+  <ul>
+    <li><a href="#spring">春（3〜5月）</a></li>
+    <li><a href="#summer">夏（6〜8月）</a></li>
+    <li><a href="#autumn">秋（9〜11月）</a></li>
+    <li><a href="#winter">冬（12〜2月）</a></li>
+    <li><a href="#soil">用土</a></li>
+    <li><a href="#mistakes">よくある失敗</a></li>
+  </ul>
+</section>
+
+    <!-- 春 -->
+    <section class="card" id="spring">
+
+        <img src="images/care/spring.jpg" alt="春の兜丸" class="care-img">
+      <h3>春（3〜5月）</h3>
+      <p>休眠から目覚める時期。徐々に水を再開。</p>
+      <ul>
+        <li>水やり：少量から開始</li>
+        <li>日照：午前中の直射はOK</li>
+        <li>注意点：急な水やりは根腐れ注意</li>
+      </ul>
+    </section>
+
+    <!-- 夏 -->
+    <section class="card" id="summer">
+
+  <img src="images/care/summer.jpg" alt="夏の管理中の兜丸" class="care-img">
+
+  <h3>夏（6〜8月）</h3>
+  <p>
+    高温期は成長が鈍りやすく、蒸れと根腐れに注意。
+    無理に成長させず、守りの管理を意識する。
+  </p>
+  <ul>
+    <li>水やり：基本は控えめ、猛暑日は断水</li>
+    <li>遮光：40〜60%</li>
+    <li>注意点：風通しが悪いと腐りやすい</li>
+  </ul>
+</section>
+
+
+    <!-- 秋 -->
+    <section class="card" id="autumn">
+
+        <img src="images/care/autumn.jpg" alt="秋の管理中の兜丸" class="care-img">
+
+  <h3>秋（9〜11月）</h3>
+  <p>
+    気温が下がり始め、兜丸が再び動きやすくなる時期。
+    夏のダメージ回復と、冬越しに向けた体作りを意識する。
+  </p>
+  <ul>
+    <li>水やり：気温を見ながら徐々に回数を増やす</li>
+    <li>日照：できるだけしっかり当てる</li>
+    <li>注意点：夜間の冷え込みと急な断水</li>
+  </ul>
+</section>
+
+
+    <!-- 冬 -->
+    <section class="card" id="winter">
+
+        <img src="images/care/winter.jpg" alt="冬越し中の兜丸" class="care-img">
+
+  <h3>冬（12〜2月）</h3>
+  <p>
+    兜丸はほぼ休眠状態。
+    成長させようとせず、無事に冬を越すことを最優先にする。
+  </p>
+  <ul>
+    <li>水やり：基本は断水（暖房下でも与えない）</li>
+    <li>温度：5℃以上を目安に管理</li>
+    <li>置き場：風を避け、乾燥気味に</li>
+    <li>注意点：低温多湿は致命的</li>
+  </ul>
+</section>
+
+
+    <!-- 用土 -->
+    <section class="card" id="soil">
+
+  <img src="images/care/soil.jpg" alt="兜丸の用土配合例" class="care-img">
+
+  <h3>用土</h3>
+  <p>
+    排水性を最優先にした用土構成。
+    栽培環境に合わせて微調整している。
+  </p>
+  <ul>
+    <li>赤玉（小粒）：〇%</li>
+    <li>軽石：〇%</li>
+    <li>鹿沼土：〇%</li>
+  </ul>
+</section>
+
+
+    <!-- 失敗例 -->
+   <section class="card" id="mistakes">
+
+  <h3>よくある失敗（実体験）</h3>
+  <ul>
+    <li>
+  夏に水をやりすぎて根が弱った（2024年）
+  <br><small class="muted">→ 以後、猛暑日は断水に変更</small>
+</li>
+
+    <li>遮光が足りず、直射日光で白点が焼けた</li>
+  </ul>
+</section>
+
+    <div class="footer">
+      © <span id="y"></span> Astro Kabuto
+    </div>
+
+  </div>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
+

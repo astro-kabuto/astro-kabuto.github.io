@@ -20,14 +20,22 @@
     <p class="sub">兜丸の写真記録</p>
 
     <div class="grid">
-      <img class="gimg"src="images/gallery/2026-01-09_kabuto (1).jpg">
-      <img class="gimg"src="images/gallery/2026-01-09_kabuto (2).jpg">
-      <img class="gimg"src="images/gallery/2026-01-09_kabuto (3).jpg">
-      <img class="gimg"src="images/gallery/2026-01-09_kabuto (4).jpg">
-      <img class="gimg"src="images/gallery/2026-01-09_kabuto (5).jpg">
-      <img class="gimg"src="images/gallery/2026-01-09_kabuto (6).jpg">
-      <img class="gimg"src="images/gallery/2026-01-09_kabuto (7).jpg">
-      <img class="gimg"src="images/gallery/2026-01-09_kabuto (8).jpg">
+      <img class="gimg"
+     src="images/gallery/2026-01-09_kabuto (1).jpg"
+     alt="兜丸"
+     loading="lazy" decoding="async"
+     data-cultivar="兜丸（Astrophytum asterias）"
+     data-date="2026-01-09"
+     data-author="kiji">
+
+
+     <img class="gimg" src="images/gallery/2026-01-09_kabuto (2).jpg" alt="" loading="lazy" decoding="async">
+      <img class="gimg" src="images/gallery/2026-01-09_kabuto (3).jpg" alt="" loading="lazy" decoding="async">
+      <img class="gimg" src="images/gallery/2026-01-09_kabuto (4).jpg" alt="" loading="lazy" decoding="async">
+      <img class="gimg" src="images/gallery/2026-01-09_kabuto (5).jpg" alt="" loading="lazy" decoding="async">
+      <img class="gimg" src="images/gallery/2026-01-09_kabuto (6).jpg" alt="" loading="lazy" decoding="async">
+      <img class="gimg" src="images/gallery/2026-01-09_kabuto (7).jpg" alt="" loading="lazy" decoding="async">
+      <img class="gimg" src="images/gallery/2026-01-09_kabuto (8).jpg" alt="" loading="lazy" decoding="async">
     </div>
 
     <p style="margin-top:40px;">
@@ -57,103 +65,17 @@
   const images = Array.from(document.querySelectorAll(".gimg"));
   let currentIndex = -1;
 
-  function showAt(index) {
-    if (!images.length) return;
-    currentIndex = (index + images.length) % images.length; // ループ
-    const img = images[currentIndex];
-    lightboxImg.src = img.src;
-    lightboxCap.textContent = img.dataset.caption || "";
-  }
-
-  function openLightbox(index) {
-    lightbox.classList.add("open");
-    lightbox.setAttribute("aria-hidden", "false");
-    showAt(index);
-  }
-
-  function closeLightbox() {
-    lightbox.classList.remove("open");
-    lightbox.setAttribute("aria-hidden", "true");
-    lightboxImg.src = "";
-    currentIndex = -1;
-  }
-
-  function next() { if (currentIndex !== -1) showAt(currentIndex + 1); }
-  function prev() { if (currentIndex !== -1) showAt(currentIndex - 1); }
-
-  images.forEach((img, i) => {
-    img.addEventListener("click", () => openLightbox(i));
-  });
-
-  nextBtn.addEventListener("click", next);
-  prevBtn.addEventListener("click", prev);
-  closeBtn.addEventListener("click", closeLightbox);
-
-  // 背景クリックで閉じる
-  lightbox.addEventListener("click", (e) => {
-    if (e.target === lightbox) closeLightbox();
-  });
-
-  // 画像の左右クリックで移動（左=prev / 右=next）
-  lightboxImg.addEventListener("click", (e) => {
-    const rect = lightboxImg.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    if (x < rect.width / 2) prev();
-    else next();
-  });
-
-  // キーボード操作
-  document.addEventListener("keydown", (e) => {
-    if (!lightbox.classList.contains("open")) return;
-    if (e.key === "Escape") closeLightbox();
-    if (e.key === "ArrowRight") next();
-    if (e.key === "ArrowLeft") prev();
-  });
-  // --- Swipe (mobile) ---
-  let touchStartX = 0;
-  let touchStartY = 0;
-  let touchEndX = 0;
-  let touchEndY = 0;
-
-  function handleSwipe() {
-    const dx = touchEndX - touchStartX;
-    const dy = touchEndY - touchStartY;
-
-    // 縦スクロールを邪魔しない（横スワイプが強いときだけ反応）
-    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
-
-    if (dx < 0) next();   // 左にスワイプ → 次へ
-    else prev();          // 右にスワイプ → 前へ
-  }
-
-  // lightbox 全体でスワイプを取る
-  lightbox.addEventListener("touchstart", (e) => {if (scale > 1.01 || e.touches.length > 1) return;
-
-    if (!lightbox.classList.contains("open")) return;
-    touchStartX = e.changedTouches[0].screenX;
-    touchStartY = e.changedTouches[0].screenY;
-  }, { passive: true });
-
-  lightbox.addEventListener("touchend", (e) => {if (scale > 1.01) return;
-
-    if (!lightbox.classList.contains("open")) return;
-    touchEndX = e.changedTouches[0].screenX;
-    touchEndY = e.changedTouches[0].screenY;
-    handleSwipe();
-  }, { passive: true });
-  // --- Zoom (double click / double tap) + drag to pan ---
-    // --- Zoom: double tap/click + pinch zoom + pan ---
+  // ===== Zoom state (showAt/closeLightbox より前に必要) =====
   let scale = 1;
   let panX = 0, panY = 0;
 
   let isPanning = false;
   let startX = 0, startY = 0;
 
-  // pinch
   let pinching = false;
   let pinchStartDist = 0;
   let pinchStartScale = 1;
-  let pinchImgX = 0, pinchImgY = 0; // image-space point under fingers
+  let pinchImgX = 0, pinchImgY = 0;
 
   const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 
@@ -168,87 +90,208 @@
     applyTransform();
   }
 
-  function toggleZoom() {
-    if (scale > 1.01) resetZoom();
-    else {
-      scale = 2;
-      panX = 0; panY = 0;
-      applyTransform();
-    }
+  // ===== Gallery navigation =====
+  function showAt(index) {
+    if (!images.length) return;
+
+    resetZoom(); // 画像切り替え時にズーム解除
+
+    currentIndex = (index + images.length) % images.length;
+    const img = images[currentIndex];
+    lightboxImg.src = img.src;
+    const c = img.dataset.cultivar || "";
+const d = img.dataset.date || "";
+const a = img.dataset.author || "";
+lightboxCap.textContent = [c, d, a ? `by ${a}` : ""].filter(Boolean).join(" / ");
+
   }
 
-  // PC: ダブルクリックでズーム
-  lightboxImg.addEventListener("dblclick", (e) => {
-    e.preventDefault();
-    toggleZoom();
+  function openLightbox(index) {
+    lightbox.classList.add("open");
+    lightbox.setAttribute("aria-hidden", "false");
+    showAt(index);
+  }
+
+  function closeLightbox() {
+    resetZoom(); // 閉じる時もズーム解除
+    lightbox.classList.remove("open");
+    lightbox.setAttribute("aria-hidden", "true");
+    lightboxImg.src = "";
+    currentIndex = -1;
+  }
+
+  function next() { if (currentIndex !== -1) showAt(currentIndex + 1); }
+  function prev() { if (currentIndex !== -1) showAt(currentIndex - 1); }
+
+  images.forEach((img, i) => img.addEventListener("click", () => openLightbox(i)));
+  nextBtn.addEventListener("click", next);
+  prevBtn.addEventListener("click", prev);
+  closeBtn.addEventListener("click", closeLightbox);
+
+  // 背景クリックで閉じる
+  lightbox.addEventListener("click", (e) => {
+    if (e.target === lightbox) closeLightbox();
   });
 
-  // Mobile: ダブルタップでズーム
-  let lastTap = 0;
-  lightboxImg.addEventListener("touchend", (e) => {
-    const now = Date.now();
-    if (now - lastTap < 300 && !pinching) {
-      e.preventDefault();
-      toggleZoom();
-      lastTap = 0;
-    } else {
-      lastTap = now;
-    }
-  }, { passive: false });
-
-  // pan (PC)
-  lightboxImg.addEventListener("mousedown", (e) => {
-    if (scale <= 1.01) return;
-    isPanning = true;
-    startX = e.clientX - panX;
-    startY = e.clientY - panY;
+  // 画像の左右クリックで移動（ズーム中は無効）
+  lightboxImg.addEventListener("click", (e) => {
+    if (scale > 1.01) return;
+    const rect = lightboxImg.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    if (x < rect.width / 2) prev();
+    else next();
   });
 
-  document.addEventListener("mousemove", (e) => {
-    if (!isPanning) return;
-    panX = e.clientX - startX;
-    panY = e.clientY - startY;
-    applyTransform();
+  // キーボード操作（ズーム中は左右無効）
+  document.addEventListener("keydown", (e) => {
+    if (!lightbox.classList.contains("open")) return;
+    if (e.key === "Escape") closeLightbox();
+    if (scale > 1.01) return;
+    if (e.key === "ArrowRight") next();
+    if (e.key === "ArrowLeft") prev();
   });
 
-  document.addEventListener("mouseup", () => {
-    isPanning = false;
-  });
+  // ===== Swipe (mobile) : ズーム中/2本指は無効 =====
+  let touchStartX = 0, touchStartY = 0, touchEndX = 0, touchEndY = 0;
 
-  // helper for pinch distance
+  function handleSwipe() {
+    const dx = touchEndX - touchStartX;
+    const dy = touchEndY - touchStartY;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+    if (dx < 0) next();
+    else prev();
+  }
+
+  lightbox.addEventListener("touchstart", (e) => {
+    if (!lightbox.classList.contains("open")) return;
+    if (scale > 1.01 || e.touches.length > 1) return;
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  lightbox.addEventListener("touchend", (e) => {
+    if (!lightbox.classList.contains("open")) return;
+    if (scale > 1.01) return;
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+    handleSwipe();
+  }, { passive: true });
+function toggleZoomAt(x, y) {
+  const rect = lightboxImg.getBoundingClientRect();
+  const px = x - rect.left;
+  const py = y - rect.top;
+
+  if (scale > 1.01) {
+    resetZoom();
+    return;
+  }
+
+  const newScale = 2;
+  const imgX = (px - panX) / scale;
+  const imgY = (py - panY) / scale;
+
+  scale = newScale;
+  panX = px - imgX * scale;
+  panY = py - imgY * scale;
+
+  applyTransform();
+}
+
+// ダブルクリックでズーム
+lightboxImg.addEventListener("dblclick", (e) => {
+  e.preventDefault();
+  toggleZoomAt(e.clientX, e.clientY);
+});
+// スマホ：ダブルタップでズーム
+let lastTap = 0;
+lightboxImg.addEventListener("touchend", (e) => {
+  if (!lightbox.classList.contains("open")) return;
+  if (e.changedTouches.length !== 1) return;
+  if (pinching) return;          // ピンチ中は無視
+  if (scale > 1.01 && isPanning) return; // パン中も無視
+
+  const now = Date.now();
+  const dt = now - lastTap;
+
+  if (dt < 280 && dt > 30) {
+    const t = e.changedTouches[0];
+    toggleZoomAt(t.clientX, t.clientY);
+    lastTap = 0;
+  } else {
+    lastTap = now;
+  }
+}, { passive: true });
+
+// マウスホイールでズーム
+lightboxImg.addEventListener("wheel", (e) => {
+  if (!lightbox.classList.contains("open")) return;
+
+  e.preventDefault();
+
+  const rect = lightboxImg.getBoundingClientRect();
+  const px = e.clientX - rect.left;
+  const py = e.clientY - rect.top;
+
+  const imgX = (px - panX) / scale;
+  const imgY = (py - panY) / scale;
+
+  const zoomFactor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
+  scale = clamp(scale * zoomFactor, 1, 6);
+
+  panX = px - imgX * scale;
+  panY = py - imgY * scale;
+
+  applyTransform();
+
+  // ★ここは「戻りすぎる」なら消してOK
+  // if (scale <= 1.01) resetZoom();
+}, { passive: false });
+
+// ドラッグで移動（PC）
+let mousePanning = false;
+let mouseStartX = 0, mouseStartY = 0;
+
+lightboxImg.addEventListener("mousedown", (e) => {
+  if (scale <= 1.01) return;
+  mousePanning = true;
+  mouseStartX = e.clientX - panX;
+  mouseStartY = e.clientY - panY;
+});
+
+document.addEventListener("mousemove", (e) => {
+  if (!mousePanning) return;
+  panX = e.clientX - mouseStartX;
+  panY = e.clientY - mouseStartY;
+  applyTransform();
+});
+
+document.addEventListener("mouseup", () => {
+  mousePanning = false;
+});
+
+  // ===== Pinch zoom + pan =====
   function dist(t1, t2) {
     const dx = t2.clientX - t1.clientX;
     const dy = t2.clientY - t1.clientY;
     return Math.hypot(dx, dy);
   }
-
   function mid(t1, t2) {
-    return {
-      x: (t1.clientX + t2.clientX) / 2,
-      y: (t1.clientY + t2.clientY) / 2
-    };
+    return { x: (t1.clientX + t2.clientX) / 2, y: (t1.clientY + t2.clientY) / 2 };
   }
 
-  // touch start: pan or pinch
   lightboxImg.addEventListener("touchstart", (e) => {
     if (e.touches.length === 2) {
-      // begin pinch
       pinching = true;
       isPanning = false;
 
-      const t1 = e.touches[0];
-      const t2 = e.touches[1];
-
+      const t1 = e.touches[0], t2 = e.touches[1];
       pinchStartDist = dist(t1, t2);
       pinchStartScale = scale;
 
-      // compute image-space point under midpoint (keep it fixed while zooming)
       const m = mid(t1, t2);
       pinchImgX = (m.x - panX) / scale;
       pinchImgY = (m.y - panY) / scale;
-
     } else if (e.touches.length === 1 && scale > 1.01) {
-      // begin pan
       pinching = false;
       isPanning = true;
       startX = e.touches[0].clientX - panX;
@@ -256,31 +299,22 @@
     }
   }, { passive: true });
 
-  // touch move: pan or pinch
   lightboxImg.addEventListener("touchmove", (e) => {
     if (pinching && e.touches.length === 2) {
-      e.preventDefault(); // important (we set passive:false)
-      const t1 = e.touches[0];
-      const t2 = e.touches[1];
+      e.preventDefault();
+      const t1 = e.touches[0], t2 = e.touches[1];
+      const ratio = dist(t1, t2) / pinchStartDist;
 
-      const d = dist(t1, t2);
-      const ratio = d / pinchStartDist;
+      scale = clamp(pinchStartScale * ratio, 1, 4);
 
-      // scale update
-      const newScale = clamp(pinchStartScale * ratio, 1, 4);
-      scale = newScale;
-
-      // keep midpoint fixed
       const m = mid(t1, t2);
       panX = m.x - pinchImgX * scale;
       panY = m.y - pinchImgY * scale;
 
       applyTransform();
-
     } else if (isPanning && e.touches.length === 1) {
-      const t = e.touches[0];
-      panX = t.clientX - startX;
-      panY = t.clientY - startY;
+      panX = e.touches[0].clientX - startX;
+      panY = e.touches[0].clientY - startY;
       applyTransform();
     }
   }, { passive: false });
@@ -288,26 +322,8 @@
   lightboxImg.addEventListener("touchend", (e) => {
     if (e.touches.length < 2) pinching = false;
     if (e.touches.length === 0) isPanning = false;
-
-    // scale が 1 に戻ったら pan もリセット（ズレ防止）
     if (scale <= 1.01) resetZoom();
   }, { passive: true });
-
-  // 画像切り替え/閉じる時はズーム解除
-  const _closeLightbox2 = closeLightbox;
-  closeLightbox = function () {
-    resetZoom();
-    _closeLightbox2();
-  };
-
-  const _showAt2 = showAt;
-  showAt = function (index) {
-    resetZoom();
-    _showAt2(index);
-  };
-
-
-
 </script>
 
 
