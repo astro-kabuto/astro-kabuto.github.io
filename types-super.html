@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+ <title>スーパー兜 | Astro Kabuto</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <a class="brand" href="index.html">
+        <div class="logo"></div>
+        <div>
+          <h1>Astro Kabuto</h1>
+          <p>兜丸の成長記録サイト</p>
+        </div>
+      </a>
+
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="care.html">Care</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+  <h2>スーパー兜</h2>
+  <p class="sub">選抜・固定化された美形個体群。密な白点や整った体型が魅力。</p>
+</section>
+
+
+    <section class="card">
+      <h3>特徴</h3>
+      <ul>
+  <li>白点が密で、見た目の完成度が高い個体が多い</li>
+  <li>形・模様のバランスが良く、コレクション性が高い</li>
+  <li>管理難易度：中（蒸れ・焼けに注意）</li>
+</ul>
+
+    </section>
+
+    <p style="margin-top:28px;">
+      <a href="index.html">← Homeへ戻る</a>
+    </p>
+
+    <div class="footer">© <span id="y"></span> Astro Kabuto</div>
+  </div>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

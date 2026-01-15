@@ -4,69 +4,151 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Astro Kabuto</title>
+  <meta name="description" content="兜丸（Astrophytum asterias）の成長記録、写真ギャラリー、育て方メモをまとめる個人サイト。" />
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <div class="container">
 
     <header class="header">
-     <a class="brand" href="index.html">
-
-        <div class="logo"></div>
-        <div>
+      <a class="brand" href="index.html" aria-label="Astro Kabuto Home">
+        <div class="logo" aria-hidden="true"></div>
+        <div class="brand-text">
           <h1>Astro Kabuto</h1>
           <p>兜丸の成長記録サイト</p>
         </div>
       </a>
 
-     <nav class="nav">
-  <a href="index.html">Home</a>
-  <a href="growth-log.html">Growth Log</a>
-  <a href="gallery.html">Gallery</a>
-  <a href="about.html">About</a>
-  <a href="care.html">Care</a>
-
-</nav>
-
+      <nav class="nav" aria-label="Primary">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="growth-log.html">Growth Log</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="about.html">About</a>
+        <a href="care.html">Care</a>
+      </nav>
     </header>
 
-    <section class="hero">
-      <h2>Astrophytum asterias</h2>
-      <p class="sub">
-        兜丸の「成長・管理・写真」を記録して、世界のファンとつながるための場所。
-      </p>
+    <main>
 
-      <div class="badges">
-        <div class="badge">📷 写真記録</div>
-        <div class="badge">📅 成長ログ</div>
-        <div class="badge">🌍 Global</div>
-        <div class="badge">💬 交流（今後追加）</div>
-      </div>
-    </section>
+      <!-- Hero（画像なしで軽く） -->
+      <section class="hero">
+        <h2>Astrophytum asterias</h2>
+        <p class="sub">
+          兜丸の「成長・管理・写真」を記録して、世界のファンとつながるための場所。
+        </p>
 
-    <section class="grid">
-      <div class="card">
-        <h3>成長ログ</h3>
-        <p>日付・サイズ・用土・水やり・環境をまとめて記録。</p>
-      </div>
-      <a class="card card-link" href="gallery.html">
-  <h3>ギャラリー</h3>
-  <p>お気に入り写真を月別・個体別に並べる予定。</p>
-</a>
+        <div class="badges" aria-label="Site highlights">
+          <div class="badge">📷 写真記録</div>
+          <div class="badge">📅 成長ログ</div>
+          <div class="badge">🌍 Global</div>
+          <div class="badge">💬 交流（今後追加）</div>
+        </div>
+      </section>
 
-      <div class="card">
-        <h3>育て方メモ</h3>
-        <p>遮光率、温度、用土、病害虫などの知見を整理。</p>
-      </div>
-      <div class="card">
-        <h3>コミュニティ</h3>
-        <p>将来：コメント＆チャットで世界の兜丸ファンと交流。</p>
-      </div>
-    </section>
+      <!-- Types（7枚のカード統一） -->
+      <section class="types" id="types">
+        <div class="section-head">
+          <h2>Types</h2>
+          <p class="sub">タイプ別に魅力をまとめました（随時更新）</p>
+        </div>
 
-    <div class="footer">
+        <div class="type-grid">
+
+          <a class="type-card" href="types-royal-super.html">
+            <div class="type-thumb">
+              <img src="images/types/index-royal-super.png" alt="ロイヤルスーパー兜" loading="lazy" decoding="async">
+            </div>
+            <h3>ロイヤルスーパー兜</h3>
+            <p>密度と品の両立。特別感のある存在。</p>
+            <span class="type-more" aria-hidden="true">さらに詳しく →</span>
+          </a>
+
+          <a class="type-card" href="types-isw.html">
+            <div class="type-thumb">
+              <img src="images/types/index-isw.png" alt="ISW兜" loading="lazy" decoding="async">
+            </div>
+            <h3>ISW兜</h3>
+            <p>高密度の白点で、繊細な粒感が魅力。</p>
+            <span class="type-more" aria-hidden="true">さらに詳しく →</span>
+          </a>
+
+          <a class="type-card" href="types-super.html">
+            <div class="type-thumb">
+              <img src="images/types/index-super.png" alt="スーパー兜" loading="lazy" decoding="async">
+            </div>
+            <h3>スーパー兜</h3>
+            <p>白点が厚く、迫力のある表情。</p>
+            <span class="type-more" aria-hidden="true">さらに詳しく →</span>
+          </a>
+
+          <a class="type-card" href="types-ruri.html">
+            <div class="type-thumb">
+              <img src="images/types/index-ruri.png" alt="瑠璃兜" loading="lazy" decoding="async">
+            </div>
+            <h3>瑠璃兜</h3>
+            <p>青緑〜瑠璃色の肌が美しい。</p>
+            <span class="type-more" aria-hidden="true">さらに詳しく →</span>
+          </a>
+
+          <a class="type-card" href="types-hanazono.html">
+            <div class="type-thumb">
+              <img src="images/types/index-hanazono.png" alt="花園兜" loading="lazy" decoding="async">
+            </div>
+            <h3>花園兜</h3>
+            <p>白点の散り方が華やか。</p>
+            <span class="type-more" aria-hidden="true">さらに詳しく →</span>
+          </a>
+
+          <a class="type-card" href="types-miracle.html">
+            <div class="type-thumb">
+              <img src="images/types/index-miracle.png" alt="ミラクル兜" loading="lazy" decoding="async">
+            </div>
+            <h3>ミラクル兜</h3>
+            <p>表情が独特で、見飽きない。</p>
+            <span class="type-more" aria-hidden="true">さらに詳しく →</span>
+          </a>
+
+          <a class="type-card" href="types-normal.html">
+            <div class="type-thumb">
+              <img src="images/types/index-normal.png" alt="通常兜" loading="lazy" decoding="async">
+            </div>
+            <h3>通常兜</h3>
+            <p>基本形の美しさ。育成の基準になるタイプ。</p>
+            <span class="type-more" aria-hidden="true">さらに詳しく →</span>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- 下段カード（導線） -->
+      <section class="cards" aria-label="Quick links">
+        <a class="card card-link" href="growth-log.html">
+          <h3>成長ログ</h3>
+          <p>日付・サイズ・用土・水やり・環境をまとめて記録。</p>
+        </a>
+
+        <a class="card card-link" href="gallery.html">
+          <h3>ギャラリー</h3>
+          <p>写真を月別・個体別に整理（随時更新）。</p>
+        </a>
+
+        <a class="card card-link" href="care.html">
+          <h3>育て方メモ</h3>
+          <p>遮光率、温度、用土、病害虫などの知見を整理。</p>
+        </a>
+
+        <div class="card">
+          <h3>コミュニティ</h3>
+          <p>将来：コメント＆チャットで世界の兜丸ファンと交流。</p>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer">
       © <span id="y"></span> Astro Kabuto
-    </div>
+    </footer>
 
   </div>
 
@@ -75,3 +157,5 @@
   </script>
 </body>
 </html>
+
+

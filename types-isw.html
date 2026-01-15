@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ISW兜 | Astro Kabuto</title>
+  <meta name="description" content="ISW兜（Astrophytum asterias）の特徴・見分け方・写真。白点密度が高い選抜個体の魅力を紹介。" />
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- typesページだけで効かせる最小CSS（既存CSSがあっても邪魔しにくい） -->
+  <style>
+    :root{
+      --bg1:#f7f7f9;
+      --bg2:#e3e6ec;
+      --ink:#0b0c0f;
+      --muted:#5b6270;
+      --card:#ffffffcc;
+      --line:#e6e8ef;
+      --radius:22px;
+      --shadow: 0 18px 50px rgba(15, 23, 42, .12);
+    }
+    body{ color:var(--ink); }
+    .wrap{ max-width: 1040px; margin: 0 auto; padding: 32px 20px 80px; }
+
+    /* Hero */
+    .hero{
+      background: radial-gradient(1200px 700px at 50% 35%, var(--bg1), var(--bg2));
+      border-bottom: 1px solid var(--line);
+    }
+    .hero-inner{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 28px;
+      align-items:center;
+      padding: 48px 0;
+    }
+    .kicker{ font-size: 13px; letter-spacing: .08em; color: var(--muted); text-transform: uppercase; }
+    h1{ margin: 10px 0 10px; font-size: clamp(34px, 4vw, 52px); line-height:1.05; }
+    .lead{ margin: 0 0 16px; font-size: 16px; line-height: 1.8; color: var(--muted); max-width: 52ch; }
+    .chips{ display:flex; flex-wrap:wrap; gap: 10px; margin-top: 18px;}
+    .chip{
+      font-size: 13px; padding: 8px 12px; border:1px solid var(--line);
+      border-radius: 999px; background: #fff8;
+      backdrop-filter: blur(10px);
+    }
+    .hero-media{
+      border-radius: var(--radius);
+      background: radial-gradient(900px 500px at 50% 30%, #fff, #eef0f6);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    .hero-media img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius: 18px;
+    }
+
+    /* Sections */
+    .section{ margin-top: 34px; }
+    .card{
+      background: var(--card);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 28px rgba(15, 23, 42, .06);
+      padding: 22px;
+    }
+    .section h2{
+      margin: 0 0 10px;
+      font-size: 20px;
+      letter-spacing: .01em;
+    }
+    .muted{ color: var(--muted); line-height: 1.85; }
+
+    /* 3-up gallery */
+    .grid3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 12px;
+    }
+    .shot{
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #fff;
+      overflow:hidden;
+    }
+    .shot img{ width:100%; height:auto; display:block; }
+    .shot .cap{ padding: 10px 12px; font-size: 13px; color: var(--muted); }
+
+    /* table */
+    .spec{
+      width:100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      overflow:hidden;
+      border-radius: 16px;
+      border:1px solid var(--line);
+      background:#fff;
+    }
+    .spec th, .spec td{
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+      vertical-align: top;
+    }
+    .spec th{ width: 32%; color: var(--muted); font-weight: 600; background: #fafbfe; }
+    .spec tr:last-child th, .spec tr:last-child td{ border-bottom: none; }
+
+    .nav-links{ display:flex; flex-wrap:wrap; gap: 10px; margin-top: 10px;}
+    .nav-links a{
+      display:inline-block;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      text-decoration:none;
+      color: var(--ink);
+      background:#fff;
+    }
+    .nav-links a:hover{ filter: brightness(.98); }
+
+    @media (max-width: 880px){
+      .hero-inner{ grid-template-columns: 1fr; }
+      .grid3{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Hero -->
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-inner">
+        <div>
+          <div class="kicker">Types / Astrophytum asterias</div>
+          <h1>ISW兜</h1>
+          <p class="lead">
+            白点の密度が高く、模様が細かく詰まって見える個体群。
+            “白い星”の情報量が多いほど、見た目はより繊細で立体的に感じられます。
+          </p>
+
+          <div class="chips">
+            <span class="chip">特徴：高密度の白点</span>
+            <span class="chip">見え方：細かい粒状感</span>
+            <span class="chip">写真：Hero + 詳細3枚</span>
+          </div>
+        </div>
+
+        <figure class="hero-media" aria-label="ISW兜のヒーロー画像">
+          <img src="types/isw-hero.png" alt="ISW兜（ヒーロー写真）">
+        </figure>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- About -->
+    <section class="section">
+      <div class="card">
+        <h2>見どころ</h2>
+        <p class="muted">
+          ISW兜の魅力は、白点の“量”だけでなく、粒の大きさ・密度・配置のバランスにあります。
+          同じ「白点系」に見えても、<strong>粒が丸いのか、楕円が混ざるのか、筋状が強いのか</strong>で印象が変わります。
+          このページでは、写真で質感が伝わるように「斜め（Hero）」を主役にして、
+          追加で「上から」「アップ」「別角度」を並べます。
+        </p>
+      </div>
+    </section>
+
+    <!-- Detail Photos -->
+    <section class="section">
+      <div class="card">
+        <h2>ディテール写真</h2>
+        <p class="muted">※ 画像がまだ無い場合は、ファイル名だけ先に用意して後で差し替えでOK。</p>
+
+        <div class="grid3">
+          <div class="shot">
+            <img src="types/isw-top.png" alt="ISW兜（上から）">
+            <div class="cap">上から：模様の全体バランス</div>
+          </div>
+          <div class="shot">
+            <img src="types/isw-close.png" alt="ISW兜（アップ）">
+            <div class="cap">アップ：白点の粒・毛の質感</div>
+          </div>
+          <div class="shot">
+            <img src="types/isw-angle.png" alt="ISW兜（別角度）">
+            <div class="cap">別角度：丸みと陰影</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Spec -->
+    <section class="section">
+      <div class="card">
+        <h2>特徴メモ</h2>
+        <table class="spec" aria-label="ISW兜の特徴">
+          <tr>
+            <th>見た目</th>
+            <td>白点が高密度。全体が“粉雪”のように見える。粒の大小が混ざると立体感が出る。</td>
+          </tr>
+          <tr>
+            <th>個体差のポイント</th>
+            <td>白点の丸さ／楕円混じり／筋状の強さ／中心部の密度／稜の出方。</td>
+          </tr>
+          <tr>
+            <th>撮影のコツ</th>
+            <td>斜め45°は質感が出る。上からは図鑑的。アップは“毛の粒立ち”が主役。</td>
+          </tr>
+          <tr>
+            <th>管理メモ</th>
+            <td>基本は兜丸の標準管理でOK（強光で締める／過湿に注意）。</td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- Related -->
+    <section class="section">
+      <div class="card">
+        <h2>関連タイプ</h2>
+        <p class="muted">同じ兜丸でも、タイプで見え方が変わります。</p>
+        <div class="nav-links">
+          <a href="types-super.html">スーパー兜</a>
+          <a href="types-ruri.html">瑠璃兜</a>
+          <a href="types-miracle.html">ミラクル兜</a>
+          <a href="types-normal.html">通常兜</a>
+          <a href="types-ruri-nishiki.html">瑠璃錦兜</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
