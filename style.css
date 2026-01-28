@@ -1458,6 +1458,14 @@ img{
 
 /* 念のため：画像はボタンより下 */
 #lightboxImg{ position: relative; z-index: 10000; }
+
+
+
+
+
+
+
+
 /* ===== Hero mobile fix: ボタンを“兜の上”に乗せない ===== */
 @media (max-width: 740px){
   .heroFull{
