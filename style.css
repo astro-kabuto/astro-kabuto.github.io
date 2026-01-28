@@ -1458,3 +1458,41 @@ img{
 
 /* 念のため：画像はボタンより下 */
 #lightboxImg{ position: relative; z-index: 10000; }
+/* ===== Hero mobile fix: ボタンを“兜の上”に乗せない ===== */
+@media (max-width: 740px){
+  .heroFull{
+    height: 78vh; /* 少し縦を確保 */
+  }
+
+  /* 兜を下側に寄せて「右側空き」を作る（数値は微調整OK） */
+  .heroFull-img{
+    object-position: 55% 78%;
+  }
+
+  /* テキストブロックを少し上に寄せる */
+  .heroFull-content{
+    top: 28px;
+    right: 18px;
+    left: 18px;            /* 幅を確保（右寄せの見た目は維持できる） */
+    bottom: auto;
+    max-width: none;
+    text-align: right;
+  }
+
+  /* ボタンは“縦2列”でコンパクトにして上側に収める */
+  .heroFull-actions{
+    position: static;      /* 変な絶対配置を解除 */
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    justify-content: end;
+  }
+
+  .heroFull-actions .btn{
+    height: 40px;
+    padding: 0 14px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+}
