@@ -1428,3 +1428,33 @@ img{
   font-weight: 800;
   text-shadow: 0 10px 26px rgba(0,0,0,.80);
 }
+#lightboxImg{ touch-action: none; cursor: zoom-in; }
+#lightboxImg.zoomed{ cursor: grab; }
+#lightboxImg.zoomed:active{ cursor: grabbing; }
+/* ===== Lightbox close button fix ===== */
+.lightbox-figure{ position: relative; }
+
+.lightbox-close{
+  position: fixed;              /* ← 画像の裏に行かない最強手 */
+  top: 18px;
+  right: 22px;
+  z-index: 10002;               /* lightbox(9999)より上 */
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.35);
+  border: 1px solid rgba(255,255,255,.22);
+  color: #fff;
+  font-size: 26px;
+  line-height: 44px;
+  text-align: center;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.lightbox-close:hover{
+  background: rgba(0,0,0,.5);
+}
+
+/* 念のため：画像はボタンより下 */
+#lightboxImg{ position: relative; z-index: 10000; }
