@@ -1646,3 +1646,9 @@ img{
   background-position: center;
   background-size: contain;
 }
+
+#lightboxImg{
+  transform-origin: 50% 50% !important;
+  touch-action: none; /* モバイルのスクロール/ズーム干渉を止める */
+}
+

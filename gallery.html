@@ -465,8 +465,8 @@
     const saveFav = () => localStorage.setItem(FAV_KEY, JSON.stringify([...favSet]));
     const imgId = (img) => img.getAttribute("src");
 
-    // =========================
-// Lightbox Zoom / Pan（復活）
+ // =========================
+// Lightbox Zoom / Pan + Swipe (Mobile) + Wheel Zoom (PC)
 // =========================
 let scale = 1;
 let panX = 0, panY = 0;
@@ -481,11 +481,20 @@ let pinchStartDist = 0;
 let pinchStartScale = 1;
 let pinchImgX = 0, pinchImgY = 0;
 
+// Mobile one-finger pan (when zoomed)
+let touchPanning = false;
+let touchStartX = 0, touchStartY = 0;
+
+// Mobile swipe (when NOT zoomed)
+let swipeStartX = 0, swipeStartY = 0;
+let swiping = false;
+
 const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 
 function applyTransform() {
-  // ついでにカーソルも切替
   lightboxImg.classList.toggle("zoomed", scale > 1.01);
+  lightboxImg.style.transformOrigin = "50% 50%";
+  // translate → scale のまま（toggleZoomAtの計算と合わせる）
   lightboxImg.style.transform = `translate3d(${panX}px, ${panY}px, 0) scale(${scale})`;
 }
 
@@ -507,6 +516,8 @@ function toggleZoomAt(clientX, clientY) {
   }
 
   const newScale = 2;
+
+  // クリック位置を基準にズーム（指/マウス位置中心）
   const imgX = (px - panX) / scale;
   const imgY = (py - panY) / scale;
 
@@ -525,24 +536,35 @@ lightboxImg.addEventListener("dblclick", (e) => {
 });
 
 // --- wheel zoom (PC) ---
-lightboxImg.addEventListener("wheel", (e) => {
+lightbox.addEventListener("wheel", (e) => {
   if (!lightbox.classList.contains("open")) return;
+
+  // 画像の上じゃなくてもズームできるように（体感よくなる）
   e.preventDefault();
 
   const rect = lightboxImg.getBoundingClientRect();
-  const px = e.clientX - rect.left;
-  const py = e.clientY - rect.top;
+  const cx = e.clientX;
+  const cy = e.clientY;
 
-  const imgX = (px - panX) / scale;
-  const imgY = (py - panY) / scale;
+  // 画像外で回したら画像中心を基準に
+  const px = (cx < rect.left || cx > rect.right) ? (rect.left + rect.width / 2) : cx;
+  const py = (cy < rect.top  || cy > rect.bottom) ? (rect.top  + rect.height / 2) : cy;
+
+  const localX = px - rect.left;
+  const localY = py - rect.top;
+
+  const imgX = (localX - panX) / scale;
+  const imgY = (localY - panY) / scale;
 
   const zoomFactor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
   scale = clamp(scale * zoomFactor, 1, 6);
 
-  panX = px - imgX * scale;
-  panY = py - imgY * scale;
+  panX = localX - imgX * scale;
+  panY = localY - imgY * scale;
 
-  applyTransform();
+  // 1倍付近ならリセットしてブレを消す
+  if (scale <= 1.01) resetZoom();
+  else applyTransform();
 }, { passive: false });
 
 // --- drag pan (PC) ---
@@ -565,7 +587,7 @@ document.addEventListener("mouseup", () => {
   mousePanning = false;
 });
 
-// --- pinch zoom (mobile) ---
+// --- pinch helpers ---
 function dist(t1, t2) {
   const dx = t2.clientX - t1.clientX;
   const dy = t2.clientY - t1.clientY;
@@ -575,43 +597,122 @@ function mid(t1, t2) {
   return { x: (t1.clientX + t2.clientX) / 2, y: (t1.clientY + t2.clientY) / 2 };
 }
 
-lightboxImg.addEventListener("touchstart", (e) => {
+// --- touchstart (mobile) ---
+lightbox.addEventListener("touchstart", (e) => {
   if (!lightbox.classList.contains("open")) return;
 
   if (e.touches.length === 2) {
+    // Pinch start
     pinching = true;
+    touchPanning = false;
+    swiping = false;
+
     const t1 = e.touches[0], t2 = e.touches[1];
     pinchStartDist = dist(t1, t2);
     pinchStartScale = scale;
 
     const m = mid(t1, t2);
-    pinchImgX = (m.x - panX) / scale;
-    pinchImgY = (m.y - panY) / scale;
+    const rect = lightboxImg.getBoundingClientRect();
+
+    // ピンチ中心を画像ローカル座標に
+    const localX = m.x - rect.left;
+    const localY = m.y - rect.top;
+    pinchImgX = (localX - panX) / scale;
+    pinchImgY = (localY - panY) / scale;
+    return;
+  }
+
+  if (e.touches.length === 1) {
+    const t = e.touches[0];
+
+    if (scale > 1.01) {
+      // Zoomed: 1-finger pan start
+      touchPanning = true;
+      touchStartX = t.clientX - panX;
+      touchStartY = t.clientY - panY;
+      swiping = false;
+    } else {
+      // Not zoomed: swipe start
+      swiping = true;
+      swipeStartX = t.clientX;
+      swipeStartY = t.clientY;
+      touchPanning = false;
+    }
   }
 }, { passive: true });
 
-lightboxImg.addEventListener("touchmove", (e) => {
+// --- touchmove (mobile) ---
+lightbox.addEventListener("touchmove", (e) => {
   if (!lightbox.classList.contains("open")) return;
 
+  // Pinch move
   if (pinching && e.touches.length === 2) {
     e.preventDefault();
 
     const t1 = e.touches[0], t2 = e.touches[1];
     const ratio = dist(t1, t2) / pinchStartDist;
-
     scale = clamp(pinchStartScale * ratio, 1, 4);
 
     const m = mid(t1, t2);
-    panX = m.x - pinchImgX * scale;
-    panY = m.y - pinchImgY * scale;
+    const rect = lightboxImg.getBoundingClientRect();
+    const localX = m.x - rect.left;
+    const localY = m.y - rect.top;
 
+    panX = localX - pinchImgX * scale;
+    panY = localY - pinchImgY * scale;
+
+    if (scale <= 1.01) resetZoom();
+    else applyTransform();
+    return;
+  }
+
+  // 1-finger pan when zoomed
+  if (touchPanning && e.touches.length === 1 && scale > 1.01) {
+    e.preventDefault();
+    const t = e.touches[0];
+    panX = t.clientX - touchStartX;
+    panY = t.clientY - touchStartY;
     applyTransform();
+    return;
+  }
+
+  // swipe move (optional: prevent vertical scroll while swiping)
+  if (swiping && e.touches.length === 1 && scale <= 1.01) {
+    const t = e.touches[0];
+    const dx = t.clientX - swipeStartX;
+    const dy = t.clientY - swipeStartY;
+
+    // 横が明らかに大きい時だけスクロール干渉を止める
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) {
+      e.preventDefault();
+    }
   }
 }, { passive: false });
 
-lightboxImg.addEventListener("touchend", (e) => {
+// --- touchend (mobile): swipe to next/prev + reset flags ---
+lightbox.addEventListener("touchend", (e) => {
+  if (!lightbox.classList.contains("open")) return;
+
+  // Pinch end
   if (e.touches.length < 2) pinching = false;
-  if (scale <= 1.01) resetZoom();
+
+  // Swipe end (only if not zoomed)
+  if (swiping && scale <= 1.01) {
+    const t = e.changedTouches[0];
+    const dx = t.clientX - swipeStartX;
+    const dy = t.clientY - swipeStartY;
+
+    const SWIPE_X = 45; // 閾値
+    const SWIPE_Y = 60; // 縦ブレ許容
+
+    if (Math.abs(dx) > SWIPE_X && Math.abs(dy) < SWIPE_Y) {
+      if (dx < 0) next();  // 左へスワイプ＝次
+      else prev();         // 右へスワイプ＝前
+    }
+  }
+
+  swiping = false;
+  touchPanning = false;
 }, { passive: true });
 
 // --- double tap zoom (mobile) ---
@@ -619,7 +720,7 @@ let lastTap = 0;
 lightboxImg.addEventListener("touchend", (e) => {
   if (!lightbox.classList.contains("open")) return;
   if (e.changedTouches.length !== 1) return;
-  if (pinching) return;
+  if (pinching) return; // ピンチ直後は無視
 
   const now = Date.now();
   const dt = now - lastTap;
@@ -632,7 +733,6 @@ lightboxImg.addEventListener("touchend", (e) => {
     lastTap = now;
   }
 }, { passive: true });
-
 
     const typeLabel = (t) => ({
       normal: "通常兜", super: "スーパー兜", ruri: "瑠璃兜", miracle: "ミラクル兜", isw: "ISW兜",
