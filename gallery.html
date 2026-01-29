@@ -639,7 +639,8 @@ lightbox.addEventListener("touchstart", (e) => {
       touchPanning = false;
     }
   }
-}, { passive: true });
+}, { passive: false });
+
 
 // --- touchmove (mobile) ---
 lightbox.addEventListener("touchmove", (e) => {

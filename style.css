@@ -1651,4 +1651,22 @@ img{
   transform-origin: 50% 50% !important;
   touch-action: none; /* モバイルのスクロール/ズーム干渉を止める */
 }
+/* ===== Lightbox: mobile fit fix ===== */
+.lightbox-figure{
+  width: min(920px, 92vw);
+  max-height: 86svh;            /* モバイルの実表示高さに合わせる */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: visible;            /* 画像の左右切れ防止 */
+}
+
+#lightboxImg{
+  max-width: 92vw;              /* 画面幅に必ず収める */
+  max-height: 68svh;            /* 画面高さに必ず収める */
+  width: auto;
+  height: auto;
+  object-fit: contain;          /* これが“切れない”ポイント */
+  display: block;
+}
 
