@@ -1639,3 +1639,10 @@ img{
     top: 34px !important;   /* ここを 56〜90 で調整 */
   }
 }
+
+.logo{
+  background-image: url("images/logo-folder/logo.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
