@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Upload | Astro Kabuto</title>
+  <meta name="description" content="兜丸ギャラリーへ投稿するページ" />
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* 既存style.cssがある前提。無い/弱い場合でも最低限綺麗に見える補助CSS */
+    :root{
+      --bg:#f5f5f7; --card:#fff; --text:#1d1d1f; --muted:#6e6e73; --line:rgba(0,0,0,.10);
+      --accent:#0071e3; --radius:18px; --radius-lg:28px;
+      --shadow:0 16px 40px rgba(0,0,0,.08);
+    }
+    body{ background:var(--bg); color:var(--text); }
+    main.wrap{ max-width: 980px; margin: 0 auto; padding: 18px 16px 80px; }
+    .card{
+      background:var(--card); border:1px solid var(--line);
+      border-radius:var(--radius-lg); box-shadow:var(--shadow);
+      padding: 18px; overflow:hidden;
+    }
+    h1{ font-size: 28px; margin: 6px 0 6px; letter-spacing: -0.02em; }
+    .sub{ color:var(--muted); margin: 0 0 14px; line-height: 1.6; }
+    .grid{ display:grid; gap:14px; grid-template-columns: 1fr; }
+    @media (min-width: 860px){
+      .grid{ grid-template-columns: 1.1fr .9fr; align-items:start; }
+    }
+    .field{ display:grid; gap:8px; }
+    label{ font-weight: 650; }
+    input[type="text"], textarea, select{
+      width:100%; padding: 12px 12px; border-radius: 14px;
+      border:1px solid var(--line); background:#fff; color:var(--text);
+      outline: none;
+    }
+    textarea{ min-height: 140px; resize: vertical; }
+    .row{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .hint{ color:var(--muted); font-size: 13px; line-height:1.5; }
+    .drop{
+      border: 1px dashed rgba(0,0,0,.18);
+      background: rgba(255,255,255,.65);
+      border-radius: 18px;
+      padding: 14px;
+      display:grid; gap:10px;
+    }
+    .drop strong{ font-size: 14px; }
+    .drop .mini{ color:var(--muted); font-size: 13px; }
+    .btns{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 6px; }
+    .btn{
+      appearance:none; border:none; cursor:pointer;
+      background: var(--accent); color:#fff;
+      padding: 12px 14px; border-radius: 14px;
+      font-weight: 700;
+    }
+    .btn.secondary{
+      background: rgba(0,0,0,.06); color: var(--text);
+      border: 1px solid var(--line);
+    }
+    .btn:disabled{ opacity:.6; cursor:not-allowed; }
+    .preview{
+      display:grid; gap:10px;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media (min-width: 520px){
+      .preview{ grid-template-columns: repeat(4, 1fr); }
+    }
+    .thumb{
+      position:relative; border-radius: 16px; overflow:hidden;
+      background: rgba(0,0,0,.05); border:1px solid var(--line);
+      aspect-ratio: 1 / 1;
+    }
+    .thumb img{
+      width:100%; height:100%; object-fit:cover; display:block;
+    }
+    .thumb button{
+      position:absolute; top:8px; right:8px;
+      background: rgba(0,0,0,.55); color:#fff;
+      border:none; border-radius: 999px; width:28px; height:28px;
+      cursor:pointer;
+    }
+    .status{
+      margin-top: 10px;
+      padding: 12px; border-radius: 16px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.7);
+      color: var(--text);
+      display:none;
+      white-space: pre-wrap;
+    }
+    .bar{
+      height: 10px; background: rgba(0,0,0,.08);
+      border-radius: 999px; overflow:hidden;
+      margin-top: 10px; display:none;
+    }
+    .bar > div{
+      height:100%; width:0%;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width .15s ease;
+    }
+    .toplink{ display:inline-block; margin-top: 10px; color: var(--accent); text-decoration:none; font-weight:700; }
+    .toplink:hover{ text-decoration: underline; }
+    .pill{
+      display:inline-flex; gap:8px; align-items:center;
+      padding: 8px 10px; border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.7);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .warn{ color:#b42318; }
+  </style>
+</head>
+
+<body>
+
+  <!-- 既存ヘッダーがあるならそのまま使ってOK（style.css前提） -->
+  <header class="header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="Astro Kabuto Home">
+        <div class="logo" aria-hidden="true"></div>
+        <div class="brand-text">
+          <h1>Astro Kabuto</h1>
+          <p>兜丸の成長記録サイト</p>
+        </div>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="growth-log.html">Growth Log</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="about.html">About</a>
+        <a href="care.html">Care</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="card">
+      <h1>投稿する</h1>
+      <p class="sub">
+        兜丸ギャラリーに写真を投稿します。<br />
+        画像は <b>R2</b> に保存、投稿情報は <b>D1</b> に保存される想定です。
+      </p>
+
+      <div class="grid">
+        <!-- Left: form -->
+        <section>
+          <div class="field">
+            <label for="title">タイトル</label>
+            <input id="title" type="text" placeholder="例：兜丸 実生 120日目" maxlength="80" />
+            <div class="hint">最大80文字。空でも投稿できる設定にもできますが、まずは必須にしてます。</div>
+          </div>
+
+          <div class="row" style="margin-top:12px;">
+            <div class="field">
+              <label for="tag">タグ（任意）</label>
+              <select id="tag">
+                <option value="">未選択</option>
+                <option value="seedling">実生</option>
+                <option value="adult">成株</option>
+                <option value="flower">開花</option>
+                <option value="variety">タイプ・品種</option>
+                <option value="care">管理・育成</option>
+                <option value="other">その他</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="visibility">公開範囲</label>
+              <select id="visibility">
+                <option value="public" selected>公開</option>
+                <option value="unlisted">限定（URLを知っている人）</option>
+              </select>
+              <div class="hint">※ まずはUIだけ。Worker側で反映する。</div>
+            </div>
+          </div>
+
+          <div class="field" style="margin-top:12px;">
+            <label for="note">メモ（任意）</label>
+            <textarea id="note" placeholder="例：遮光30%、潅水は7日おき。温室内の最高温度は〜"></textarea>
+            <div class="hint">撮影日や管理内容も書くと、ギャラリーが強くなる。</div>
+          </div>
+
+          <div class="drop" id="drop" style="margin-top:14px;">
+            <div>
+              <strong>画像を追加</strong>
+              <div class="mini">ドラッグ&ドロップ / ファイル選択（最大12枚・1枚あたり最大10MB推奨）</div>
+            </div>
+            <input id="files" type="file" accept="image/*" multiple />
+            <div class="pill">
+              <span>選択中:</span> <b id="count">0</b> 枚
+              <span style="margin-left:10px;">合計:</span> <b id="totalSize">0</b>
+            </div>
+            <div class="hint warn" id="limitWarn" style="display:none;">※ 枚数/容量が大きすぎます。少し減らしてください。</div>
+          </div>
+
+          <div class="btns">
+            <button class="btn" id="submitBtn">アップロード</button>
+            <button class="btn secondary" id="clearBtn" type="button">クリア</button>
+            <a class="btn secondary" href="gallery.html" style="text-decoration:none; display:inline-flex; align-items:center;">ギャラリーへ戻る</a>
+          </div>
+
+          <div class="bar" id="bar"><div id="barInner"></div></div>
+          <div class="status" id="status"></div>
+
+          <a class="toplink" href="gallery.html">← Gallery に戻る</a>
+        </section>
+
+        <!-- Right: preview -->
+        <aside>
+          <div class="field">
+            <label>プレビュー</label>
+            <div class="hint">投稿前に画像の並びと内容を確認できます。</div>
+          </div>
+          <div class="preview" id="preview"></div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    /**
+     * ★ここだけ必ず設定★
+     * Worker の API ベースURL（末尾スラッシュなし）
+     * 例: https://astro-kabuto-gallery-worker.<subdomain>.workers.dev
+     * もし独自ドメインで /api を切っているならそこに合わせる
+     */
+    const WORKER_API_BASE = "https://astro-kabuto-gallery-worker.gigasantrinn1226.workers.dev";
+const ENDPOINT_UPLOAD = WORKER_API_BASE + "/api/upload";
+
+
+    // 制限（必要なら変更）
+    const MAX_FILES = 12;
+    const MAX_TOTAL_MB = 60; // 合計60MBまで（例）
+    const MAX_EACH_MB = 10;  // 1枚10MB推奨（強制はしないが警告用に使う）
+
+    const elTitle = document.getElementById("title");
+    const elTag = document.getElementById("tag");
+    const elVisibility = document.getElementById("visibility");
+    const elNote = document.getElementById("note");
+    const elFiles = document.getElementById("files");
+    const elDrop = document.getElementById("drop");
+    const elPreview = document.getElementById("preview");
+    const elCount = document.getElementById("count");
+    const elTotalSize = document.getElementById("totalSize");
+    const elLimitWarn = document.getElementById("limitWarn");
+
+    const elSubmit = document.getElementById("submitBtn");
+    const elClear = document.getElementById("clearBtn");
+    const elStatus = document.getElementById("status");
+    const elBar = document.getElementById("bar");
+    const elBarInner = document.getElementById("barInner");
+
+    /** 内部状態（Fileの配列） */
+    let selected = [];
+
+    function fmtBytes(bytes){
+      const mb = bytes / (1024*1024);
+      if (mb < 1) return (bytes/1024).toFixed(1) + " KB";
+      return mb.toFixed(2) + " MB";
+    }
+
+    function showStatus(msg, isError=false){
+      elStatus.style.display = "block";
+      elStatus.textContent = msg;
+      elStatus.style.borderColor = isError ? "rgba(180,35,24,.35)" : "rgba(0,0,0,.10)";
+    }
+
+    function setProgress(p){
+      elBar.style.display = "block";
+      const clamped = Math.max(0, Math.min(100, p));
+      elBarInner.style.width = clamped + "%";
+      if (clamped >= 100) {
+        setTimeout(()=>{ elBar.style.display="none"; elBarInner.style.width="0%"; }, 700);
+      }
+    }
+
+    function recalc(){
+      elCount.textContent = selected.length.toString();
+      const total = selected.reduce((a,f)=>a+f.size,0);
+      elTotalSize.textContent = fmtBytes(total);
+
+      const tooMany = selected.length > MAX_FILES;
+      const tooBig = (total/(1024*1024)) > MAX_TOTAL_MB;
+      elLimitWarn.style.display = (tooMany || tooBig) ? "block" : "none";
+      elSubmit.disabled = (selected.length === 0) || tooMany || tooBig;
+    }
+
+    function render(){
+      elPreview.innerHTML = "";
+      selected.forEach((file, idx) => {
+        const url = URL.createObjectURL(file);
+        const wrap = document.createElement("div");
+        wrap.className = "thumb";
+        wrap.innerHTML = `
+          <img alt="" src="${url}">
+          <button type="button" title="削除">×</button>
+        `;
+        wrap.querySelector("button").addEventListener("click", () => {
+          selected.splice(idx, 1);
+          render();
+          recalc();
+        });
+        elPreview.appendChild(wrap);
+      });
+    }
+
+    function addFiles(files){
+      const arr = Array.from(files || []);
+      // 追加（MAX_FILES超過はUIで警告、送信不可にする）
+      selected = selected.concat(arr);
+      render();
+      recalc();
+
+      // 推奨サイズ警告（強制ではない）
+      const bigOnes = selected.filter(f => (f.size/(1024*1024)) > MAX_EACH_MB);
+      if (bigOnes.length) {
+        showStatus(`⚠ 10MBを超える画像が ${bigOnes.length} 枚あります。通信が遅くなるかも。\n必要なら画像を少し圧縮すると快適です。`, false);
+      }
+    }
+
+    // file input
+    elFiles.addEventListener("change", (e) => {
+      addFiles(e.target.files);
+      elFiles.value = ""; // 同じファイルを再選択できるように
+    });
+
+    // drag & drop
+    ["dragenter","dragover"].forEach(ev=>{
+      elDrop.addEventListener(ev, (e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        elDrop.style.borderColor = "rgba(0,113,227,.55)";
+      });
+    });
+    ["dragleave","drop"].forEach(ev=>{
+      elDrop.addEventListener(ev, (e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        elDrop.style.borderColor = "rgba(0,0,0,.18)";
+      });
+    });
+    elDrop.addEventListener("drop", (e)=>{
+      addFiles(e.dataTransfer.files);
+    });
+
+    // clear
+    elClear.addEventListener("click", () => {
+      selected = [];
+      elTitle.value = "";
+      elTag.value = "";
+      elVisibility.value = "public";
+      elNote.value = "";
+      elPreview.innerHTML = "";
+      elStatus.style.display = "none";
+      recalc();
+    });
+
+    // upload
+    elSubmit.addEventListener("click", async () => {
+      const title = (elTitle.value || "").trim();
+      if (!title) {
+        showStatus("タイトルを入力してね。", true);
+        elTitle.focus();
+        return;
+      }
+      if (selected.length === 0) {
+        showStatus("画像を1枚以上追加してね。", true);
+        return;
+      }
+
+      // 送信
+      elSubmit.disabled = true;
+      showStatus("アップロード中…");
+      setProgress(10);
+
+      try {
+        const fd = new FormData();
+        fd.append("title", title);
+        fd.append("tag", elTag.value || "");
+        fd.append("visibility", elVisibility.value || "public");
+        fd.append("note", elNote.value || "");
+
+        // files[]
+        selected.forEach((f) => fd.append("files", f, f.name));
+
+        // XHRで進捗を取る
+        const resText = await xhrPostWithProgress(ENDPOINT_UPLOAD, fd, (p)=>{
+          // p: 0..100
+          setProgress(Math.max(10, Math.round(p)));
+        });
+
+        // WorkerはJSONを返す想定（例: { ok:true, postId:"...", urls:[...] }）
+        let json;
+        try { json = JSON.parse(resText); } catch { json = null; }
+
+        if (!json || !json.ok) {
+          const msg = json?.error || "アップロードに失敗しました（Workerレスポンス不正）。";
+          showStatus("❌ " + msg + "\n\n返ってきた内容:\n" + resText, true);
+          elSubmit.disabled = false;
+          return;
+        }
+
+        setProgress(100);
+        showStatus("✅ 投稿完了！\nギャラリーに反映されるまで少しだけ時間がかかる場合があります。");
+
+        // 成功したら、ギャラリーへ誘導（少し待ってから）
+        setTimeout(() => {
+          location.href = "gallery.html";
+        }, 900);
+
+      } catch (err) {
+        console.error(err);
+        showStatus("❌ エラー: " + (err?.message || String(err)), true);
+        elSubmit.disabled = false;
+      }
+    });
+
+    function xhrPostWithProgress(url, formData, onProgress){
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", url, true);
+
+        xhr.upload.onprogress = (e) => {
+          if (!e.lengthComputable) return;
+          const p = (e.loaded / e.total) * 100;
+          onProgress?.(p);
+        };
+
+        xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 300) resolve(xhr.responseText);
+          else reject(new Error(`HTTP ${xhr.status}: ${xhr.responseText || xhr.statusText}`));
+        };
+        xhr.onerror = () => reject(new Error("Network error / CORS error"));
+        xhr.send(formData);
+      });
+    }
+
+    // init
+    recalc();
+  </script>
+</body>
+</html>

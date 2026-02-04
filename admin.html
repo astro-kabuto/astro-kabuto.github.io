@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin | Astro Kabuto</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    main.wrap{ padding-top: 16px; }
+    .panel{
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(0,0,0,.10);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 18px 55px rgba(0,0,0,.08);
+    }
+    .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    input[type="password"]{
+      height: 44px; border-radius: 14px; border:1px solid rgba(0,0,0,.12);
+      padding: 0 12px; min-width: 320px;
+    }
+    button{
+      height:44px; border-radius:14px; border:1px solid rgba(0,0,0,.12);
+      background:#fff; padding:0 14px; cursor:pointer; font-weight:900;
+    }
+    button.primary{ background: rgba(0,113,227,.12); border-color: rgba(0,113,227,.18); }
+    .list{ display:grid; gap:12px; margin-top:12px; }
+    .card{
+      display:grid; gap:10px;
+      border-radius: 18px;
+      border: 1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.72);
+      padding: 12px;
+    }
+    .thumb{
+      width: 100%; max-height: 360px;
+      object-fit: contain;
+      background: rgba(0,0,0,.03);
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,.08);
+    }
+    .meta{ font-size: 12px; opacity:.75; }
+    .actions{ display:flex; gap:10px; flex-wrap:wrap; }
+    .ok{ color: #0a7; font-weight:900; }
+    .ng{ color: #c33; font-weight:900; }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a class="brand" href="index.html">
+        <div class="logo" aria-hidden="true"></div>
+        <div class="brand-text">
+          <h1>Astro Kabuto</h1>
+          <p>兜丸の成長記録サイト</p>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="gallery.html">Gallery</a>
+        <a href="upload.html">Upload</a>
+        <a href="admin.html" aria-current="page">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="panel">
+      <h2 style="margin:0 0 8px;">承認管理</h2>
+      <div class="row">
+        <input id="token" type="password" placeholder="ADMIN_TOKEN（ここに貼る。GitHubに保存しない）" />
+        <button id="save" class="primary">この端末に保存</button>
+        <button id="clear">保存を消す</button>
+        <button id="reload">再読み込み</button>
+        <span id="status" class="meta"></span>
+      </div>
+      <p class="meta" style="margin:8px 0 0;">
+        ※ トークンはこのページのHTMLに書かない。入力→ローカル保存（localStorage）だけ。
+      </p>
+    </section>
+
+    <section class="panel" style="margin-top:12px;">
+      <div class="row" style="justify-content:space-between;">
+        <h3 style="margin:0;">承認待ち一覧</h3>
+        <span class="meta" id="count"></span>
+      </div>
+      <div id="list" class="list"></div>
+    </section>
+  </main>
+
+  <script>
+    const ORIGIN = "https://astro-kabuto-gallery-worker.gigasantrinn1226.workers.dev";
+    const KEY = "astroKabutoAdminToken";
+
+    const elToken = document.getElementById("token");
+    const elSave = document.getElementById("save");
+    const elClear = document.getElementById("clear");
+    const elReload = document.getElementById("reload");
+    const elStatus = document.getElementById("status");
+    const elCount = document.getElementById("count");
+    const elList = document.getElementById("list");
+
+    const r2 = (key) => `${ORIGIN}/files/` + encodeURIComponent(key);
+
+    function setStatus(msg, kind="") {
+      elStatus.className = "meta " + (kind || "");
+      elStatus.textContent = msg;
+    }
+
+    function getToken() {
+      return (elToken.value || localStorage.getItem(KEY) || "").trim();
+    }
+
+    function authHeaders() {
+      const t = getToken();
+      return { Authorization: "Bearer " + t };
+    }
+
+    async function api(path, opts={}) {
+      const res = await fetch(ORIGIN + path, {
+        ...opts,
+        headers: { ...(opts.headers||{}), ...authHeaders() },
+        cache: "no-store",
+      });
+      const data = await res.json().catch(()=>({ ok:false, error:"bad json" }));
+      if (!res.ok) throw Object.assign(new Error(data?.error || "request failed"), { status: res.status, data });
+      return data;
+    }
+
+    function parseCaption(row) {
+      let meta = {};
+      try { meta = JSON.parse(row.caption || "{}"); } catch {}
+      return {
+        title: (meta.title || "").toString(),
+        tag: (meta.tag || "").toString(),
+        note: (meta.note || "").toString(),
+        images: Array.isArray(meta.images) ? meta.images : [],
+      };
+    }
+
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function card(row) {
+      const meta = parseCaption(row);
+      const title = meta.title || "(no title)";
+      const created = row.created_at || "";
+      const img = r2(row.r2_key);
+
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = `
+        <div class="meta"><b>ID:</b> ${escapeHtml(row.id)} / <b>Created:</b> ${escapeHtml(created)}</div>
+        <img class="thumb" src="${img}" alt="">
+        <div><b>${escapeHtml(title)}</b></div>
+        <div class="meta">
+          ${meta.tag ? `#${escapeHtml(meta.tag)} ` : ""}
+          ${meta.note ? escapeHtml(meta.note) : ""}
+        </div>
+        <div class="actions">
+          <button data-approve class="primary">✅ 承認</button>
+          <button data-reject>❌ 却下</button>
+          <a href="${img}" target="_blank" class="meta" style="align-self:center;">画像を別タブで開く</a>
+        </div>
+      `;
+
+      div.querySelector("[data-approve]").onclick = async () => {
+        if (!confirm("承認しますか？")) return;
+        setStatus("承認中...");
+        try {
+          await api(`/admin/approve?id=${encodeURIComponent(row.id)}`, { method: "POST" });
+          setStatus("承認しました", "ok");
+          await load();
+        } catch (e) {
+          setStatus(`失敗: ${e.status || ""} ${e.message}`, "ng");
+          console.error(e);
+        }
+      };
+
+      div.querySelector("[data-reject]").onclick = async () => {
+        if (!confirm("却下しますか？（ギャラリーには出ません）")) return;
+        setStatus("却下中...");
+        try {
+          await api(`/admin/reject?id=${encodeURIComponent(row.id)}`, { method: "POST" });
+          setStatus("却下しました", "ok");
+          await load();
+        } catch (e) {
+          setStatus(`失敗: ${e.status || ""} ${e.message}`, "ng");
+          console.error(e);
+        }
+      };
+
+      return div;
+    }
+
+    async function load() {
+      const t = getToken();
+      if (!t) {
+        setStatus("ADMIN_TOKEN を入力してください", "ng");
+        elList.innerHTML = "";
+        elCount.textContent = "";
+        return;
+      }
+
+      setStatus("読み込み中...");
+      try {
+        const data = await api("/admin/pending");
+        const items = data.items || [];
+        elCount.textContent = `${items.length}件`;
+        elList.innerHTML = "";
+        items.forEach(row => elList.appendChild(card(row)));
+        setStatus("OK", "ok");
+      } catch (e) {
+        setStatus(`Unauthorized ならトークンが違う：${e.status || ""} ${e.message}`, "ng");
+        console.error(e);
+      }
+    }
+
+    // buttons
+    elSave.onclick = () => {
+      const t = elToken.value.trim();
+      if (!t) return setStatus("空です", "ng");
+      localStorage.setItem(KEY, t);
+      setStatus("この端末に保存しました", "ok");
+      load();
+    };
+    elClear.onclick = () => {
+      localStorage.removeItem(KEY);
+      elToken.value = "";
+      setStatus("保存を消しました", "ok");
+      load();
+    };
+    elReload.onclick = load;
+
+    // init
+    const saved = localStorage.getItem(KEY);
+    if (saved) elToken.value = saved;
+    load();
+  </script>
+</body>
+</html>

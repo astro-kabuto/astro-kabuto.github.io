@@ -1502,3 +1502,105 @@ a{ color:inherit; text-decoration:none; }
   .faq{ padding-bottom: 56px !important; }
   .faq-all{ padding: 10px 16px !important; }
 }
+
+
+
+
+/* =========================
+   Link Strip ( | 区切り )
+========================= */
+.linkstrip{
+  display:flex;
+  flex-wrap:wrap;
+  gap: 10px;
+  align-items:center;
+  justify-content:center;
+  margin: 18px auto 10px;
+  padding: 10px 14px;
+  width: min(980px, calc(100% - 40px));
+  border-radius: 999px;
+  background: rgba(255,255,255,.55);
+  border: 1px solid rgba(42,36,27,.12);
+  box-shadow: 0 10px 28px rgba(0,0,0,.05);
+  backdrop-filter: blur(6px);
+}
+
+.linkstrip a{
+  text-decoration:none;
+  color: rgba(42,36,27,.80);
+  font-size: 14px;
+  letter-spacing: .02em;
+  padding: 6px 8px;
+  border-radius: 999px;
+}
+
+.linkstrip a:hover{
+  background: rgba(42,36,27,.06);
+}
+
+.linkstrip .sep{
+  color: rgba(42,36,27,.35);
+  user-select:none;
+}
+
+/* スマホは詰めて2段になっても綺麗に */
+@media (max-width: 560px){
+  .linkstrip{
+    gap: 6px;
+    padding: 8px 10px;
+  }
+  .linkstrip a{ font-size: 13px; padding: 6px 6px; }
+  .linkstrip .sep{ display:none; } /* スマホは区切り消した方が上品 */
+}
+
+
+/* =========================
+   CTA Pill Stack (右の丸ボタン)
+========================= */
+.cta-stack{
+  display:flex;
+  flex-direction:column;
+  gap: 10px;
+  align-items:flex-start;
+}
+
+.cta-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  text-decoration:none;
+  font-size: 13px;
+  letter-spacing: .02em;
+
+  background: rgba(255,255,255,.72);
+  border: 1px solid rgba(42,36,27,.18);
+  color: rgba(42,36,27,.82);
+
+  box-shadow: 0 10px 28px rgba(0,0,0,.06);
+  backdrop-filter: blur(6px);
+}
+
+.cta-pill:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 14px 36px rgba(0,0,0,.08);
+}
+
+.cta-pill.is-primary{
+  background: rgba(0,113,227,.92); /* 既存アクセントに合わせるならここ */
+  border-color: rgba(0,113,227,.55);
+  color: #fff;
+}
+.linkstrip{
+  margin: 12px auto 20px; /* 18px auto 10px → 12px auto 14px */
+}
+.linkstrip .sep{
+  color: rgba(42,36,27,.22);  /* .35→.22 */
+}
+.linkstrip{
+  background: rgba(255,255,255,.42); /* .55→.42 */
+  border: 1px solid rgba(255,255,255,.28);
+  backdrop-filter: blur(10px);
+}
