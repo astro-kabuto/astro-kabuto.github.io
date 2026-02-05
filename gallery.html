@@ -506,27 +506,174 @@
       .lightbox-btn.prev{ left: 10px; }
       .lightbox-btn.next{ right: 10px; }
     }
+
+    /* =========================================
+       【PATCH】Gallery readability upgrade
+       末尾に追記するだけでOK
+    ========================================= */
+
+    /* 1) ページ全体の横幅を整えて余白を最適化 */
+    main.wrap{
+      max-width: 1180px;
+      margin: 0 auto;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    /* 2) Bannerは少しコンパクトに */
+    .gBanner{
+      padding: 16px 16px 12px;
+    }
+    .gBanner h1{ font-size: 24px; }
+    .gBanner p{ font-size: 13px; }
+
+    /* 3) TODAY'S PICK を “ちょうど良い高さ” に */
+    .gFeatured{
+      aspect-ratio: 21 / 9;          /* 16/9より横長で高さを抑える */
+      min-height: 220px;
+    }
+    @media (max-width: 740px){
+      .gFeatured{ aspect-ratio: 16 / 10; min-height: 200px; }
+    }
+    .gFeatured img{
+      object-fit: cover;              /* contain→coverで迫力UP */
+      padding: 0;                     /* 余白を減らして大きく見せる */
+    }
+    .gFeatured::before{
+      filter: blur(18px) brightness(.86);
+    }
+    .gFeatured-info{
+      left: 16px;
+      bottom: 14px;
+    }
+    .gFeatured-title{ font-size: 18px; margin: 0 0 6px; }
+    .gFeatured-sub{ font-size: 12px; opacity: .92; }
+
+    /* 4) Toolbarをスリム＆見やすく（stickyの圧を減らす） */
+    .gToolbar{
+      padding: 10px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.50);
+      box-shadow: 0 14px 40px rgba(0,0,0,.07);
+    }
+    .gRow{ gap: 8px; }
+    .gSearch{
+      height: 42px;
+      border-radius: 12px;
+      font-size: 13px;
+    }
+    .gSelect, .gBtn{ height: 42px; border-radius: 12px; }
+    .gPillBtn{ height: 42px; }
+
+    /* chipsは少し小さめ＆行を詰める */
+    .gChips{ gap: 7px; margin-top: 8px; }
+    .gChip{ padding: 6px 10px; font-size: 12px; }
+
+    /* 5) グリッドを “自然に増減” させて整列感UP */
+    .grid{
+      gap: 14px;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+    @media (max-width: 560px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    /* 6) カードの見やすさ（文字と余白の最適化） */
+    .gCard{
+      border-radius: 18px;
+      box-shadow: 0 14px 40px rgba(0,0,0,.08);
+    }
+    .gCardTop{
+      padding: 10px 10px 8px;
+    }
+    .gAvatar{
+      width: 28px; height: 28px;
+      font-size: 12px;
+    }
+    .gName{ font-size: 13px; }
+    .gSubName{ font-size: 11px; }
+
+    /* 7) サムネを “大きく見せる” */
+    .gThumbWrap{
+      background: rgba(255,255,255,.80);
+    }
+    .gThumb{
+      height: 240px;                 /* 210→240で少し大きく */
+      padding: 0;                    /* 余白を減らす */
+      object-fit: cover;             /* contain→cover */
+    }
+    @media (max-width: 740px){
+      .gThumb{ height: 260px; }
+    }
+    @media (max-width: 560px){
+      .gThumb{
+        object-fit: contain;         /* スマホは切れない方が好きならcontainに */
+        background: rgba(255,255,255,.85);
+      }
+    }
+
+    /* 8) 本文を読みやすく */
+    .gCardBody{ padding: 10px 12px 12px; }
+    .gCaption{
+      font-size: 13px;               /* 12→13 */
+      line-height: 1.6;
+      min-height: 0;                 /* 固定高を外して詰める */
+    }
+    .gFoot{ font-size: 11px; }
+    .gTagPill{ font-size: 11px; }
+
+    /* 9) 月見出しを少し目立たせる */
+    .gMonth{
+      padding: 10px 12px;
+      font-weight: 900;
+      background: rgba(255,255,255,.60);
+    }
+
+    /* 10) “もっと見る”ボタンを少し強めに */
+    .gMoreBtn{
+      height: 46px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.78);
+      box-shadow: 0 16px 45px rgba(0,0,0,.08);
+    }
+
+    /* ✅ いいねボタン: 押した時の視覚 */
+    .gPillBtn[data-like]{
+      transition: transform .12s ease, filter .12s ease, background .12s ease;
+    }
+    .gPillBtn[data-like].is-liked{
+      background: rgba(255, 0, 70, .14);
+      border-color: rgba(255, 0, 70, .20);
+      color: rgba(180, 0, 50, .90);
+    }
+    .gPillBtn[data-like]:active{
+      transform: scale(.97);
+    }
+
   </style>
 </head>
 
 <body>
-  <header class="header">
-    <div class="header-inner">
-      <a class="brand" href="index.html" aria-label="Astro Kabuto Home">
-        <div class="logo" aria-hidden="true"></div>
-        <div class="brand-text">
-          <h1>Astro Kabuto</h1>
-          <p>兜丸の成長記録サイト</p>
-        </div>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="index.html" aria-label="Home">
+        <span class="brand-kanji">兜</span>
+        <span class="brand-name">KABUTOMARU</span>
       </a>
 
       <nav class="nav" aria-label="Primary">
-        <a href="index.html">Home</a>
-        <a href="growth-log.html">Growth Log</a>
-        <a href="gallery.html" aria-current="page">Gallery</a>
+        <a class="active" href="index.html">Home</a>
         <a href="about.html">About</a>
-        <a href="care.html">Care</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="care.html">Care Tips</a>
+        <a href="shop.html">Shop</a>
       </nav>
+
+      <div class="social" aria-label="Social">
+        <a class="sbtn" href="#" aria-label="Facebook">f</a>
+        <a class="sbtn" href="#" aria-label="X">x</a>
+        <a class="sbtn" href="#" aria-label="Instagram">◎</a>
+      </div>
     </div>
   </header>
 
@@ -612,7 +759,46 @@
     // スペースや()が入っても安全なURLにする
     const r2 = (key) => R2_FILES + encodeURIComponent(key);
 
+    // ================================
+    // ❤️ Like API helpers
+    // ================================
+    async function fetchLikesMap(ids){
+      // ids: string[]
+      const unique = Array.from(new Set(ids.filter(Boolean)));
+      if (!unique.length) return { counts:{}, liked:{} };
+
+      // URL長さ対策：一応 chunk
+      const chunkSize = 120;
+      const counts = {};
+      const liked = {};
+
+      for (let i=0; i<unique.length; i+=chunkSize){
+        const part = unique.slice(i, i+chunkSize);
+        const qs = encodeURIComponent(part.join(","));
+        const res = await fetch(`${WORKER_ORIGIN}/api/likes?ids=${qs}`, { cache:"no-store" });
+        if (!res.ok) throw new Error("likes fetch failed: " + res.status);
+        const data = await res.json();
+        Object.assign(counts, data.counts || {});
+        Object.assign(liked, data.liked || {});
+      }
+      return { counts, liked };
+    }
+
+    async function toggleLike(postId){
+      const res = await fetch(`${WORKER_ORIGIN}/api/like`, {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ post_id: postId })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) throw new Error(data?.error || "like failed");
+      // { ok:true, liked:true/false, likes:number }
+      return data;
+    }
+
+    // ================================
     // ✅ v=2（title/tag/note入り）を読む
+    // ================================
     async function loadPosts(){
       const res = await fetch(`${WORKER_ORIGIN}/list?v=2`, { cache: "no-store" });
       if (!res.ok) throw new Error(`list failed: ${res.status}`);
@@ -651,7 +837,7 @@
         }
 
         return {
-          id: row.id,         // favが安定する
+          id: row.id,
           src: r2(key),
           cultivar: "兜丸（Astrophytum asterias）",
           date,
@@ -659,12 +845,15 @@
           country: "JP",
           type,
 
-          // 表示用
           caption: title || "(no title)", // タイトル
-          note,                            // メモ
-          tag,                             // タグ
-          images,                          // 将来用（複数枚）
+          note,
+          tag,
+          images,
+
+          // ❤️ like (server)
           likes: 0,
+          liked: false,
+
           tags: [ tag ? `#${tag}` : "#兜コレクション" ],
         };
       });
@@ -692,12 +881,6 @@
     let activeType = "all";
     let shown = 8;
 
-    // favorites
-    const FAV_KEY = "astroKabutoFavs";
-    let favSet = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || "[]"));
-    const saveFav = () => localStorage.setItem(FAV_KEY, JSON.stringify([...favSet]));
-
-    // ====== helpers ======
     const typeLabel = (t)=>({
       normal:"通常兜", super:"スーパー兜", ruri:"瑠璃兜", miracle:"ミラクル兜", isw:"ISW兜"
     }[t] || "兜");
@@ -727,7 +910,7 @@
       const q = (searchEl.value||"").trim().toLowerCase();
 
       filtered = allPosts.filter(p=>{
-        const matchFav = favSet.has(p.id);
+        const matchFav = !!p.liked; // ✅ 自分がいいねした投稿
         const matchType =
           (activeType === "all") ||
           (activeType === "fav" ? matchFav : p.type === activeType);
@@ -742,7 +925,6 @@
 
       filtered = sortPosts(filtered);
 
-      // ★ 空なら body クラス付け（featured畳む）
       document.body.classList.toggle("is-empty", filtered.length === 0);
 
       render();
@@ -783,36 +965,37 @@
       el.dataset.author = p.author || "";
       el.dataset.type = p.type || "";
       el.dataset.country = p.country || "";
-      el.dataset.caption = p.caption || "";
-      el.dataset.likes = String(p.likes ?? "");
-
-      // ✅ 追加：メモ/タグ/タイトル
+      el.dataset.title = p.caption || "";
       el.dataset.note = p.note || "";
       el.dataset.tag = p.tag || "";
-      el.dataset.title = p.caption || "";
-
-      const isFav = favSet.has(p.id);
+      el.dataset.likes = String(p.likes ?? 0);
+      el.dataset.liked = String(!!p.liked);
 
       const noteLine = (p.note || "").trim();
       const noteShort = noteLine.length > 60 ? noteLine.slice(0,60) + "…" : noteLine;
+
+      const likeMark = p.liked ? "♥" : "♡";
 
       el.innerHTML = `
         <div class="gCardTop">
           <div class="gUser">
             <div class="gAvatar">${(p.author||"k").slice(0,1).toUpperCase()}</div>
             <div style="min-width:0;">
-              <div class="gName">${p.author || "unknown"}</div>
-              <div class="gSubName">${typeLabel(p.type)} / ${p.date || ""}</div>
+              <div class="gName">${escapeHtml(p.author || "unknown")}</div>
+              <div class="gSubName">${escapeHtml(typeLabel(p.type))} / ${escapeHtml(p.date || "")}</div>
             </div>
           </div>
 
           <div class="gFlagLike">
-            <span class="gFlag" title="${p.country||""}">${countryFlag(p.country)}</span>
+            <span class="gFlag" title="${escapeHtml(p.country||"")}">${countryFlag(p.country)}</span>
+
             <span class="gLikes" title="likes">
-              <span>♥</span> <span>${p.likes ?? 0}</span>
+              <span>♥</span> <span data-like-count>${escapeHtml(String(p.likes ?? 0))}</span>
             </span>
-            <button class="gPillBtn" data-fav style="height:34px;padding:0 10px;font-size:12px;">
-              ${isFav ? "♥" : "♡"}
+
+            <button class="gPillBtn ${p.liked ? "is-liked" : ""}" data-like type="button"
+              style="height:34px;padding:0 10px;font-size:12px;">
+              ${likeMark}
             </button>
           </div>
         </div>
@@ -839,11 +1022,60 @@
         </div>
       `;
 
-      el.querySelector("[data-fav]").addEventListener("click", (e)=>{
+      // ❤️ like click (server)
+      el.querySelector("[data-like]").addEventListener("click", async (e)=>{
         e.preventDefault(); e.stopPropagation();
-        favSet.has(p.id) ? favSet.delete(p.id) : favSet.add(p.id);
-        saveFav();
-        applyFilters();
+
+        const btn = e.currentTarget;
+        const countEl = el.querySelector("[data-like-count]");
+
+        // 連打防止
+        if (btn.dataset.busy === "1") return;
+        btn.dataset.busy = "1";
+
+        const postId = p.id;
+
+        // 楽観更新（体感よく）
+        const wasLiked = !!p.liked;
+        p.liked = !wasLiked;
+        p.likes = Math.max(0, (p.likes||0) + (p.liked ? 1 : -1));
+        btn.textContent = p.liked ? "♥" : "♡";
+        btn.classList.toggle("is-liked", p.liked);
+        countEl.textContent = String(p.likes);
+
+        try{
+          const res = await toggleLike(postId);
+          p.liked = !!res.liked;
+          p.likes = Number(res.likes ?? p.likes);
+          btn.textContent = p.liked ? "♥" : "♡";
+          btn.classList.toggle("is-liked", p.liked);
+          countEl.textContent = String(p.likes);
+
+          // フィルタが「♡お気に入り」なら結果を反映
+          if (activeType === "fav" || typeSel.value === "fav") applyFilters();
+
+          // lightboxが開いてるならパネルも同期
+          if (lightbox.classList.contains("open")) {
+            const card = visibleCards()[currentIndex];
+            if (card && card.dataset.id === postId){
+              card.dataset.likes = String(p.likes);
+              card.dataset.liked = String(p.liked);
+              setInfoPanel(card);
+            }
+          }
+
+        }catch(err){
+          // 戻す
+          p.liked = wasLiked;
+          p.likes = Math.max(0, (p.likes||0) + (wasLiked ? 1 : -1));
+          btn.textContent = p.liked ? "♥" : "♡";
+          btn.classList.toggle("is-liked", p.liked);
+          countEl.textContent = String(p.likes);
+          alert("いいねに失敗しました。少し待ってからもう一度試してね。");
+          console.error(err);
+        }finally{
+          btn.dataset.busy = "0";
+        }
       });
 
       return el;
@@ -921,10 +1153,10 @@
       const a = card.dataset.author || "";
       const t = typeLabel(card.dataset.type || "");
       const flag = countryFlag(card.dataset.country || "");
-      const likes = card.dataset.likes || "";
-      const note = card.dataset.note || ""; // ✅ メモはnoteから
-
+      const likes = card.dataset.likes || "0";
+      const note = card.dataset.note || "";
       const tag = card.dataset.tag || "";
+      const liked = card.dataset.liked === "true";
 
       lbPanel.innerHTML = `
         <div class="lbTitle">${escapeHtml(title || c || "兜丸")}</div>
@@ -934,7 +1166,7 @@
           ${a ? `<span class="lbPill">by ${escapeHtml(a)}</span>` : ""}
           ${tag ? `<span class="lbPill">#${escapeHtml(tag)}</span>` : ""}
           ${flag ? `<span class="lbPill">${escapeHtml(flag)}</span>` : ""}
-          ${likes ? `<span class="lbPill">♥ ${escapeHtml(likes)}</span>` : ""}
+          <span class="lbPill">${liked ? "♥" : "♡"} ${escapeHtml(likes)}</span>
         </div>
         <div class="lbNote">${escapeHtml(note || "（メモは未登録）")}</div>
       `;
@@ -1138,7 +1370,7 @@
       if (swiping && scale <= 1.01){
         const t=e.changedTouches[0];
         const dx=t.clientX - swipeStartX;
-        const dy=t.clientY - swipeStartY; // ✅ バグ修正：clientY
+        const dy=t.clientY - swipeStartY;
         const SWIPE_X=45, SWIPE_Y=60;
         if (Math.abs(dx) > SWIPE_X && Math.abs(dy) < SWIPE_Y){
           if (dx < 0) next(); else prev();
@@ -1171,18 +1403,20 @@
         btn.classList.add("is-active");
         activeType = btn.dataset.filter;
         typeSel.value = (activeType === "fav") ? "fav" : (activeType === "all" ? "all" : activeType);
+        shown = 8; // ✅ フィルタ変えたら表示数リセット
         applyFilters();
       });
     });
 
-    searchEl.addEventListener("input", applyFilters);
+    searchEl.addEventListener("input", ()=>{ shown = 8; applyFilters(); });
     typeSel.addEventListener("change", ()=>{
       activeType = typeSel.value;
       chips.forEach(b=>b.classList.toggle("is-active", b.dataset.filter === activeType));
       if (activeType === "all") chips[0].classList.add("is-active");
+      shown = 8; // ✅
       applyFilters();
     });
-    sortEl.addEventListener("change", applyFilters);
+    sortEl.addEventListener("change", ()=>{ shown = 8; applyFilters(); });
 
     resetEl.addEventListener("click", ()=>{
       activeType="all";
@@ -1204,6 +1438,16 @@
     (async ()=>{
       try{
         allPosts = await loadPosts();
+
+        // ❤️ like情報をまとめて取得して、allPostsへ反映
+        const ids = allPosts.map(p=>p.id);
+        const likeData = await fetchLikesMap(ids);
+
+        allPosts.forEach(p=>{
+          p.likes = Number(likeData.counts?.[p.id] ?? 0);
+          p.liked = !!likeData.liked?.[p.id];
+        });
+
         allPosts = sortPosts(allPosts);
         applyFilters();
       }catch(err){
@@ -1222,3 +1466,4 @@
   </script>
 </body>
 </html>
+
