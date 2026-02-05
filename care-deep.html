@@ -1,32 +1,313 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>育て方（詳しく） | Astro Kabuto</title>
   <meta name="description" content="兜丸（Astrophytum asterias）の育て方を深掘り。関東の目安、白点を守る環境、用土配合、植え替え、実生・選抜、黒ずみ（カビ）対策まで。">
-  <link rel="stylesheet" href="style.css">
+
+  <!-- ✅ Topと同じフォント（そのまま流用OK） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:wght@400;600;700&family=Yuji+Syuku&family=Zen+Kurenaido&family=Kaisei+Tokumin:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================
+       Care Deep page (ALL-IN-ONE)
+       Paper + ruled + soft cards
+       + ✅ Topと同じTopbarデザイン
+       ========================= */
+
+    :root{
+      --paper:#f3efe7;
+      --paper2:#efe8dc;
+      --ink: rgba(0,0,0,.82);
+      --muted: rgba(0,0,0,.58);
+      --line: rgba(0,0,0,.10);
+
+      --card: rgba(255,255,255,.72);
+      --card2: rgba(255,255,255,.55);
+
+      --radius: 18px;
+      --radius-xl: 24px;
+
+      --shadow-sm: 0 10px 28px rgba(0,0,0,.08);
+
+      /* ✅ Topと合わせるフォント変数 */
+      --serif: "Cinzel","Playfair Display","Kaisei Tokumin",serif;
+      --script: "Yuji Syuku","Kaisei Tokumin",serif;
+      --ui: system-ui,-apple-system,"Segoe UI","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+
+      /* ✅ Topbarカラー（トップと同系） */
+      --topbar1: rgba(58,66,43,.88);
+      --topbar2: rgba(58,66,43,.70);
+    }
+
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; }
+
+    body{
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--ui);
+
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(0,0,0,.035) 0px,
+          rgba(0,0,0,.035) 1px,
+          transparent 1px,
+          transparent 44px
+        ),
+        radial-gradient(1200px 700px at 30% 15%, rgba(255,255,255,.55), transparent 60%),
+        linear-gradient(180deg, var(--paper), var(--paper2));
+      overflow-x: hidden;
+    }
+
+    a{ color: inherit; }
+    a:hover{ opacity: .92; }
+
+    /* headings */
+    h1,h2,h3,h4{
+      font-family: "Kaisei Tokumin", serif;
+      letter-spacing: .02em;
+      margin: 0;
+    }
+    h2{
+      font-size: clamp(26px, 3.2vw, 40px);
+      line-height: 1.15;
+    }
+    h3{
+      font-size: 22px;
+      line-height: 1.25;
+    }
+    h4{
+      font-size: 17px;
+      line-height: 1.4;
+      margin-top: 14px;
+      display: inline-block;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(0,0,0,.08);
+    }
+    p{ margin: 0; }
+    .sub, .muted{ color: var(--muted); }
+
+    /* ==================================
+       ✅ Topbar (indexと同じ見た目)
+       ================================== */
+    .shell{
+      width: min(1060px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: linear-gradient(180deg, var(--topbar1), var(--topbar2));
+      border-bottom: 1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .topbar-inner{
+      height: 62px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+    }
+
+    .topbar .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      color: rgba(255,255,255,.92);
+      text-decoration:none;
+      letter-spacing:.02em;
+      white-space: nowrap;
+    }
+    .brand-kanji{
+      font-family: var(--serif);
+      font-size: 30px;
+      letter-spacing:.06em;
+      line-height: 1;
+    }
+    .brand-name{
+      font-family: var(--serif);
+      font-size: 13px;
+      letter-spacing: .18em;
+      opacity:.92;
+      line-height: 1;
+    }
+
+    .topbar .nav{
+      display:flex;
+      align-items:center;
+      gap: 16px;
+      font-family: var(--serif);
+      font-size: 13px;
+      letter-spacing:.06em;
+      justify-content: center;
+    }
+    .topbar .nav a{
+      color: rgba(255,255,255,.82);
+      padding: 10px 6px;
+      border-bottom: 2px solid transparent;
+      text-decoration:none;
+      transition: .18s ease;
+    }
+    .topbar .nav a:hover{ color:#fff; }
+    .topbar .nav a.active,
+    .topbar .nav a[aria-current="page"]{
+      color:#fff;
+      border-bottom-color: rgba(255,255,255,.80);
+    }
+
+    .social{ display:flex; gap: 8px; }
+    .sbtn{
+      width: 28px; height: 28px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      color: rgba(255,255,255,.90);
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.10);
+      font-size: 13px;
+      text-decoration:none;
+    }
+    .sbtn:hover{ background: rgba(255,255,255,.18); }
+
+    @media (max-width: 980px){
+      .topbar .nav{ display:none; }
+      .social{ display:none; }
+    }
+
+    /* layout */
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px 16px 54px;
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      padding: 18px 18px;
+      margin: 16px 0;
+    }
+
+    /* hero */
+    .hero{
+      margin: 18px 0 16px;
+      padding: 8px 4px 2px;
+    }
+    .hero .sub{
+      margin-top: 8px;
+      line-height: 1.7;
+    }
+    .hero .muted{
+      margin-top: 10px;
+      line-height: 1.75;
+    }
+    .hero a{
+      color: rgba(0,0,0,.72);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* two-column layout (toc + content) */
+    .deepGrid{
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    /* toc */
+    .toc{
+      position: sticky;
+      top: 84px; /* header高さ分 */
+    }
+    .toc ul{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      line-height: 1.7;
+    }
+    .toc a{
+      color: rgba(0,0,0,.75);
+      text-decoration: none;
+    }
+    .toc a:hover{ text-decoration: underline; }
+
+    /* content cards typography */
+    .card p{
+      line-height: 1.85;
+      color: rgba(0,0,0,.74);
+      margin-top: 10px;
+    }
+    .card .sub{
+      margin-top: 10px;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+    .card .muted{
+      margin-top: 10px;
+      line-height: 1.85;
+      color: var(--muted);
+    }
+    ul,ol{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      line-height: 1.85;
+      color: rgba(0,0,0,.74);
+    }
+    li{ margin: 6px 0; }
+    strong{ font-weight: 700; }
+
+    /* Section anchors spacing (for sticky header) */
+    section[id]{ scroll-margin-top: 92px; }
+
+    /* footer */
+    .footer{
+      margin-top: 22px;
+      padding: 18px 0 0;
+      text-align: center;
+      color: rgba(0,0,0,.55);
+      font-family: var(--serif);
+      letter-spacing: .06em;
+    }
+
+    /* responsive */
+    @media (max-width: 980px){
+      .deepGrid{ grid-template-columns: 1fr; }
+      .toc{ position: relative; top: auto; }
+    }
+  </style>
 </head>
 
 <body>
-  <!-- Header（トップと同じ構造） -->
-  <header class="header">
-    <div class="header-inner">
-      <a class="brand" href="index.html" aria-label="Astro Kabuto Home">
-        <div class="logo" aria-hidden="true"></div>
-        <div class="brand-text">
-          <h1>Astro Kabuto</h1>
-          <p>兜丸の成長記録サイト</p>
-        </div>
+  <!-- ✅ Topと同じTopbar -->
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="index.html" aria-label="Home">
+        <span class="brand-kanji">兜</span>
+        <span class="brand-name">KABUTOMARU</span>
       </a>
 
       <nav class="nav" aria-label="Primary">
         <a href="index.html">Home</a>
-        <a href="growth-log.html">Growth Log</a>
-        <a href="gallery.html">Gallery</a>
         <a href="about.html">About</a>
-        <a href="care.html">Care</a>
+        <a href="gallery.html">Gallery</a>
+        <a class="active" href="care.html">Care Tips</a>
+        
       </nav>
+
+      <div class="social" aria-label="Social">
+        <a class="sbtn" href="#" aria-label="Facebook">f</a>
+        <a class="sbtn" href="#" aria-label="X">x</a>
+        <a class="sbtn" href="#" aria-label="Instagram">◎</a>
+      </div>
     </div>
   </header>
 
@@ -37,289 +318,279 @@
         兜丸を「白く」「崩さず」「長く楽しむ」ための深掘りメモ。<br>
         迷ったら <a href="care.html">Care（初心者）</a> の要約に戻ってOK。
       </p>
-      <p class="muted" style="margin-top:10px;">
+      <p class="muted">
         このページは“ガチ勢向け”。細かい話も含めて、後で見返せるように長めにまとめています。
       </p>
     </section>
 
-    <section class="card toc">
-      <h3>目次</h3>
-      <ul>
-        <li><a href="#principles">0. いちばん大事な原則</a></li>
-        <li><a href="#habitat">1. 生息地と気候（なぜこの管理になるか）</a></li>
-        <li><a href="#calendar">2. 年間カレンダー（関東の目安）</a></li>
-        <li><a href="#light">3. 光と遮光（白点を守る）</a></li>
-        <li><a href="#water">4. 水やり（回数よりメリハリ）</a></li>
-        <li><a href="#wind">5. 風と湿度（黒ずみ・カビ対策）</a></li>
-        <li><a href="#soil-deep">6. 用土（ガチ勢向け配合）</a></li>
-        <li><a href="#repot">7. 植え替え（根切り・乾燥・再開）</a></li>
-        <li><a href="#fert">8. 肥料（少しでいい）</a></li>
-        <li><a href="#seed">9. 実生・選抜（良個体は少ない）</a></li>
-        <li><a href="#trouble">10. トラブル深掘り（黒ずみ・腰折れ・止まり）</a></li>
-        <li><a href="#checklist">11. 毎日の観察チェックリスト</a></li>
-      </ul>
-    </section>
+    <div class="deepGrid">
+      <!-- TOC -->
+      <section class="card toc">
+        <h3>目次</h3>
+        <ul>
+          <li><a href="#principles">0. いちばん大事な原則</a></li>
+          <li><a href="#habitat">1. 生息地と気候（なぜこの管理になるか）</a></li>
+          <li><a href="#calendar">2. 年間カレンダー（関東の目安）</a></li>
+          <li><a href="#light">3. 光と遮光（白点を守る）</a></li>
+          <li><a href="#water">4. 水やり（回数よりメリハリ）</a></li>
+          <li><a href="#wind">5. 風と湿度（黒ずみ・カビ対策）</a></li>
+          <li><a href="#soil-deep">6. 用土（ガチ勢向け配合）</a></li>
+          <li><a href="#repot">7. 植え替え（根切り・乾燥・再開）</a></li>
+          <li><a href="#fert">8. 肥料（少しでいい）</a></li>
+          <li><a href="#seed">9. 実生・選抜（良個体は少ない）</a></li>
+          <li><a href="#trouble">10. トラブル深掘り（黒ずみ・腰折れ・止まり）</a></li>
+          <li><a href="#checklist">11. 毎日の観察チェックリスト</a></li>
+        </ul>
+      </section>
 
-    <!-- 0. 原則 -->
-    <section class="card" id="principles">
-      <h3>0. いちばん大事な原則</h3>
-      <ul>
-        <li><strong>兜はゆっくり。</strong>焦り（やりすぎ）が失敗の一番の原因。</li>
-        <li><strong>白点を守る最大要因は「風と湿度」</strong>。水より先に“空気”を整える。</li>
-        <li><strong>回数よりメリハリ。</strong>「乾く時は完全に乾かす」「やる時はしっかりやる」。</li>
-        <li><strong>低温＋湿り気が最危険。</strong>冬の水で治そうとしない。</li>
-        <li><strong>粉を減らす。</strong>用土の微塵（細粒）が多いほど蒸れと腐りのリスクが上がる。</li>
-      </ul>
-      <p class="muted">
-        まとめ：迷ったら「まず乾かす」「風を当てる」「温度を見る」。
-      </p>
-    </section>
+      <!-- Content -->
+      <div>
+        <!-- 0 -->
+        <section class="card" id="principles">
+          <h3>0. いちばん大事な原則</h3>
+          <ul>
+            <li><strong>兜はゆっくり。</strong>焦り（やりすぎ）が失敗の一番の原因。</li>
+            <li><strong>白点を守る最大要因は「風と湿度」</strong>。水より先に“空気”を整える。</li>
+            <li><strong>回数よりメリハリ。</strong>「乾く時は完全に乾かす」「やる時はしっかりやる」。</li>
+            <li><strong>低温＋湿り気が最危険。</strong>冬の水で治そうとしない。</li>
+            <li><strong>粉を減らす。</strong>用土の微塵（細粒）が多いほど蒸れと腐りのリスクが上がる。</li>
+          </ul>
+          <p class="muted">まとめ：迷ったら「まず乾かす」「風を当てる」「温度を見る」。</p>
+        </section>
 
-    <!-- 1. 生息地 -->
-    <section class="card" id="habitat">
-      <h3>1. 生息地と気候（なぜこの管理になるか）</h3>
-      <p>
-        兜丸（Astrophytum asterias）はメキシコ原産のサボテン。乾く時はしっかり乾く環境で、風が通り、日照の強弱もある。
-        この前提があるから、家庭栽培でも「湿りっぱなし」より<strong>乾湿のメリハリ</strong>が合いやすい。
-      </p>
-      <ul>
-        <li><strong>“乾き”がある</strong> → 根が呼吸できて調子が上がりやすい</li>
-        <li><strong>“蒸れ”が続く</strong> → 黒ずみ・根腐れに寄りやすい</li>
-        <li><strong>光が強い</strong> → ただし急に当てると焼ける（慣らしが必須）</li>
-      </ul>
-      <p class="muted">
-        Deepページでは生息地を“理屈の補助”として置くけど、初心者は「管理の結論」だけで十分。
-      </p>
-    </section>
+        <!-- 1 -->
+        <section class="card" id="habitat">
+          <h3>1. 生息地と気候（なぜこの管理になるか）</h3>
+          <p>
+            兜丸（Astrophytum asterias）はメキシコ原産のサボテン。乾く時はしっかり乾く環境で、風が通り、日照の強弱もある。
+            この前提があるから、家庭栽培でも「湿りっぱなし」より<strong>乾湿のメリハリ</strong>が合いやすい。
+          </p>
+          <ul>
+            <li><strong>“乾き”がある</strong> → 根が呼吸できて調子が上がりやすい</li>
+            <li><strong>“蒸れ”が続く</strong> → 黒ずみ・根腐れに寄りやすい</li>
+            <li><strong>光が強い</strong> → ただし急に当てると焼ける（慣らしが必須）</li>
+          </ul>
+          <p class="muted">Deepページでは生息地を“理屈の補助”として置くけど、初心者は「管理の結論」だけで十分。</p>
+        </section>
 
-    <!-- 2. 年間カレンダー -->
-    <section class="card" id="calendar">
-      <h3>2. 年間カレンダー（関東の目安）</h3>
-      <p class="sub">日付は固定せず「気温が安定したら」で判断。ここは“ざっくり目安”。</p>
+        <!-- 2 -->
+        <section class="card" id="calendar">
+          <h3>2. 年間カレンダー（関東の目安）</h3>
+          <p class="sub">日付は固定せず「気温が安定したら」で判断。ここは“ざっくり目安”。</p>
 
-      <h4>水やりの比率イメージ</h4>
-      <ul>
-        <li><strong>春：100</strong>（一番動かしやすい）</li>
-        <li><strong>夏：50</strong>（蒸れ対策優先で控えめ）</li>
-        <li><strong>秋：70</strong>（再び動きやすいが、夜温低下に注意）</li>
-        <li><strong>冬：0</strong>（基本断水）</li>
-      </ul>
+          <h4>水やりの比率イメージ</h4>
+          <ul>
+            <li><strong>春：100</strong>（一番動かしやすい）</li>
+            <li><strong>夏：50</strong>（蒸れ対策優先で控えめ）</li>
+            <li><strong>秋：70</strong>（再び動きやすいが、夜温低下に注意）</li>
+            <li><strong>冬：0</strong>（基本断水）</li>
+          </ul>
 
-      <h4>ざっくり時期の目安</h4>
-      <ul>
-        <li><strong>2月後半〜3月</strong>：少量から開始（霧吹き/少量→通常へ）</li>
-        <li><strong>4月</strong>：気温が安定したら「やる時はたっぷり」</li>
-        <li><strong>梅雨〜真夏</strong>：湿度が上がる。水より風。必要なら控えめ/休む</li>
-        <li><strong>秋（9〜11月）</strong>：春ほどではないが動く。夜温が落ちるなら減らす</li>
-        <li><strong>真冬（12〜2月）</strong>：ほぼ断水。低温多湿は致命的</li>
-      </ul>
-      <p class="muted">
-        「暖地のスピード」と比べると関東はゆっくりに感じる。焦って水や肥料を増やさないのがコツ。
-      </p>
-    </section>
+          <h4>ざっくり時期の目安</h4>
+          <ul>
+            <li><strong>2月後半〜3月</strong>：少量から開始（霧吹き/少量→通常へ）</li>
+            <li><strong>4月</strong>：気温が安定したら「やる時はたっぷり」</li>
+            <li><strong>梅雨〜真夏</strong>：湿度が上がる。水より風。必要なら控えめ/休む</li>
+            <li><strong>秋（9〜11月）</strong>：春ほどではないが動く。夜温が落ちるなら減らす</li>
+            <li><strong>真冬（12〜2月）</strong>：ほぼ断水。低温多湿は致命的</li>
+          </ul>
+          <p class="muted">「暖地のスピード」と比べると関東はゆっくりに感じる。焦って水や肥料を増やさないのがコツ。</p>
+        </section>
 
-    <!-- 3. 光と遮光 -->
-    <section class="card" id="light">
-      <h3>3. 光と遮光（白点を守る）</h3>
-      <p>
-        兜は光が好き。でも<strong>急に強光へ</strong>は白点が焼けやすい。季節と慣らしで決める。
-      </p>
+        <!-- 3 -->
+        <section class="card" id="light">
+          <h3>3. 光と遮光（白点を守る）</h3>
+          <p>兜は光が好き。でも<strong>急に強光へ</strong>は白点が焼けやすい。季節と慣らしで決める。</p>
 
-      <h4>遮光の目安（ざっくり）</h4>
-      <ul>
-        <li><strong>春：40%前後</strong>（環境が整えばよく動く）</li>
-        <li><strong>夏：50〜60%</strong>（蒸れ＋焼けを避ける）</li>
-        <li><strong>秋：40%前後</strong>（できるだけ光を確保）</li>
-        <li><strong>実生（小苗）：60%前後</strong>（環境次第）</li>
-      </ul>
+          <h4>遮光の目安（ざっくり）</h4>
+          <ul>
+            <li><strong>春：40%前後</strong>（環境が整えばよく動く）</li>
+            <li><strong>夏：50〜60%</strong>（蒸れ＋焼けを避ける）</li>
+            <li><strong>秋：40%前後</strong>（できるだけ光を確保）</li>
+            <li><strong>実生（小苗）：60%前後</strong>（環境次第）</li>
+          </ul>
 
-      <h4>焼けを増やさないコツ</h4>
-      <ul>
-        <li>移動は段階的に（数日〜1週間かけて慣らす）</li>
-        <li>強光線の時間帯を避ける（特に真夏の直射）</li>
-        <li>風が弱い日は“同じ光でも”荒れやすい（蒸れセット）</li>
-      </ul>
-    </section>
+          <h4>焼けを増やさないコツ</h4>
+          <ul>
+            <li>移動は段階的に（数日〜1週間かけて慣らす）</li>
+            <li>強光線の時間帯を避ける（特に真夏の直射）</li>
+            <li>風が弱い日は“同じ光でも”荒れやすい（蒸れセット）</li>
+          </ul>
+        </section>
 
-    <!-- 4. 水やり -->
-    <section class="card" id="water">
-      <h3>4. 水やり（回数よりメリハリ）</h3>
-      <p>
-        兜の水は「回数」よりも<strong>乾きと温度</strong>で決める。
-        “ダラダラ少量”より、“乾いたらしっかり→乾かす”が安定しやすい。
-      </p>
+        <!-- 4 -->
+        <section class="card" id="water">
+          <h3>4. 水やり（回数よりメリハリ）</h3>
+          <p>
+            兜の水は「回数」よりも<strong>乾きと温度</strong>で決める。
+            “ダラダラ少量”より、“乾いたらしっかり→乾かす”が安定しやすい。
+          </p>
 
-      <h4>基本の型</h4>
-      <ul>
-        <li><strong>乾いたらたっぷり</strong>（鉢底から抜けるくらい）</li>
-        <li><strong>乾かす時は完全に乾かす</strong></li>
-        <li>蒸れやすい日は無理に上げない（風が弱い日・湿度が高い日）</li>
-      </ul>
+          <h4>基本の型</h4>
+          <ul>
+            <li><strong>乾いたらたっぷり</strong>（鉢底から抜けるくらい）</li>
+            <li><strong>乾かす時は完全に乾かす</strong></li>
+            <li>蒸れやすい日は無理に上げない（風が弱い日・湿度が高い日）</li>
+          </ul>
 
-      <h4>季節のニュアンス</h4>
-      <ul>
-        <li><strong>春</strong>：動かしやすい。乾いたらしっかり</li>
-        <li><strong>夏</strong>：春の半分くらいのイメージ。加湿気味なら少なめ</li>
-        <li><strong>秋</strong>：春の7割くらいのイメージ。夜温低下で減らす</li>
-        <li><strong>冬</strong>：ほぼ断水。低温＋湿り気が一番危険</li>
-      </ul>
+          <h4>季節のニュアンス</h4>
+          <ul>
+            <li><strong>春</strong>：動かしやすい。乾いたらしっかり</li>
+            <li><strong>夏</strong>：春の半分くらいのイメージ。加湿気味なら少なめ</li>
+            <li><strong>秋</strong>：春の7割くらいのイメージ。夜温低下で減らす</li>
+            <li><strong>冬</strong>：ほぼ断水。低温＋湿り気が一番危険</li>
+          </ul>
 
-      <p class="muted">
-        兜は回復が遅い。数日〜1週間スパンで観察する。
-      </p>
-    </section>
+          <p class="muted">兜は回復が遅い。数日〜1週間スパンで観察する。</p>
+        </section>
 
-    <!-- 5. 風と湿度 -->
-    <section class="card" id="wind">
-      <h3>5. 風と湿度（黒ずみ・カビ対策）</h3>
-      <p>
-        白く綺麗に保つ最大のポイントは<strong>黒ずみ（カビ）を出さない</strong>こと。
-        対策は薬より先に<strong>湿度を切る／風を動かす</strong>。
-      </p>
+        <!-- 5 -->
+        <section class="card" id="wind">
+          <h3>5. 風と湿度（黒ずみ・カビ対策）</h3>
+          <p>
+            白く綺麗に保つ最大のポイントは<strong>黒ずみ（カビ）を出さない</strong>こと。
+            対策は薬より先に<strong>湿度を切る／風を動かす</strong>。
+          </p>
 
-      <h4>やること</h4>
-      <ul>
-        <li>鉢を詰めすぎない（間隔を空ける）</li>
-        <li>サーキュレーター/扇風機で空気を動かす</li>
-        <li>梅雨〜真夏は換気を強める（温室/棚内の湿度を下げる）</li>
-        <li>用土の粉を減らす（乾きが悪いと黒ずみが出やすい）</li>
-      </ul>
+          <h4>やること</h4>
+          <ul>
+            <li>鉢を詰めすぎない（間隔を空ける）</li>
+            <li>サーキュレーター/扇風機で空気を動かす</li>
+            <li>梅雨〜真夏は換気を強める（温室/棚内の湿度を下げる）</li>
+            <li>用土の粉を減らす（乾きが悪いと黒ずみが出やすい）</li>
+          </ul>
 
-      <h4>“温水（約50℃）”の話について（注意）</h4>
-      <p class="muted">
-        いくつかの記録では「温水で表面の汚れを落とす」ような対処が語られることがある。
-        ただし株を傷めるリスクがあるため、Astro Kabutoでは<strong>推奨手順としては扱わない</strong>。
-        どうしても試す場合は、必ず小さな範囲・弱い個体では避ける・自己責任で。基本は環境改善（風と乾き）が先。
-      </p>
-    </section>
+          <h4>“温水（約50℃）”の話について（注意）</h4>
+          <p class="muted">
+            いくつかの記録では「温水で表面の汚れを落とす」ような対処が語られることがある。
+            ただし株を傷めるリスクがあるため、Astro Kabutoでは<strong>推奨手順としては扱わない</strong>。
+            どうしても試す場合は、必ず小さな範囲・弱い個体では避ける・自己責任で。基本は環境改善（風と乾き）が先。
+          </p>
+        </section>
 
-    <!-- 6. 用土 -->
-    <section class="card" id="soil-deep">
-      <h3>6. 用土（ガチ勢向け：自分の配合）</h3>
-      <p class="sub">
-        ※体積比（パーツ）で表記。環境（湿度・風・鉢サイズ）で微調整。
-        初心者は市販のサボテン培養土＋軽石でOK。
-      </p>
+        <!-- 6 -->
+        <section class="card" id="soil-deep">
+          <h3>6. 用土（ガチ勢向け：自分の配合）</h3>
+          <p class="sub">
+            ※体積比（パーツ）で表記。環境（湿度・風・鉢サイズ）で微調整。
+            初心者は市販のサボテン培養土＋軽石でOK。
+          </p>
 
-      <h4>自分の配合（体積比）</h4>
-      <ul>
-        <li>硬質赤玉：7</li>
-        <li>鹿沼：2</li>
-        <li>黒炭：2</li>
-        <li>軽石：3</li>
-        <li>ピートモス：2（＋ピート少々はここに含める）</li>
-        <li>ココピート：2</li>
-        <li>ゼオライト：3</li>
-        <li>卵の殻：少々</li>
-        <li>マグァンプK：少々</li>
-      </ul>
+          <h4>自分の配合（体積比）</h4>
+          <ul>
+            <li>硬質赤玉：7</li>
+            <li>鹿沼：2</li>
+            <li>黒炭：2</li>
+            <li>軽石：3</li>
+            <li>ピートモス：2（＋ピート少々はここに含める）</li>
+            <li>ココピート：2</li>
+            <li>ゼオライト：3</li>
+            <li>卵の殻：少々</li>
+            <li>マグァンプK：少々</li>
+          </ul>
 
-      <h4>用土の重要ポイント</h4>
-      <ul>
-        <li><strong>粉（微塵）は取り除く</strong>（乾きが悪い→腐りやすい）</li>
-        <li>湿度が高い季節は「ピート/ココ」を減らして乾き寄りへ</li>
-        <li>小鉢ほど乾きにくいので、粒成分を増やすと安全</li>
-      </ul>
+          <h4>用土の重要ポイント</h4>
+          <ul>
+            <li><strong>粉（微塵）は取り除く</strong>（乾きが悪い→腐りやすい）</li>
+            <li>湿度が高い季節は「ピート/ココ」を減らして乾き寄りへ</li>
+            <li>小鉢ほど乾きにくいので、粒成分を増やすと安全</li>
+          </ul>
 
-      <p class="muted">
-        “割合”は絶対ではなく、あなたの環境で「乾きやすい・風が通る」を優先して調整するのが正解。
-      </p>
-    </section>
+          <p class="muted">
+            “割合”は絶対ではなく、あなたの環境で「乾きやすい・風が通る」を優先して調整するのが正解。
+          </p>
+        </section>
 
-    <!-- 7. 植え替え -->
-    <section class="card" id="repot">
-      <h3>7. 植え替え（根切り・乾燥・再開）</h3>
-      <p>
-        植え替えは日付で決めるより、<strong>株が動き出すタイミング</strong>を優先。
-        温暖化でズレることもあるので「固定日」より「気温と株の反応」で。
-      </p>
+        <!-- 7 -->
+        <section class="card" id="repot">
+          <h3>7. 植え替え（根切り・乾燥・再開）</h3>
+          <p>
+            植え替えは日付で決めるより、<strong>株が動き出すタイミング</strong>を優先。
+            温暖化でズレることもあるので「固定日」より「気温と株の反応」で。
+          </p>
 
-      <h4>基本手順（目安）</h4>
-      <ol>
-        <li>春先に抜く（寒い時期は避ける）</li>
-        <li>根を数cm残してカット（整理する）</li>
-        <li><strong>日陰でしっかり乾燥（目安：2〜3週間）</strong></li>
-        <li>新しい用土へ植え付け（粉少なめ）</li>
-        <li><strong>植え付け後すぐ水やりしない</strong></li>
-        <li>目安：10日くらいして少量→反応を見て通常へ</li>
-      </ol>
+          <h4>基本手順（目安）</h4>
+          <ol>
+            <li>春先に抜く（寒い時期は避ける）</li>
+            <li>根を数cm残してカット（整理する）</li>
+            <li><strong>日陰でしっかり乾燥（目安：2〜3週間）</strong></li>
+            <li>新しい用土へ植え付け（粉少なめ）</li>
+            <li><strong>植え付け後すぐ水やりしない</strong></li>
+            <li>目安：10日くらいして少量→反応を見て通常へ</li>
+          </ol>
 
-      <p class="muted">
-        迷ったら「湿ったまま植えない」。切った根は“乾かしてから”が安全。
-      </p>
-    </section>
+          <p class="muted">迷ったら「湿ったまま植えない」。切った根は“乾かしてから”が安全。</p>
+        </section>
 
-    <!-- 8. 肥料 -->
-    <section class="card" id="fert">
-      <h3>8. 肥料（少しでいい）</h3>
-      <p>
-        肥料は「多ければ速く育つ」ではなく、根や環境が整ってから少し足すイメージ。
-        真夏や冬は無理に入れない（根が動かない時期はトラブルになりやすい）。
-      </p>
-      <ul>
-        <li>緩効性（例：マグァンプK）は少量でOK（入れすぎない）</li>
-        <li>生長期（春〜初夏・秋）に合わせる</li>
-        <li>真夏（蒸れ期）・冬（低温期）は控える</li>
-      </ul>
-      <p class="muted">※ここはあなたの運用（量・時期）が固まったら追記して完成させる。</p>
-    </section>
+        <!-- 8 -->
+        <section class="card" id="fert">
+          <h3>8. 肥料（少しでいい）</h3>
+          <p>
+            肥料は「多ければ速く育つ」ではなく、根や環境が整ってから少し足すイメージ。
+            真夏や冬は無理に入れない（根が動かない時期はトラブルになりやすい）。
+          </p>
+          <ul>
+            <li>緩効性（例：マグァンプK）は少量でOK（入れすぎない）</li>
+            <li>生長期（春〜初夏・秋）に合わせる</li>
+            <li>真夏（蒸れ期）・冬（低温期）は控える</li>
+          </ul>
+          <p class="muted">※ここはあなたの運用（量・時期）が固まったら追記して完成させる。</p>
+        </section>
 
-    <!-- 9. 実生・選抜 -->
-    <section class="card" id="seed">
-      <h3>9. 実生・選抜（良個体は少ない）</h3>
-      <p>
-        実生は大量に作れても「良い個体」は一部。ここを理解していると、焦りが減って楽しくなる。
-      </p>
-      <ul>
-        <li>実生は遮光を強めに（目安：60%前後、環境で調整）</li>
-        <li>良い個体は少ない＝選抜は現実的に必要</li>
-        <li>“白さ”は環境（風・湿度）でも変わるので、育成と選抜はセット</li>
-      </ul>
-      <p class="muted">兜はゆっくり。環境が合うと少しずつ“締まって白く”なっていく。</p>
-    </section>
+        <!-- 9 -->
+        <section class="card" id="seed">
+          <h3>9. 実生・選抜（良個体は少ない）</h3>
+          <p>実生は大量に作れても「良い個体」は一部。ここを理解していると、焦りが減って楽しくなる。</p>
+          <ul>
+            <li>実生は遮光を強めに（目安：60%前後、環境で調整）</li>
+            <li>良い個体は少ない＝選抜は現実的に必要</li>
+            <li>“白さ”は環境（風・湿度）でも変わるので、育成と選抜はセット</li>
+          </ul>
+          <p class="muted">兜はゆっくり。環境が合うと少しずつ“締まって白く”なっていく。</p>
+        </section>
 
-    <!-- 10. トラブル深掘り -->
-    <section class="card" id="trouble">
-      <h3>10. トラブル深掘り（黒ずみ・腰折れ・止まり）</h3>
+        <!-- 10 -->
+        <section class="card" id="trouble">
+          <h3>10. トラブル深掘り（黒ずみ・腰折れ・止まり）</h3>
 
-      <h4>黒ずみ（カビ）</h4>
-      <ul>
-        <li>原因は「湿度＋風不足」が多い</li>
-        <li>対策は薬より先に：換気、送風、鉢間隔、粉を減らす</li>
-        <li>梅雨〜真夏は特に注意（温室内の湿度を下げる）</li>
-      </ul>
+          <h4>黒ずみ（カビ）</h4>
+          <ul>
+            <li>原因は「湿度＋風不足」が多い</li>
+            <li>対策は薬より先に：換気、送風、鉢間隔、粉を減らす</li>
+            <li>梅雨〜真夏は特に注意（温室内の湿度を下げる）</li>
+          </ul>
 
-      <h4>腰折れ（冬に出やすい）</h4>
-      <ul>
-        <li>水不足・根の不調に見えるが、寒さで“しぼむ”こともある</li>
-        <li>一度腰折れした株は冬に繰り返すことがある</li>
-        <li><strong>冬の腰折れは水で治そうとしない</strong>（低温＋湿り気が危険）</li>
-      </ul>
+          <h4>腰折れ（冬に出やすい）</h4>
+          <ul>
+            <li>水不足・根の不調に見えるが、寒さで“しぼむ”こともある</li>
+            <li>一度腰折れした株は冬に繰り返すことがある</li>
+            <li><strong>冬の腰折れは水で治そうとしない</strong>（低温＋湿り気が危険）</li>
+          </ul>
 
-      <h4>生育の悪さ（育たない）</h4>
-      <ul>
-        <li>原因の大半は：温度不足／水の回数（環境的に増やせない）／肥料不足</li>
-        <li>ただし焦って水と肥料を増やすと崩れることがある</li>
-        <li>まずは「風・光・温度帯」を整えてから、少しずつ動かす</li>
-      </ul>
-    </section>
+          <h4>生育の悪さ（育たない）</h4>
+          <ul>
+            <li>原因の大半は：温度不足／水の回数（環境的に増やせない）／肥料不足</li>
+            <li>ただし焦って水と肥料を増やすと崩れることがある</li>
+            <li>まずは「風・光・温度帯」を整えてから、少しずつ動かす</li>
+          </ul>
+        </section>
 
-    <!-- 11. 観察チェック -->
-    <section class="card" id="checklist">
-      <h3>11. 毎日の観察チェックリスト</h3>
-      <p class="sub">“毎日見る”は精神論じゃなく、事故を小さいうちに拾う最強の技術。</p>
-      <ul>
-        <li>鉢の重さ（乾き）</li>
-        <li>表面だけでなく中も乾いているか</li>
-        <li>風（空気が動いているか）</li>
-        <li>最低気温（特に冬）</li>
-        <li>肌の張り（しわ／ぶよぶよ）</li>
-        <li>黒ずみや変色（早期発見）</li>
-      </ul>
-      <p class="muted">
-        Deepの結論：兜は“待つ植物”。毎日少し見るだけで上達する。
-      </p>
-    </section>
+        <!-- 11 -->
+        <section class="card" id="checklist">
+          <h3>11. 毎日の観察チェックリスト</h3>
+          <p class="sub">“毎日見る”は精神論じゃなく、事故を小さいうちに拾う最強の技術。</p>
+          <ul>
+            <li>鉢の重さ（乾き）</li>
+            <li>表面だけでなく中も乾いているか</li>
+            <li>風（空気が動いているか）</li>
+            <li>最低気温（特に冬）</li>
+            <li>肌の張り（しわ／ぶよぶよ）</li>
+            <li>黒ずみや変色（早期発見）</li>
+          </ul>
+          <p class="muted">Deepの結論：兜は“待つ植物”。毎日少し見るだけで上達する。</p>
+        </section>
+      </div>
+    </div>
 
     <footer class="footer">
       © <span id="y"></span> Astro Kabuto
@@ -331,3 +602,5 @@
   </script>
 </body>
 </html>
+
+

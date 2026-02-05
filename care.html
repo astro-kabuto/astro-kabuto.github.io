@@ -1,115 +1,493 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>育て方 | Astro Kabuto</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="兜丸（Astrophytum asterias）の育て方・管理メモ。" />
+
+  <!-- ✅ Topと同じフォント（そのまま流用OK） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:wght@400;600;700&family=Yuji+Syuku&family=Zen+Kurenaido&family=Kaisei+Tokumin:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================
+       Care page (ALL-IN-ONE)
+       Paper + ruled + soft cards
+       + ✅ Topと同じTopbarデザイン
+       ========================= */
+
+    :root{
+      --paper:#f3efe7;
+      --paper2:#efe8dc;
+      --ink: rgba(0,0,0,.82);
+      --muted: rgba(0,0,0,.58);
+      --line: rgba(0,0,0,.10);
+
+      --card: rgba(255,255,255,.72);
+      --card2: rgba(255,255,255,.55);
+
+      --radius: 18px;
+      --radius-xl: 24px;
+
+      --shadow: 0 18px 60px rgba(0,0,0,.10);
+      --shadow-sm: 0 10px 28px rgba(0,0,0,.08);
+
+      /* ✅ Topと合わせるフォント変数 */
+      --serif: "Cinzel","Playfair Display","Kaisei Tokumin",serif;
+      --script: "Yuji Syuku","Kaisei Tokumin",serif;
+      --ui: system-ui,-apple-system,"Segoe UI","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+
+      /* ✅ Topbarカラー（トップと同系） */
+      --topbar1: rgba(58,66,43,.88);
+      --topbar2: rgba(58,66,43,.70);
+    }
+
+    /* ===== base ===== */
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; }
+    body{
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--ui);
+
+      /* 紙＋うっすら罫線 */
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(0,0,0,.035) 0px,
+          rgba(0,0,0,.035) 1px,
+          transparent 1px,
+          transparent 44px
+        ),
+        radial-gradient(1200px 700px at 30% 15%, rgba(255,255,255,.55), transparent 60%),
+        linear-gradient(180deg, var(--paper), var(--paper2));
+      overflow-x: hidden;
+    }
+    a{ color: inherit; }
+
+    h1,h2,h3{
+      font-family: "Kaisei Tokumin", serif;
+      letter-spacing: .02em;
+      margin: 0;
+    }
+    h2{ font-size: clamp(28px, 3.6vw, 44px); line-height: 1.15; }
+    h3{ font-size: 22px; line-height: 1.25; }
+    p{ margin: 0; }
+    .sub, .muted{ color: var(--muted); }
+
+    /* ==================================
+       ✅ Topbar (indexと同じ見た目)
+       ================================== */
+    .shell{
+      width: min(1060px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: linear-gradient(180deg, var(--topbar1), var(--topbar2));
+      border-bottom: 1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .topbar-inner{
+      height: 62px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+    }
+
+    .topbar .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      color: rgba(255,255,255,.92);
+      text-decoration:none;
+      letter-spacing:.02em;
+      white-space: nowrap;
+    }
+    .brand-kanji{
+      font-family: var(--serif);
+      font-size: 30px;
+      letter-spacing:.06em;
+      line-height: 1;
+    }
+    .brand-name{
+      font-family: var(--serif);
+      font-size: 13px;
+      letter-spacing: .18em;
+      opacity:.92;
+      line-height: 1;
+    }
+
+    .topbar .nav{
+      display:flex;
+      align-items:center;
+      gap: 16px;
+      font-family: var(--serif);
+      font-size: 13px;
+      letter-spacing:.06em;
+      justify-content: center;
+    }
+    .topbar .nav a{
+      color: rgba(255,255,255,.82);
+      padding: 10px 6px;
+      border-bottom: 2px solid transparent;
+      text-decoration:none;
+      transition: .18s ease;
+    }
+    .topbar .nav a:hover{ color:#fff; }
+    .topbar .nav a.active,
+    .topbar .nav a[aria-current="page"]{
+      color:#fff;
+      border-bottom-color: rgba(255,255,255,.80);
+    }
+
+    .social{ display:flex; gap: 8px; }
+    .sbtn{
+      width: 28px; height: 28px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      color: rgba(255,255,255,.90);
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.10);
+      font-size: 13px;
+      text-decoration:none;
+    }
+    .sbtn:hover{ background: rgba(255,255,255,.18); }
+
+    /* スマホ：ナビは一旦隠す（トップと同じ方針） */
+    @media (max-width: 980px){
+      .topbar .nav{ display:none; }
+    }
+
+    /* ===== layout ===== */
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px 16px 54px;
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      padding: 18px 18px;
+      margin: 16px 0;
+    }
+
+    /* ===== hero (Care) ===== */
+    .careHero{
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 14px;
+      align-items: center;
+      margin: 18px 0 16px;
+      padding: 8px 4px 2px;
+    }
+    .careHero .sub{ margin-top: 8px; line-height: 1.7; }
+
+    /* 右上イラスト：画像を差し替え */
+    .careHero-art{
+      height: 140px;
+      border-radius: 18px;
+      background:
+        radial-gradient(500px 220px at 50% 50%, rgba(255,255,255,.55), transparent 60%),
+        url("images/care/hero-illust.png") right center / contain no-repeat;
+      opacity: .95;
+      filter: saturate(.95);
+    }
+
+    /* ===== “まずはこれだけ” ===== */
+    .careQuick h3{ margin-bottom: 6px; }
+    .careQuick .sub{ margin-bottom: 12px; }
+
+    .careQuick-split{
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .careQuick-grid{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .careQuick-item{
+      background: var(--card2);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px 12px;
+    }
+    .careQuick-item strong{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-family: "Kaisei Tokumin", serif;
+    }
+    .careQuick-item p{
+      margin-top: 6px;
+      line-height: 1.7;
+      color: rgba(0,0,0,.74);
+    }
+
+    /* 右写真：画像を差し替え */
+    .careQuick-photo{
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,.05)),
+        url("images/care/quick-photo.jpg") center / cover no-repeat;
+      min-height: 220px;
+    }
+
+    .careQuick-actions{
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* ===== button ===== */
+    .btn{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.65);
+      color: rgba(0,0,0,.78);
+      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+      box-shadow: 0 10px 24px rgba(0,0,0,.08);
+      font-family: var(--serif);
+      letter-spacing: .04em;
+    }
+    .btn.primary{ background: rgba(152, 165, 129, .35); }
+    .btn:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 32px rgba(0,0,0,.10);
+    }
+
+    /* ===== images inside season cards ===== */
+    .care-img{
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      margin: 0 0 12px;
+      display:block;
+    }
+
+    /* ===== lists ===== */
+    ul,ol{ margin: 10px 0 0; padding-left: 18px; }
+    li{ margin: 6px 0; }
+    b,strong{ font-weight: 700; }
+
+    /* ===== Care Note grid ===== */
+    .careNote-grid{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .careNote-item{
+      background: var(--card2);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px 12px;
+    }
+    .careNote-item strong{
+      font-family: "Kaisei Tokumin", serif;
+      display:block;
+      margin-bottom: 6px;
+    }
+    .careNote-item p{ line-height: 1.7; color: rgba(0,0,0,.74); }
+    .careNote-item .muted{ margin-top: 6px; }
+
+    /* ===== TOC ===== */
+    .toc ul{ margin-top: 10px; }
+    .toc a{ color: rgba(0,0,0,.75); text-decoration: none; }
+    .toc a:hover{ text-decoration: underline; }
+
+    /* ===== Q&A details ===== */
+    .qa{
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.52);
+      padding: 10px 12px;
+      margin: 10px 0;
+    }
+    .qa summary{
+      cursor: pointer;
+      font-weight: 700;
+      list-style: none;
+      font-family: "Kaisei Tokumin", serif;
+    }
+    .qa summary::-webkit-details-marker{ display:none; }
+    .qa summary::after{
+      content: "▾";
+      float: right;
+      opacity: .55;
+    }
+    .qa[open] summary::after{ content: "▴"; }
+    .qa-body{
+      margin-top: 10px;
+      color: rgba(0,0,0,.74);
+      line-height: 1.75;
+    }
+
+    /* ===== footer ===== */
+    .footer{
+      margin-top: 22px;
+      padding: 18px 0 0;
+      text-align: center;
+      color: rgba(0,0,0,.55);
+      font-family: var(--serif);
+      letter-spacing: .06em;
+    }
+
+    /* ===== responsive ===== */
+    @media (max-width: 860px){
+      .careHero{ grid-template-columns: 1fr; }
+      .careHero-art{ height: 120px; background-position: center; }
+      .careQuick-split{ grid-template-columns: 1fr; }
+      .careQuick-photo{ min-height: 180px; }
+      .careNote-grid{ grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 
 <body>
-  <!-- Header（トップと同じ構造） -->
-  <header class="header">
-    <div class="header-inner">
-      <a class="brand" href="index.html" aria-label="Astro Kabuto Home">
-        <div class="logo" aria-hidden="true"></div>
-        <div class="brand-text">
-          <h1>Astro Kabuto</h1>
-          <p>兜丸の成長記録サイト</p>
-        </div>
+
+  <!-- ✅ Topと同じTopbar（構造も合わせてる） -->
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="index.html" aria-label="Home">
+        <span class="brand-kanji">兜</span>
+        <span class="brand-name">KABUTOMARU</span>
       </a>
 
       <nav class="nav" aria-label="Primary">
         <a href="index.html">Home</a>
-        <a href="growth-log.html">Growth Log</a>
-        <a href="gallery.html">Gallery</a>
         <a href="about.html">About</a>
-        <a href="care.html" aria-current="page">Care</a>
+        <a href="gallery.html">Gallery</a>
+        <a class="active" href="care.html" aria-current="page">Care Tips</a>
+        
       </nav>
+
+      <div class="social" aria-label="Social">
+        <a class="sbtn" href="#" aria-label="Facebook">f</a>
+        <a class="sbtn" href="#" aria-label="X">x</a>
+        <a class="sbtn" href="#" aria-label="Instagram">◎</a>
+      </div>
     </div>
   </header>
 
-  <!-- 本文は wrap 幅で統一 -->
   <main class="wrap">
 
     <!-- Page Title -->
-    <section class="hero">
-      <h2>兜丸の育て方</h2>
-      <p class="sub">
-        Astrophytum asterias を健康に育てるための管理メモ。
-        実体験ベースで随時更新。
-      </p>
+    <section class="hero careHero">
+      <div class="careHero-text">
+        <h2>兜丸の育て方</h2>
+        <p class="sub">
+          Astrophytum asterias を健康に育てるための管理メモ。<br>
+          実体験ベースで随時更新。
+        </p>
+      </div>
+      <div class="careHero-art" aria-hidden="true"></div>
     </section>
-<section class="careQuick card" aria-label="初心者向けまとめ">
-  <h3>まずはこれだけ</h3>
-  <p class="sub">迷ったら「光・水・風・温度・用土」だけ守ればOK。</p>
 
-  <div class="careQuick-grid">
-    <div class="careQuick-item">
-      <strong>光</strong>
-      <p>春秋はしっかり。真夏は遮光40〜60%目安。置き場変更は徐々に。</p>
-    </div>
-    <div class="careQuick-item">
-      <strong>水</strong>
-      <p>生長期は乾いたらたっぷり。真夏は蒸れる日は控えめ。冬は断水寄り。</p>
-    </div>
-    <div class="careQuick-item">
-      <strong>風</strong>
-      <p>蒸れが最大の敵。鉢を詰めすぎない＋風通しで白点も守れる。</p>
-    </div>
-    <div class="careQuick-item">
-      <strong>温度</strong>
-      <p>目安：5℃以下は注意。低温＋湿り気が一番危険なので乾かし気味。</p>
-    </div>
-    <div class="careQuick-item">
-      <strong>用土</strong>
-      <p>排水重視。粉を減らして粒で組む（環境で微調整）。</p>
-    </div>
-  </div>
+    <!-- Quick summary -->
+    <section class="careQuick card" aria-label="初心者向けまとめ">
+      <h3>まずはこれだけ</h3>
+      <p class="sub">迷ったら「光・水・風・温度・用土」だけ守ればOK。</p>
 
-  <div class="careQuick-actions">
-    <a class="btn primary" href="care-deep.html">詳しく（Deep）</a>
-  </div>
-</section>
-<section class="card careNote" id="care-note">
-  <h3>実例：実生2から5年生の管理メモ）</h3>
-  <p class="sub">まずは「光・風・乾き」を優先。兜は湿りすぎると腐りやすい。</p>
+      <div class="careQuick-split">
+        <div class="careQuick-grid">
+          <div class="careQuick-item">
+            <strong>光</strong>
+            <p>春秋はしっかり。真夏は遮光40〜60%目安。置き場変更は徐々に。</p>
+          </div>
+          <div class="careQuick-item">
+            <strong>水</strong>
+            <p>生長期は乾いたらたっぷり。真夏は蒸れる日は控えめ。冬は断水寄り。</p>
+          </div>
+          <div class="careQuick-item">
+            <strong>風</strong>
+            <p>蒸れが最大の敵。鉢を詰めすぎない＋風通しで白点も守れる。</p>
+          </div>
+          <div class="careQuick-item">
+            <strong>温度</strong>
+            <p>目安：5℃以下は注意。低温＋湿り気が一番危険なので乾かし気味。</p>
+          </div>
+          <div class="careQuick-item">
+            <strong>用土</strong>
+            <p>排水重視。粉を減らして粒で組む（環境で微調整）。</p>
+          </div>
+        </div>
 
-  <div class="careNote-grid">
-    <div class="careNote-item">
-      <strong>環境</strong>
-      <p>日当たりが良く、暖かい場所が好き。風通しも確保。</p>
-      <p class="muted">温度目安：5〜30℃（兜にとって快適帯）</p>
-    </div>
+        <div class="careQuick-photo" aria-hidden="true"></div>
+      </div>
 
-    <div class="careNote-item">
-      <strong>水やり目安</strong>
-      <ul>
-        <li><b>春</b>：週1回くらい、乾いてからたっぷり</li>
-        <li><b>夏</b>：週1でもOKだが、蒸れやすいので控えめ（乾き重視）</li>
-        <li><b>秋</b>：10日に1回くらい、量は控えめ</li>
-        <li><b>冬（12〜2月）</b>：ほぼ断水でもOK（低温＋湿り気が危険）</li>
-      </ul>
-    </div>
+      <div class="careQuick-actions">
+        <a class="btn primary" href="care-deep.html">詳しく（Deep）</a>
+      </div>
+    </section>
 
-    <div class="careNote-item">
-      <strong>植え替え（年1回の目安）</strong>
-      <ol>
-        <li>春先に鉢から抜く</li>
-        <li>根を数cm残してカット</li>
-        <li>日陰で20日ほど乾かす（乾燥させてから植える）</li>
-        <li>少し大きい鉢へ植え付け</li>
-        <li>植え付け後10日くらいして「少しだけ」水やり</li>
-        <li>その後は日光浴（急な環境変化は避ける）</li>
-      </ol>
-      <p class="muted">用土：市販のサボテン培養土でもOK（乾きやすさ優先）</p>
-    </div>
-  </div>
+    <!-- Care Note -->
+    <section class="card careNote" id="care-note">
+      <h3>実例：実生2〜5年生の管理メモ</h3>
+      <p class="sub">まずは「光・風・乾き」を優先。兜は湿りすぎると腐りやすい。</p>
 
-  <p class="muted"><b>注意：</b>兜は腐りやすい。迷ったら「まず乾かす・風を当てる」。</p>
-</section>
+      <div class="careNote-grid">
+        <div class="careNote-item">
+          <strong>環境</strong>
+          <p>日当たりが良く、暖かい場所が好き。風通しも確保。</p>
+          <p class="muted">温度目安：5〜30℃（兜にとって快適帯）</p>
+        </div>
 
-    <!-- 目次 -->
+        <div class="careNote-item">
+          <strong>水やり目安</strong>
+          <ul>
+            <li><b>春</b>：週1回くらい、乾いてからたっぷり</li>
+            <li><b>夏</b>：週1でもOKだが、蒸れやすいので控えめ（乾き重視）</li>
+            <li><b>秋</b>：10日に1回くらい、量は控えめ</li>
+            <li><b>冬（12〜2月）</b>：ほぼ断水でもOK（低温＋湿り気が危険）</li>
+          </ul>
+        </div>
+
+        <div class="careNote-item">
+          <strong>植え替え（年1回の目安）</strong>
+          <ol>
+            <li>春先に鉢から抜く</li>
+            <li>根を数cm残してカット</li>
+            <li>日陰で20日ほど乾かす（乾燥させてから植える）</li>
+            <li>少し大きい鉢へ植え付け</li>
+            <li>植え付け後10日くらいして「少しだけ」水やり</li>
+            <li>その後は日光浴（急な環境変化は避ける）</li>
+          </ol>
+          <p class="muted">用土：市販のサボテン培養土でもOK（乾きやすさ優先）</p>
+        </div>
+      </div>
+
+      <p class="muted" style="margin-top:12px;"><b>注意：</b>迷ったら「まず乾かす・風を当てる」。</p>
+    </section>
+
+    <!-- TOC -->
     <section class="card toc">
       <h3>目次</h3>
       <ul>
@@ -119,14 +497,15 @@
         <li><a href="#winter">冬（12〜2月）</a></li>
         <li><a href="#soil">用土</a></li>
         <li><a href="#mistakes">よくある失敗</a></li>
+        <li><a href="#troubles">よくある症状と対処（Q&A）</a></li>
       </ul>
     </section>
 
-    <!-- 春 -->
+    <!-- Spring -->
     <section class="card" id="spring">
       <img src="images/care/spring.jpg" alt="春の兜丸" class="care-img">
       <h3>春（3〜5月）</h3>
-      <p>休眠から目覚める時期。徐々に水を再開。</p>
+      <p class="sub" style="margin-top: 8px;">休眠から目覚める時期。徐々に水を再開。</p>
       <ul>
         <li>水やり：少量から開始</li>
         <li>日照：午前中の直射はOK</li>
@@ -134,11 +513,11 @@
       </ul>
     </section>
 
-    <!-- 夏 -->
+    <!-- Summer -->
     <section class="card" id="summer">
       <img src="images/care/summer.jpg" alt="夏の管理中の兜丸" class="care-img">
       <h3>夏（6〜8月）</h3>
-      <p>
+      <p class="sub" style="margin-top:8px;">
         高温期は成長が鈍りやすく、蒸れと根腐れに注意。
         無理に成長させず、守りの管理を意識する。
       </p>
@@ -149,11 +528,11 @@
       </ul>
     </section>
 
-    <!-- 秋 -->
+    <!-- Autumn -->
     <section class="card" id="autumn">
       <img src="images/care/autumn.jpg" alt="秋の管理中の兜丸" class="care-img">
       <h3>秋（9〜11月）</h3>
-      <p>
+      <p class="sub" style="margin-top:8px;">
         気温が下がり始め、兜丸が再び動きやすくなる時期。
         夏のダメージ回復と、冬越しに向けた体作りを意識する。
       </p>
@@ -164,11 +543,11 @@
       </ul>
     </section>
 
-    <!-- 冬 -->
+    <!-- Winter -->
     <section class="card" id="winter">
       <img src="images/care/winter.jpg" alt="冬越し中の兜丸" class="care-img">
       <h3>冬（12〜2月）</h3>
-      <p>
+      <p class="sub" style="margin-top:8px;">
         兜丸はほぼ休眠状態。
         成長させようとせず、無事に冬を越すことを最優先にする。
       </p>
@@ -179,141 +558,77 @@
         <li>注意点：低温多湿は致命的</li>
       </ul>
     </section>
-<section class="card" id="troubles">
-  <h3>よくある症状と対処（Q&A）</h3>
-  <p class="sub">「原因を決め打ちしない」→ “環境と根”を順番に疑うのがコツ。</p>
 
- <details class="qa" open>
-  <summary>Q. しわしわになった（へこんだ）／腰折れっぽい</summary>
-  <div class="qa-body">
-    <p><strong>よくある原因</strong>：乾きすぎ／根が弱って吸えていない／真夏の断水が長い／気温低下で“しぼみ”っぽく見える</p>
-    <ul>
-      <li><strong>土が完全に乾いている（生長期）</strong> → 「たっぷり潅水」で回復することが多い</li>
-      <li><strong>水をやっても戻らない</strong> → 根の不調を疑う（蒸れ・根腐れ・根が無い）→ 風通し改善＋植え替え検討</li>
-      <li><strong>寒くなった直後</strong> → 気温低下による症状のことも。無理に水を増やさず様子見</li>
-      <li><strong>真夏にへこむ</strong> → 無理に増やさず、夕方の軽い潅水は環境次第で検討</li>
-    </ul>
-    <p class="muted"><strong>メモ</strong>：兜は回復がゆっくり。数日〜1週間スパンで見る。</p>
-    <p class="muted"><strong>腰折れについて</strong>：一度腰折れした株は、冬に同じ症状が出やすいことがある。<br>
-    <strong>一言：</strong>冬の腰折れは“水で治そう”としない。まず温度と乾き。</p>
-  </div>
-</details>
+    <!-- Troubles / Q&A -->
+    <section class="card" id="troubles">
+      <h3>よくある症状と対処（Q&A）</h3>
+      <p class="sub">「原因を決め打ちしない」→ “環境と根”を順番に疑うのがコツ。</p>
 
+      <details class="qa" open>
+        <summary>Q. しわしわになった（へこんだ）／腰折れっぽい</summary>
+        <div class="qa-body">
+          <p><strong>よくある原因</strong>：乾きすぎ／根が弱って吸えていない／真夏の断水が長い／気温低下で“しぼみ”っぽく見える</p>
+          <ul>
+            <li><strong>土が完全に乾いている（生長期）</strong> → 「たっぷり潅水」で回復することが多い</li>
+            <li><strong>水をやっても戻らない</strong> → 根の不調を疑う（蒸れ・根腐れ・根が無い）→ 風通し改善＋植え替え検討</li>
+            <li><strong>寒くなった直後</strong> → 気温低下による症状のことも。無理に水を増やさず様子見</li>
+            <li><strong>真夏にへこむ</strong> → 無理に増やさず、夕方の軽い潅水は環境次第で検討</li>
+          </ul>
+          <p class="muted"><strong>メモ</strong>：兜は回復がゆっくり。数日〜1週間スパンで見る。</p>
+          <p class="muted"><strong>腰折れについて</strong>：冬の腰折れは“水で治そう”としない。まず温度と乾き。</p>
+        </div>
+      </details>
 
-  <details class="qa">
-  <summary>Q. ぶよぶよする（柔らかい）</summary>
-  <div class="qa-body">
-    <p><strong>よくある原因</strong>：根腐れ／低温＋湿り気／蒸れ（内部が傷んでいる可能性が高い）</p>
-    <p class="muted"><strong>迷ったら“水やりで回復させよう”は危険。まず乾かす。</strong></p>
-    <ul>
-      <li>まず水やりを止めて乾かす（急にいじらない）</li>
-      <li>風を当てる・鉢間隔を空ける</li>
-      <li>改善しない／臭い／黒変が進む → 抜いて根を確認（植え替え）</li>
-    </ul>
-    <p class="muted">危険サイン：黒く溶ける、異臭、急激に柔らかい。</p>
-  </div>
-</details>
+      <details class="qa">
+        <summary>Q. ぶよぶよする（柔らかい）</summary>
+        <div class="qa-body">
+          <p><strong>よくある原因</strong>：根腐れ／低温＋湿り気／蒸れ</p>
+          <p class="muted"><strong>迷ったら“水で回復させよう”は危険。まず乾かす。</strong></p>
+          <ul>
+            <li>まず水やりを止めて乾かす</li>
+            <li>風を当てる・鉢間隔を空ける</li>
+            <li>改善しない／臭い／黒変が進む → 抜いて根を確認（植え替え）</li>
+          </ul>
+        </div>
+      </details>
 
+      <details class="qa">
+        <summary>Q. 白点が茶色く焼けた</summary>
+        <div class="qa-body">
+          <p><strong>よくある原因</strong>：急な直射・遮光不足・慣れ不足</p>
+          <ul>
+            <li>遮光を増やす（40〜60%目安）</li>
+            <li>置き場所変更は1週間くらい段階的に</li>
+            <li>焼けは戻りにくいので「これ以上増やさない」が目的</li>
+          </ul>
+        </div>
+      </details>
 
-  <details class="qa">
-    <summary>Q. 白点が茶色く焼けた</summary>
-    <div class="qa-body">
-      <p><strong>よくある原因</strong>：急な直射・遮光不足・強光に慣れていない</p>
-      <ul>
-        <li>遮光を増やす（40〜60%目安）</li>
-        <li>置き場所を急に変えたなら、1週間くらい段階的に慣らす</li>
-        <li>焼けは元に戻りにくいので「これ以上増やさない」が目的</li>
-      </ul>
-    </div>
-  </details>
+      <details class="qa">
+        <summary>Q. 黒い汚れ／黒ずみが出てきた</summary>
+        <div class="qa-body">
+          <p><strong>よくある原因</strong>：湿度が高い・風不足・カビ（梅雨〜夏）</p>
+          <ul>
+            <li>風通しを強化（サーキュレーター、鉢間隔）</li>
+            <li>用土の粉を減らす（乾きが悪いと悪化しやすい）</li>
+            <li>薬より“風と乾き”が優先</li>
+          </ul>
+        </div>
+      </details>
+    </section>
 
-  <details class="qa">
-    <summary>Q. 黒い汚れ／黒ずみが出てきた</summary>
-    <div class="qa-body">
-      <p><strong>よくある原因</strong>：湿度が高い・風不足・カビ（特に梅雨〜夏）</p>
-      <ul>
-        <li>風通しを強化（サーキュレーター、鉢間隔、棚の高さ）</li>
-        <li>用土の粉を減らす（乾きが悪いと悪化しやすい）</li>
-        <li>まずは環境改善が優先（薬より“風と乾き”）</li>
-      </ul>
-    </div>
-  </details>
-<details class="qa">
-  <summary>Q. 植え替えはいつやる？</summary>
-  <div class="qa-body">
-    <p><strong>基本</strong>：年1回の目安。<strong>春先（動き出す前〜動き出し始め）</strong>がやりやすい。</p>
-    <ul>
-      <li>寒い時期の植え替えはリスクが上がる（低温＋湿り気が危険）</li>
-      <li>根の状態を見たい／乾きが悪い／不調が続くときは「春に」立て直し</li>
-    </ul>
-  </div>
-</details>
-
-<details class="qa">
-  <summary>Q. 植え替えで根を切ったあと、どうする？</summary>
-  <div class="qa-body">
-    <p><strong>ポイント</strong>：切った根はすぐ植えない。まず乾かしてから。</p>
-    <ul>
-      <li>根は数cm残してカット</li>
-      <li><strong>日陰でしっかり乾燥（目安：2〜3週間）</strong></li>
-      <li>植え付け後はすぐ水やりしない</li>
-    </ul>
-    <p class="muted">「湿ったまま植える」が一番腐りやすい。</p>
-  </div>
-</details>
-
-<details class="qa">
-  <summary>Q. 植え替え後、いつ水やりする？</summary>
-  <div class="qa-body">
-    <p><strong>目安</strong>：植え付け後<strong>10日くらいして</strong>から「少しだけ」。</p>
-    <ul>
-      <li>最初は少量 → 反応を見て通常ペースへ</li>
-      <li>気温が低い時期はさらに遅らせる（乾き優先）</li>
-    </ul>
-    <p class="muted"><strong>迷ったら：</strong>水で回復させようとしない。まず乾かす。</p>
-  </div>
-</details>
-
-  <details class="qa">
-    <summary>Q. 冬、置き場所はどこが安全？</summary>
-    <div class="qa-body">
-      <p><strong>基本</strong>：5℃以下に落ちるなら乾かし気味＋風避け。</p>
-      <ul>
-        <li>低温＋湿り気が一番危険（断水寄り）</li>
-        <li>結露する場所は避ける／朝の冷気が直撃しない場所へ</li>
-        <li>春に向けて「最低気温が安定したら」少量から再開</li>
-      </ul>
-    </div>
-  </details>
-
-  <details class="qa">
-  <summary>Q. 花が咲かない</summary>
-  <div class="qa-body">
-    <p><strong>よくある原因</strong>：株がまだ若い／光量不足／冬に休ませきれていない／生長期の栄養・水のメリハリ不足</p>
-    <ul>
-      <li><strong>株の成熟</strong>：小さい株は咲かないことが多い（焦らず“育てる年”も必要）</li>
-      <li><strong>光</strong>：春〜初夏はしっかり光を確保（ただし急に強光へは移動しない）</li>
-      <li><strong>冬の休眠</strong>：冬に乾かし気味＋低温多湿を避けて“休ませる”と花芽が乗りやすい</li>
-      <li><strong>水のメリハリ</strong>：生長期は乾いたらたっぷり（ダラダラ少量は弱りやすい）</li>
-    </ul>
-    <p class="muted">メモ：花は「環境が整って株が充実した結果」。毎年咲かなくても普通。</p>
-  </div>
-</details>
-
-</section>
-
+    <!-- Soil -->
     <section class="card" id="soil">
-  <h3>用土（初心者はこれでOK）</h3>
-  <p>基本は<strong>市販のサボテン用培養土</strong>で大丈夫。</p>
-  <ul>
-    <li>不安なら：培養土＋軽石（2〜3割）で乾きやすくすると安心</li>
-    <li>粉が多い場合：ふるって微塵を減らすと腐りにくい</li>
-  </ul>
-  <p class="muted">迷ったら「乾きやすい・風が通る」を優先。</p>
-</section>
+      <h3>用土（初心者はこれでOK）</h3>
+      <p class="sub" style="margin-top:8px;">基本は<strong>市販のサボテン用培養土</strong>で大丈夫。</p>
+      <ul>
+        <li>不安なら：培養土＋軽石（2〜3割）で乾きやすく</li>
+        <li>粉が多い場合：ふるって微塵を減らす</li>
+      </ul>
+      <p class="muted" style="margin-top:10px;">迷ったら「乾きやすい・風が通る」を優先。</p>
+    </section>
 
-
-    <!-- 失敗例 -->
+    <!-- Mistakes -->
     <section class="card" id="mistakes">
       <h3>よくある失敗（実体験）</h3>
       <ul>
@@ -335,5 +650,6 @@
   </script>
 </body>
 </html>
+
 
 

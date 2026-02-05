@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About | Astro Kabuto</title>
+  <meta name="description" content="Astro Kabutoについて。兜丸（Astrophytum asterias）を中心に、育て方・栽培の考え方・記録をまとめています。" />
+
+  <!-- Serif -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --paper:#f3efe7;
+      --paper2:#efe8dc;
+      --ink: rgba(0,0,0,.82);
+      --muted: rgba(0,0,0,.58);
+      --line: rgba(0,0,0,.10);
+
+      --card: rgba(255,255,255,.72);
+      --card2: rgba(255,255,255,.55);
+
+      --radius: 18px;
+      --radius-xl: 24px;
+
+      --shadow: 0 18px 60px rgba(0,0,0,.10);
+      --shadow-sm: 0 10px 28px rgba(0,0,0,.08);
+
+      --green1: #4b4f36;
+      --green2: #2f3322;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      color: var(--ink);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP",
+        "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(0,0,0,.035) 0px,
+          rgba(0,0,0,.035) 1px,
+          transparent 1px,
+          transparent 44px
+        ),
+        radial-gradient(1200px 700px at 30% 15%, rgba(255,255,255,.55), transparent 60%),
+        linear-gradient(180deg, var(--paper), var(--paper2));
+    }
+
+    a{ color: inherit; }
+    a:hover{ opacity:.92; }
+
+    h1,h2,h3{
+      font-family:"Noto Serif JP", serif;
+      letter-spacing:.02em;
+      margin:0;
+    }
+
+    .shell{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* ===== Topbar（トップと同じ雰囲気） ===== */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: linear-gradient(180deg, var(--green1) 0%, var(--green2) 100%);
+      border-bottom: 1px solid rgba(255,255,255,.14);
+    }
+    .topbar-inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      padding: 10px 0;
+    }
+
+    .brand{
+      display:inline-flex;
+      align-items:baseline;
+      gap: 10px;
+      text-decoration:none;
+      color: rgba(255,255,255,.86);
+      letter-spacing:.02em;
+      white-space:nowrap;
+    }
+    .brand-kanji{
+      width: 34px;
+      height: 34px;
+      display:grid;
+      place-items:center;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      background:
+        radial-gradient(16px 16px at 30% 30%, rgba(255,255,255,.90), rgba(255,255,255,.20)),
+        linear-gradient(180deg, rgba(152,165,129,.45), rgba(152,165,129,.18));
+      box-shadow: var(--shadow-sm);
+      font-family:"Noto Serif JP", serif;
+      font-weight: 700;
+      color: rgba(0,0,0,.80);
+    }
+    .brand-name{
+      font-family:"Noto Serif JP", serif;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing:.12em;
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      gap: 4px;
+      flex-wrap: wrap;
+      justify-content:center;
+    }
+    .nav a{
+      color: rgba(255,255,255,.78);
+      text-decoration:none;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+    }
+    .nav a:hover{
+      background: rgba(255,255,255,.10);
+      border-color: rgba(255,255,255,.10);
+    }
+    .nav a[aria-current="page"]{
+      background: rgba(255,255,255,.14);
+      border-color: rgba(255,255,255,.18);
+    }
+
+    .social{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+    }
+    .sbtn{
+      width: 30px;
+      height: 30px;
+      display:grid;
+      place-items:center;
+      border-radius: 999px;
+      text-decoration:none;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.78);
+    }
+    .sbtn:hover{ background: rgba(255,255,255,.16); }
+
+    @media (max-width: 860px){
+      .social{ display:none; }
+    }
+
+    /* ===== Hero background (画像) ===== */
+    .hero-bg{
+      position: relative;
+      min-height: 520px;
+      background: url("images/about/hero_clean.jpg") center / cover no-repeat;
+      border-bottom: 1px solid rgba(0,0,0,.10);
+    }
+
+    /* fog overlay like the design */
+    .hero-bg::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(1100px 520px at 50% 62%, rgba(243,239,231,.95), rgba(243,239,231,.70) 45%, rgba(243,239,231,.0) 70%),
+        linear-gradient(180deg, rgba(243,239,231,.00) 0%, rgba(243,239,231,.65) 55%, rgba(243,239,231,.92) 100%);
+      pointer-events:none;
+    }
+
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 16px 54px;
+    }
+
+    /* hero text block (center) */
+    .hero-content{
+      position: relative;
+      z-index: 2;
+      padding: 86px 0 18px;
+      text-align: center;
+    }
+
+    .hero-title{
+      font-size: clamp(34px, 4.2vw, 52px);
+      line-height: 1.08;
+      color: rgba(0,0,0,.76);
+      text-shadow: 0 1px 0 rgba(255,255,255,.55);
+    }
+    .hero-sub{
+      margin-top: 12px;
+      color: rgba(0,0,0,.58);
+      line-height: 1.9;
+      font-size: 14px;
+    }
+
+    .orn{
+      margin: 16px auto 0;
+      width: min(520px, 90%);
+      height: 22px;
+      position: relative;
+      opacity: .60;
+    }
+    .orn::before,
+    .orn::after{
+      content:"";
+      position:absolute;
+      top: 50%;
+      width: 44%;
+      height: 1px;
+      background: rgba(0,0,0,.18);
+    }
+    .orn::before{ left:0; }
+    .orn::after{ right:0; }
+    .orn span{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform: translate(-50%,-50%);
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,.16);
+      background: rgba(255,255,255,.35);
+    }
+
+    /* ===== 3 cards area ===== */
+    .grid{
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+      padding-bottom: 18px;
+    }
+
+    .card{
+      border-radius: 22px;
+      border: 1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.55);
+      box-shadow: 0 18px 55px rgba(0,0,0,.10);
+      overflow: hidden;
+    }
+
+    .card-inner{
+      padding: 14px 14px 16px;
+    }
+
+    .card-head{
+      display:flex;
+      align-items:flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .card-ico{
+      width: 26px;
+      height: 26px;
+      border-radius: 9px;
+      display:grid;
+      place-items:center;
+      border: 1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.50);
+      color: rgba(0,0,0,.62);
+      font-size: 14px;
+      flex: 0 0 auto;
+    }
+
+    .card-title{
+      font-size: 18px;
+      line-height: 1.15;
+      color: rgba(0,0,0,.74);
+    }
+
+    .card-sub{
+      margin-top: 2px;
+      font-size: 12px;
+      color: rgba(0,0,0,.50);
+    }
+
+    .thumb{
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,.10);
+      background: #ddd center / cover no-repeat;
+      box-shadow: 0 12px 30px rgba(0,0,0,.10);
+      height: 210px;
+      margin: 8px 0 10px;
+    }
+
+    /* ここが画像ファイル指定（あなたの命名） */
+    .thumb.t1{ background-image: url("images/about/about-01_story.jpg"); }
+    .thumb.t2{ background-image: url("images/about/about-02_philosophy.jpg"); }
+    .thumb.t3{ background-image: url("images/about/about-03_vision.jpg"); }
+
+    .card-text{
+      color: rgba(0,0,0,.64);
+      line-height: 1.85;
+      font-size: 13px;
+      margin: 8px 0 12px;
+      min-height: 72px;
+    }
+
+    .btn{
+      display: inline-flex;
+      align-items:center;
+      justify-content:center;
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      text-decoration:none;
+      border: 1px solid rgba(0,0,0,.12);
+      background: rgba(152,165,129,.25);
+      color: rgba(0,0,0,.70);
+      font-family:"Noto Serif JP", serif;
+      box-shadow: 0 10px 24px rgba(0,0,0,.08);
+      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 32px rgba(0,0,0,.10);
+      background: rgba(152,165,129,.30);
+    }
+
+    /* bottom CTA */
+    .cta{
+      position: relative;
+      z-index: 2;
+      text-align:center;
+      margin-top: 8px;
+      padding-bottom: 34px;
+    }
+    .cta .muted{
+      color: rgba(0,0,0,.55);
+      font-size: 12px;
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+    .cta .btn-wide{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width: min(520px, 92%);
+      padding: 14px 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.55);
+      text-decoration:none;
+      color: rgba(0,0,0,.70);
+      font-family:"Noto Serif JP", serif;
+      box-shadow: 0 14px 36px rgba(0,0,0,.10);
+    }
+    .cta .btn-wide:hover{ transform: translateY(-1px); }
+
+    /* footer */
+    .footer{
+      background: linear-gradient(180deg, var(--green1) 0%, var(--green2) 100%);
+      border-top: 1px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.65);
+      text-align:center;
+      padding: 16px 0;
+      font-family:"Noto Serif JP", serif;
+      letter-spacing:.08em;
+      font-size: 12px;
+    }
+
+    /* responsive */
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .hero-bg{ min-height: 520px; }
+      .card-text{ min-height: auto; }
+    }
+    
+  </style>
+</head>
+
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="index.html" aria-label="Home">
+        <span class="brand-kanji">兜</span>
+        <span class="brand-name">KABUTOMARU</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="about.html" aria-current="page">About</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="care.html">Care Tips</a>
+        
+      </nav>
+
+      <div class="social" aria-label="Social">
+        <a class="sbtn" href="#" aria-label="Facebook">f</a>
+        <a class="sbtn" href="#" aria-label="X">x</a>
+        <a class="sbtn" href="#" aria-label="Instagram">◎</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero-bg">
+    <main class="wrap">
+      <div class="hero-content">
+        <h1 class="hero-title">Astro Kabutoについて</h1>
+        <p class="hero-sub">
+          Astrophytum asterias（兜丸）を主体に、育てた経験＋栽培哲学ベースの情報を発信。<br>
+          このサイト経由で「育てることがもっと楽しく」なれたら嬉しいです。
+        </p>
+        <div class="orn" aria-hidden="true"><span></span></div>
+      </div>
+
+      <!-- 3 cards（あなたのコード＋画像対応） -->
+      <div class="grid" aria-label="About sections">
+        <article class="card">
+          <div class="card-inner">
+            <div class="card-head">
+              <div class="card-ico">✿</div>
+              <div>
+                <h2 class="card-title">私たちについて</h2>
+                <div class="card-sub"></div>
+              </div>
+            </div>
+
+            <div class="thumb t1" aria-hidden="true"></div>
+
+            <p class="card-text">
+              趣味で育てており、「マイペース」を大切に育て方を発信しております。
+            </p>
+
+            <a class="btn" href="about.html#us">私たちについて</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-inner">
+            <div class="card-head">
+              <div class="card-ico">🔧</div>
+              <div>
+                <h2 class="card-title">大切にしていること</h2>
+                <div class="card-sub">（育て方哲学）</div>
+              </div>
+            </div>
+
+            <div class="thumb t2" aria-hidden="true"></div>
+
+            <p class="card-text">
+              一番大切にすることは兜（白点）を年ごとに、白点周りの裏側を両の力を秋いた育て方を温んでいます。
+            </p>
+
+            <a class="btn" href="about.html#philosophy">大切にしていること ⟲</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-inner">
+            <div class="card-head">
+              <div class="card-ico">❖</div>
+              <div>
+                <h2 class="card-title">どんな兜を育てたい？</h2>
+                <div class="card-sub"></div>
+              </div>
+            </div>
+
+            <div class="thumb t3" aria-hidden="true"></div>
+
+            <p class="card-text">
+              のびのび×凛性で「きれいで丈夫な白い兜」を望みたい、植え元の明性で困られない飼育を大切に道めています。
+            </p>
+
+            <a class="btn" href="contact.html">お問い合わせ</a>
+          </div>
+        </article>
+      </div>
+
+      <div class="cta">
+        <div class="muted">どちらでも情報が参考で、拡はまり、</div>
+        <a class="btn-wide" href="contact.html">お問い合わせ</a>
+      </div>
+    </main>
+  </section>
+
+  <footer class="footer">
+    © <span id="y"></span> ASTRO KABUTO
+  </footer>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
+
