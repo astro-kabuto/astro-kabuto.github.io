@@ -28,8 +28,11 @@
       --shadow: 0 18px 60px rgba(0,0,0,.10);
       --shadow-sm: 0 10px 28px rgba(0,0,0,.08);
 
-      --green1: #4b4f36;
-      --green2: #2f3322;
+      /* ✅ Topbar（前ページと同じ変数名） */
+      --topbar1:#4b4f36;
+      --topbar2:#2f3322;
+
+      --serif:"Noto Serif JP", serif;
     }
 
     *{ box-sizing:border-box; }
@@ -56,104 +59,96 @@
     a:hover{ opacity:.92; }
 
     h1,h2,h3{
-      font-family:"Noto Serif JP", serif;
+      font-family: var(--serif);
       letter-spacing:.02em;
       margin:0;
     }
 
+    /* ✅ 前ページと同じ .shell */
     .shell{
-      max-width: 980px;
+      width: min(1060px, calc(100% - 40px));
       margin: 0 auto;
-      padding: 0 16px;
     }
 
-    /* ===== Topbar（トップと同じ雰囲気） ===== */
+    /* =========================
+       Topbar（前ページと同じ）
+       ========================= */
     .topbar{
       position: sticky;
       top: 0;
-      z-index: 999;
-      background: linear-gradient(180deg, var(--green1) 0%, var(--green2) 100%);
+      z-index: 80;
+      background: linear-gradient(180deg, var(--topbar1), var(--topbar2));
       border-bottom: 1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
     .topbar-inner{
+      height: 62px;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap: 14px;
-      padding: 10px 0;
     }
 
-    .brand{
-      display:inline-flex;
-      align-items:baseline;
+    .topbar .brand{
+      display:flex;
+      align-items:center;
       gap: 10px;
+      color: rgba(255,255,255,.92);
       text-decoration:none;
-      color: rgba(255,255,255,.86);
       letter-spacing:.02em;
-      white-space:nowrap;
+      white-space: nowrap;
     }
     .brand-kanji{
-      width: 34px;
-      height: 34px;
-      display:grid;
-      place-items:center;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.18);
-      background:
-        radial-gradient(16px 16px at 30% 30%, rgba(255,255,255,.90), rgba(255,255,255,.20)),
-        linear-gradient(180deg, rgba(152,165,129,.45), rgba(152,165,129,.18));
-      box-shadow: var(--shadow-sm);
-      font-family:"Noto Serif JP", serif;
-      font-weight: 700;
-      color: rgba(0,0,0,.80);
+      font-family: var(--serif);
+      font-size: 30px;
+      letter-spacing:.06em;
+      line-height: 1;
     }
     .brand-name{
-      font-family:"Noto Serif JP", serif;
-      font-weight: 700;
-      font-size: 14px;
-      letter-spacing:.12em;
+      font-family: var(--serif);
+      font-size: 13px;
+      letter-spacing: .18em;
+      opacity:.92;
+      line-height: 1;
     }
 
-    .nav{
+    .topbar .nav{
       display:flex;
       align-items:center;
-      gap: 4px;
-      flex-wrap: wrap;
-      justify-content:center;
+      gap: 16px;
+      font-family: var(--serif);
+      font-size: 13px;
+      letter-spacing:.06em;
+      justify-content: center;
     }
-    .nav a{
-      color: rgba(255,255,255,.78);
+    .topbar .nav a{
+      color: rgba(255,255,255,.82);
+      padding: 10px 6px;
+      border-bottom: 2px solid transparent;
       text-decoration:none;
-      padding: 8px 10px;
-      border-radius: 12px;
-      border: 1px solid transparent;
+      transition: .18s ease;
     }
-    .nav a:hover{
-      background: rgba(255,255,255,.10);
-      border-color: rgba(255,255,255,.10);
-    }
-    .nav a[aria-current="page"]{
-      background: rgba(255,255,255,.14);
-      border-color: rgba(255,255,255,.18);
+    .topbar .nav a:hover{ color:#fff; }
+    .topbar .nav a.active,
+    .topbar .nav a[aria-current="page"]{
+      color:#fff;
+      border-bottom-color: rgba(255,255,255,.80);
     }
 
-    .social{
-      display:flex;
-      align-items:center;
-      gap: 8px;
-    }
+    .social{ display:flex; gap: 8px; }
     .sbtn{
-      width: 30px;
-      height: 30px;
+      width: 28px; height: 28px;
       display:grid;
       place-items:center;
-      border-radius: 999px;
-      text-decoration:none;
-      border: 1px solid rgba(255,255,255,.18);
+      border-radius:999px;
+      color: rgba(255,255,255,.90);
+      border: 1px solid rgba(255,255,255,.22);
       background: rgba(255,255,255,.10);
-      color: rgba(255,255,255,.78);
+      font-size: 13px;
+      text-decoration:none;
     }
-    .sbtn:hover{ background: rgba(255,255,255,.16); }
+    .sbtn:hover{ background: rgba(255,255,255,.18); }
 
     @media (max-width: 860px){
       .social{ display:none; }
@@ -167,7 +162,7 @@
       border-bottom: 1px solid rgba(0,0,0,.10);
     }
 
-    /* fog overlay like the design */
+    /* fog overlay */
     .hero-bg::after{
       content:"";
       position:absolute;
@@ -184,7 +179,7 @@
       padding: 0 16px 54px;
     }
 
-    /* hero text block (center) */
+    /* hero text block */
     .hero-content{
       position: relative;
       z-index: 2;
@@ -299,7 +294,7 @@
       margin: 8px 0 10px;
     }
 
-    /* ここが画像ファイル指定（あなたの命名） */
+    /* 画像ファイル指定（あなたの命名のまま） */
     .thumb.t1{ background-image: url("images/about/about-01_story.jpg"); }
     .thumb.t2{ background-image: url("images/about/about-02_philosophy.jpg"); }
     .thumb.t3{ background-image: url("images/about/about-03_vision.jpg"); }
@@ -323,7 +318,7 @@
       border: 1px solid rgba(0,0,0,.12);
       background: rgba(152,165,129,.25);
       color: rgba(0,0,0,.70);
-      font-family:"Noto Serif JP", serif;
+      font-family: var(--serif);
       box-shadow: 0 10px 24px rgba(0,0,0,.08);
       transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
     }
@@ -358,19 +353,24 @@
       background: rgba(255,255,255,.55);
       text-decoration:none;
       color: rgba(0,0,0,.70);
-      font-family:"Noto Serif JP", serif;
+      font-family: var(--serif);
       box-shadow: 0 14px 36px rgba(0,0,0,.10);
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
     }
-    .cta .btn-wide:hover{ transform: translateY(-1px); }
+    .cta .btn-wide:hover{
+      transform: translateY(-1px);
+      filter: brightness(.99);
+      box-shadow: 0 18px 46px rgba(0,0,0,.12);
+    }
 
     /* footer */
     .footer{
-      background: linear-gradient(180deg, var(--green1) 0%, var(--green2) 100%);
+      background: linear-gradient(180deg, var(--topbar1) 0%, var(--topbar2) 100%);
       border-top: 1px solid rgba(255,255,255,.14);
       color: rgba(255,255,255,.65);
       text-align:center;
       padding: 16px 0;
-      font-family:"Noto Serif JP", serif;
+      font-family: var(--serif);
       letter-spacing:.08em;
       font-size: 12px;
     }
@@ -381,12 +381,11 @@
       .hero-bg{ min-height: 520px; }
       .card-text{ min-height: auto; }
     }
-    
   </style>
 </head>
 
 <body>
-  <!-- Topbar -->
+  <!-- ===== Top Navigation（共通Topbar） ===== -->
   <header class="topbar">
     <div class="shell topbar-inner">
       <a class="brand" href="index.html" aria-label="Home">
@@ -396,10 +395,9 @@
 
       <nav class="nav" aria-label="Primary">
         <a href="index.html">Home</a>
-        <a href="about.html" aria-current="page">About</a>
+        <a class="active" href="about.html" aria-current="page">About</a>
         <a href="gallery.html">Gallery</a>
         <a href="care.html">Care Tips</a>
-        
       </nav>
 
       <div class="social" aria-label="Social">
@@ -410,7 +408,7 @@
     </div>
   </header>
 
-  <!-- Hero -->
+  <!-- ===== Hero ===== -->
   <section class="hero-bg">
     <main class="wrap">
       <div class="hero-content">
@@ -422,62 +420,65 @@
         <div class="orn" aria-hidden="true"><span></span></div>
       </div>
 
-      <!-- 3 cards（あなたのコード＋画像対応） -->
+      <!-- 3 cards -->
       <div class="grid" aria-label="About sections">
-        <article class="card">
+        <article class="card" id="us">
           <div class="card-inner">
             <div class="card-head">
               <div class="card-ico">✿</div>
               <div>
                 <h2 class="card-title">私たちについて</h2>
-                <div class="card-sub"></div>
+                <div class="card-sub">（このサイトの作者）</div>
               </div>
             </div>
 
             <div class="thumb t1" aria-hidden="true"></div>
 
             <p class="card-text">
-              趣味で育てており、「マイペース」を大切に育て方を発信しております。
+              趣味で兜丸を育てながら、写真と記録をコツコツまとめています。<br>
+              「無理に速く育てない」「白点を守る」を大事にしています。
             </p>
 
-            <a class="btn" href="about.html#us">私たちについて</a>
+            <a class="btn" href="#us">私たちについて</a>
           </div>
         </article>
 
-        <article class="card">
+        <article class="card" id="philosophy">
           <div class="card-inner">
             <div class="card-head">
               <div class="card-ico">🔧</div>
               <div>
                 <h2 class="card-title">大切にしていること</h2>
-                <div class="card-sub">（育て方哲学）</div>
+                <div class="card-sub">（育て方の考え方）</div>
               </div>
             </div>
 
             <div class="thumb t2" aria-hidden="true"></div>
 
             <p class="card-text">
-              一番大切にすることは兜（白点）を年ごとに、白点周りの裏側を両の力を秋いた育て方を温んでいます。
+              兜は「水の量」よりも、まず<strong>風・乾き・温度</strong>が大事。<br>
+              迷ったら、いったん乾かして環境を整える方が失敗しにくいです。
             </p>
 
-            <a class="btn" href="about.html#philosophy">大切にしていること ⟲</a>
+            <a class="btn" href="#philosophy">大切にしていること</a>
           </div>
         </article>
 
-        <article class="card">
+        <article class="card" id="vision">
           <div class="card-inner">
             <div class="card-head">
               <div class="card-ico">❖</div>
               <div>
                 <h2 class="card-title">どんな兜を育てたい？</h2>
-                <div class="card-sub"></div>
+                <div class="card-sub">（目指す姿）</div>
               </div>
             </div>
 
             <div class="thumb t3" aria-hidden="true"></div>
 
             <p class="card-text">
-              のびのび×凛性で「きれいで丈夫な白い兜」を望みたい、植え元の明性で困られない飼育を大切に道めています。
+              のびのび育てつつ、締まりのある「きれいで丈夫な白い兜」を目標に。<br>
+              写真と記録で“変化”が分かるサイトにしていきます。
             </p>
 
             <a class="btn" href="contact.html">お問い合わせ</a>
@@ -486,7 +487,7 @@
       </div>
 
       <div class="cta">
-        <div class="muted">どちらでも情報が参考で、拡はまり、</div>
+        <div class="muted">質問・掲載依頼・感想など、気軽にどうぞ。</div>
         <a class="btn-wide" href="contact.html">お問い合わせ</a>
       </div>
     </main>
@@ -501,4 +502,5 @@
   </script>
 </body>
 </html>
+
 
