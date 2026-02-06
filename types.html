@@ -5,130 +5,551 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Types | Astro Kabuto</title>
   <meta name="description" content="兜丸（Astrophytum asterias）のタイプ別ページ一覧。" />
-  <link rel="stylesheet" href="style.css" />
 
   <link rel="icon" href="images/logo-folder/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" href="images/logo-folder/favicon-32.png" sizes="32x32">
   <link rel="apple-touch-icon" href="images/logo-folder/favicon-180.png">
+
+  <!-- Serif (雰囲気) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================
+       Types page (All-in-one)
+       Deep green topbar + paper UI
+       ========================= */
+
+    :root{
+      --serif: "Noto Serif JP", serif;
+
+      --paper:#f3efe7;
+      --paper2:#efe8dc;
+      --ink: rgba(0,0,0,.82);
+      --muted: rgba(0,0,0,.58);
+      --line: rgba(0,0,0,.10);
+
+      --card: rgba(255,255,255,.72);
+      --card2: rgba(255,255,255,.55);
+
+      --radius: 18px;
+      --radius-xl: 26px;
+
+      --shadow-sm: 0 10px 26px rgba(0,0,0,.08);
+      --shadow-md: 0 20px 60px rgba(0,0,0,.10);
+
+      --green-1:#4b4f36;
+      --green-2:#2f3322;
+      --gold: rgba(255,255,255,.86);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      color: var(--ink);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP",
+        "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(0,0,0,.035) 0px,
+          rgba(0,0,0,.035) 1px,
+          transparent 1px,
+          transparent 44px
+        ),
+        radial-gradient(1200px 700px at 30% 10%, rgba(255,255,255,.55), transparent 60%),
+        linear-gradient(180deg, var(--paper), var(--paper2));
+    }
+
+    a{ color: inherit; text-decoration:none; }
+    a:hover{ opacity:.96; }
+
+    .shell{
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 18px;
+    }
+
+    /* =========================
+       Topbar (deep green like index)
+       ========================= */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      background: linear-gradient(180deg, var(--green-1) 0%, var(--green-2) 100%);
+      border-bottom: 1px solid rgba(255,255,255,.14);
+    }
+    .topbar-inner{
+      height: 62px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      color: rgba(255,255,255,.92);
+      min-width: 180px;
+    }
+    .brand-kanji{
+      width: 34px;
+      height: 34px;
+      display:grid;
+      place-items:center;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      background:
+        radial-gradient(16px 16px at 30% 30%, rgba(255,255,255,.22), rgba(255,255,255,.06)),
+        linear-gradient(180deg, rgba(255,255,255,.10), rgba(0,0,0,.12));
+      font-family: var(--serif);
+      font-size: 18px;
+      letter-spacing:.06em;
+    }
+    .brand-name{
+      font-family: var(--serif);
+      font-size: 13px;
+      letter-spacing: .18em;
+      opacity:.92;
+      white-space: nowrap;
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      gap: 16px;
+      font-family: var(--serif);
+      font-size: 13px;
+      letter-spacing:.06em;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .nav a{
+      color: rgba(255,255,255,.82);
+      padding: 10px 6px;
+      border-bottom: 2px solid transparent;
+      transition: .18s ease;
+    }
+    .nav a:hover{ color:#fff; }
+    .nav a.active,
+    .nav a[aria-current="page"]{
+      color:#fff;
+      border-bottom-color: rgba(255,255,255,.80);
+    }
+
+    .social{ display:flex; gap: 8px; }
+    .sbtn{
+      width: 28px; height: 28px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      color: rgba(255,255,255,.90);
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.10);
+      font-size: 13px;
+      transition: .18s ease;
+    }
+    .sbtn:hover{ background: rgba(255,255,255,.18); }
+
+    @media (max-width: 860px){
+      .social{ display:none; }
+      .nav{ gap: 10px; }
+    }
+
+    /* =========================
+       Sub category nav (paper pill)
+       ========================= */
+    .catNav{
+      margin: 14px auto 0;
+      max-width: 1080px;
+      padding: 0 18px;
+    }
+    .catNav-inner{
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(0,0,0,.10);
+      border-radius: 999px;
+      box-shadow: var(--shadow-sm);
+      padding: 10px 12px;
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+    }
+    .catNav a{
+      color: rgba(0,0,0,.68);
+      font-size: 12.5px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: .18s ease;
+      white-space: nowrap;
+    }
+    .catNav a:hover{
+      background: rgba(255,255,255,.65);
+      border-color: rgba(0,0,0,.08);
+    }
+    .catNav a[aria-current="page"]{
+      background: rgba(255,255,255,.80);
+      border-color: rgba(0,0,0,.12);
+      color: rgba(0,0,0,.78);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.25);
+    }
+
+    /* =========================
+       Main layout
+       ========================= */
+    main{
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 18px 18px 56px;
+    }
+
+    .pageHead{
+      display:flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 14px;
+      padding: 18px 18px;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.60);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    .pageHead::before{
+      content:"";
+      position:absolute;
+      inset:-40px -40px auto -40px;
+      height: 220px;
+      background:
+        radial-gradient(420px 180px at 15% 40%, rgba(255,255,255,.75), transparent 60%),
+        radial-gradient(520px 240px at 70% 30%, rgba(152,165,129,.18), transparent 65%);
+      pointer-events:none;
+    }
+
+    .pageTitle{
+      position: relative;
+      z-index: 1;
+    }
+    .pageTitle h2{
+      margin:0;
+      font-family: var(--serif);
+      font-size: 34px;
+      letter-spacing: -.02em;
+      line-height: 1.1;
+    }
+    .pageTitle p{
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .actions{
+      position: relative;
+      z-index: 1;
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.60);
+      color: rgba(0,0,0,.74);
+      box-shadow: 0 10px 26px rgba(0,0,0,.07);
+      font-size: 13px;
+      transition: .18s ease;
+      white-space: nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn.primary{
+      background: linear-gradient(180deg, rgba(152,165,129,.45), rgba(152,165,129,.18));
+      border-color: rgba(0,0,0,.10);
+      color: rgba(0,0,0,.78);
+    }
+
+    @media (max-width: 760px){
+      .pageHead{ align-items: flex-start; flex-direction: column; }
+      .actions{ justify-content: flex-start; }
+      .pageTitle h2{ font-size: 30px; }
+    }
+
+    /* =========================
+       Grid Cards (premium)
+       ========================= */
+    .grid{
+      margin-top: 16px;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 560px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .type-card{
+      position: relative;
+      border-radius: 22px;
+      border: 1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.70);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      padding: 14px 14px 16px;
+      transform: translateZ(0);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .type-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(420px 220px at 30% 0%, rgba(255,255,255,.55), transparent 55%),
+        radial-gradient(520px 260px at 80% 20%, rgba(152,165,129,.14), transparent 60%);
+      pointer-events:none;
+    }
+    .type-card:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 26px 85px rgba(0,0,0,.14);
+    }
+
+    .thumb{
+      position: relative;
+      z-index: 1;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.65);
+      aspect-ratio: 4 / 3;
+    }
+    .thumb img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display:block;
+      transform: scale(1.02);
+      transition: transform .25s ease;
+    }
+    .type-card:hover .thumb img{
+      transform: scale(1.06);
+    }
+
+    .type-card h3{
+      position: relative;
+      z-index: 1;
+      margin: 12px 2px 0;
+      font-family: var(--serif);
+      font-size: 18px;
+      letter-spacing: .02em;
+      line-height: 1.25;
+    }
+    .type-card p{
+      position: relative;
+      z-index: 1;
+      margin: 8px 2px 0;
+      color: rgba(0,0,0,.68);
+      line-height: 1.7;
+      font-size: 13.5px;
+    }
+
+    .more{
+      position: relative;
+      z-index: 1;
+      margin-top: 12px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      color: rgba(0,0,0,.62);
+      font-size: 13px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.55);
+      box-shadow: 0 10px 26px rgba(0,0,0,.06);
+      color: rgba(0,0,0,.72);
+      font-size: 12.5px;
+      white-space: nowrap;
+    }
+
+    /* small note */
+    .note{
+      margin-top: 14px;
+      color: rgba(0,0,0,.55);
+      font-size: 12.5px;
+    }
+
+    /* footer */
+    .footer{
+      margin-top: 24px;
+      padding: 18px 0 0;
+      text-align: center;
+      color: rgba(0,0,0,.55);
+      font-family: var(--serif);
+    }
+  </style>
 </head>
 
 <body>
 
-  <!-- ===== Header ===== -->
-  <header class="header">
-    <div class="header-inner">
-      <a class="brand" href="index.html" aria-label="Astro Kabuto Home">
-        <div class="logo" aria-hidden="true"></div>
-        <div class="brand-text">
-          <h1>Astro Kabuto</h1>
-          <p>兜丸のfanサイト</p>
-        </div>
+  <!-- ===== Top Navigation (deep green) ===== -->
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="index.html" aria-label="Home">
+        <span class="brand-kanji">兜</span>
+        <span class="brand-name">KABUTOMARU</span>
       </a>
 
       <nav class="nav" aria-label="Primary">
         <a href="index.html">Home</a>
-        <a href="growth-log.html">Growth Log</a>
-        <a href="gallery.html">Gallery</a>
         <a href="about.html">About</a>
-        <a href="care.html">Care</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="care.html">Care Tips</a>
+        <a href="shop.html">Shop</a>
       </nav>
+
+      <div class="social" aria-label="Social">
+        <a class="sbtn" href="#" aria-label="Facebook">f</a>
+        <a class="sbtn" href="#" aria-label="X">x</a>
+        <a class="sbtn" href="#" aria-label="Instagram">◎</a>
+      </div>
     </div>
   </header>
 
-  <!-- ===== Category Nav ===== -->
+  <!-- ===== Category Nav (paper pill) ===== -->
   <nav class="catNav" aria-label="Category">
-    <a href="gallery.html">写真で楽しむ</a>
-    <a href="care.html">育て方（初心者）</a>
-    <a href="care-deep.html">育て方（詳しく）</a>
-    <a href="growth-log.html">成長記録</a>
-    <a href="types.html" aria-current="page">種類別</a>
-    <a href="index.html#community">コミュニティ</a>
+    <div class="catNav-inner">
+      <a href="gallery.html">写真で楽しむ</a>
+      <a href="care.html">育て方（初心者）</a>
+      <a href="care-deep.html">育て方（詳しく）</a>
+      <a href="growth-log.html">成長記録</a>
+      <a href="types.html" aria-current="page">種類別</a>
+      <a href="index.html#community">コミュニティ</a>
+    </div>
   </nav>
 
-  <main class="wrap" style="padding-top:10px;">
-
+  <main>
     <!-- ===== Page Head ===== -->
-    <section class="typesPageHead" aria-label="Types list">
-      <div>
-        <h2 style="margin:0;font-size:28px;letter-spacing:-.02em;">Types</h2>
-        <p class="sub" style="margin-top:8px;">兜丸のタイプ別ページ一覧。気になるタイプからどうぞ。</p>
+    <section class="pageHead" aria-label="Types list">
+      <div class="pageTitle">
+        <h2>Types</h2>
+        <p>兜丸のタイプ別ページ一覧。気になるタイプからどうぞ。</p>
       </div>
 
-      <div class="typesPageActions">
+      <div class="actions">
         <a class="btn" href="index.html#types">トップに戻る</a>
         <a class="btn primary" href="gallery.html">ギャラリーを見る</a>
       </div>
     </section>
 
     <!-- ===== Types Grid ===== -->
-    <section class="typesPageGrid" aria-label="Types cards">
+    <section class="grid" aria-label="Types cards">
 
       <a class="type-card" href="types-normal.html">
-        <div class="type-thumb"><img src="images/types/index-normal.png" alt="通常兜"></div>
+        <div class="thumb"><img src="images/types/index-normal.png" alt="通常兜"></div>
         <h3>通常兜</h3>
         <p>基本形の美しさ。育成の基準になるタイプ。</p>
-        <span class="type-more">さらに詳しく →</span>
+        <div class="more">
+          <span class="pill">さらに詳しく →</span>
+          <span aria-hidden="true">✦</span>
+        </div>
       </a>
 
       <a class="type-card" href="types-super.html">
-        <div class="type-thumb"><img src="images/types/index-super.png" alt="スーパー兜"></div>
+        <div class="thumb"><img src="images/types/index-super.png" alt="スーパー兜"></div>
         <h3>スーパー兜</h3>
         <p>白点が厚く、迫力のある表情。</p>
-        <span class="type-more">さらに詳しく →</span>
+        <div class="more">
+          <span class="pill">さらに詳しく →</span>
+          <span aria-hidden="true">✦</span>
+        </div>
       </a>
 
       <a class="type-card" href="types-ruri.html">
-        <div class="type-thumb"><img src="images/types/index-ruri.png" alt="瑠璃兜"></div>
+        <div class="thumb"><img src="images/types/index-ruri.png" alt="瑠璃兜"></div>
         <h3>瑠璃兜</h3>
         <p>青緑〜瑠璃色の肌が美しい。</p>
-        <span class="type-more">さらに詳しく →</span>
+        <div class="more">
+          <span class="pill">さらに詳しく →</span>
+          <span aria-hidden="true">✦</span>
+        </div>
       </a>
 
       <a class="type-card" href="types-miracle.html">
-        <div class="type-thumb"><img src="images/types/index-miracle.png" alt="ミラクル兜"></div>
+        <div class="thumb"><img src="images/types/index-miracle.png" alt="ミラクル兜"></div>
         <h3>ミラクル兜</h3>
         <p>表情が独特で、見飽きない。</p>
-        <span class="type-more">さらに詳しく →</span>
+        <div class="more">
+          <span class="pill">さらに詳しく →</span>
+          <span aria-hidden="true">✦</span>
+        </div>
       </a>
 
       <a class="type-card" href="types-isw.html">
-        <div class="type-thumb"><img src="images/types/index-isw.png" alt="ISW兜"></div>
+        <div class="thumb"><img src="images/types/index-isw.png" alt="ISW兜"></div>
         <h3>ISW兜</h3>
         <p>高密度の白点で、繊細な粒感が魅力。</p>
-        <span class="type-more">さらに詳しく →</span>
+        <div class="more">
+          <span class="pill">さらに詳しく →</span>
+          <span aria-hidden="true">✦</span>
+        </div>
       </a>
 
       <a class="type-card" href="types-royal-super.html">
-        <div class="type-thumb"><img src="images/types/index-royal-super.png" alt="ロイヤルスーパー兜"></div>
+        <div class="thumb"><img src="images/types/index-royal-super.png" alt="ロイヤルスーパー兜"></div>
         <h3>ロイヤルスーパー兜</h3>
         <p>密度と品の両立。特別感のある存在。</p>
-        <span class="type-more">さらに詳しく →</span>
+        <div class="more">
+          <span class="pill">さらに詳しく →</span>
+          <span aria-hidden="true">✦</span>
+        </div>
       </a>
 
       <a class="type-card" href="types-hanazono.html">
-        <div class="type-thumb"><img src="images/types/index-hanazono.png" alt="花園兜"></div>
+        <div class="thumb"><img src="images/types/index-hanazono.png" alt="花園兜"></div>
         <h3>花園兜</h3>
         <p>白点の散り方が華やか。</p>
-        <span class="type-more">さらに詳しく →</span>
+        <div class="more">
+          <span class="pill">さらに詳しく →</span>
+          <span aria-hidden="true">✦</span>
+        </div>
       </a>
 
     </section>
 
-    <section style="margin-top:18px;">
-      <p class="muted" style="margin:0;">
-        ※各タイプページは随時更新。写真が増えたら差し替えていきます。
-      </p>
-    </section>
+    <p class="note">※各タイプページは随時更新。写真が増えたら差し替えていきます。</p>
 
+    <footer class="footer">
+      © <span id="y"></span> Astro Kabuto
+    </footer>
   </main>
-
-  <footer class="footer">
-    © <span id="y"></span> Astro Kabuto
-  </footer>
 
   <script>
     document.getElementById("y").textContent = new Date().getFullYear();
   </script>
-
 </body>
 </html>
+

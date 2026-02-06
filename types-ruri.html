@@ -1,140 +1,474 @@
-<!doctype html><html lang="ja"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>瑠璃兜 | Astro Kabuto</title>
-<meta name="description" content="瑠璃兜（Astrophytum asterias）の特徴・写真。地肌の色味と白点の対比を記録。"/>
-<link rel="stylesheet" href="style.css"/>
-<!-- ★ここに types-normal.html の <style> を丸ごと貼ってOK -->
-</head><body>
-<header class="site-header"><div class="site-header-inner">
-<a class="brand" href="index.html"><strong>Astro Kabuto</strong><span>兜丸の成長記録</span></a>
-<nav class="site-nav"><a href="index.html">Home</a></nav></div></header>
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>瑠璃兜 | Astro Kabuto</title>
+  <meta name="description" content="瑠璃兜（Astrophytum asterias）の特徴・写真。地肌の色味と白点の対比を記録。" />
 
-<header class="hero"><div class="wrap"><div class="hero-inner">
-<div>
-  <div class="kicker">Types / Astrophytum asterias</div>
-  <h1>瑠璃兜</h1>
-  <p class="lead">地肌が深く、瑠璃色っぽく見えるタイプ。白点とのコントラストで立体感が強く出ます。</p>
-  <div class="chips"><span class="chip">深い地肌</span><span class="chip">コントラスト</span><span class="chip">Hero + 3 Detail</span></div>
-</div>
-<figure class="hero-media"><img src="images/types/types-ruri-hero.png" alt="瑠璃兜 ヒーロー写真" loading="eager"></figure>
-</div></div></header>
+  <link rel="icon" href="images/logo-folder/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="images/logo-folder/favicon-32.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="images/logo-folder/favicon-180.png">
 
-<main class="wrap">
-<section class="section"><div class="card"><h2>ディテール写真</h2>
-<div class="grid3">
-  <div class="shot"><img src="images/types/types-ruri-top.png" alt="瑠璃兜 上から"><div class="cap">上から：稜と模様</div></div>
-  <div class="shot"><img src="images/types/types-ruri-close.png" alt="瑠璃兜 アップ"><div class="cap">アップ：白点の粒と地肌</div></div>
-  <div class="shot"><img src="images/types/types-ruri-angle.png" alt="瑠璃兜 別角度"><div class="cap">別角度：陰影の出方</div></div>
-</div></div></section>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
 
-<section class="section"><div class="card"><h2>関連タイプ</h2>
-<div class="nav-links">
-  <a href="types-normal.html">通常兜</a><a href="types-isw.html">ISW兜</a><a href="types-super.html">スーパー兜</a>
-  <a href="types-miracle.html">ミラクル兜</a><a href="types-ruri-nishiki.html">瑠璃錦兜</a>
-  <a href="types-hanazono.html">花園兜</a><a href="types-royal-super.html">ロイヤルスーパー兜</a>
-</div></div></section>
-</main></body></html>
-<style>
+  <style>
     :root{
-      --bg1:#f7f7f9; --bg2:#e3e6ec; --ink:#0b0c0f; --muted:#5b6270;
-      --card:#ffffffcc; --line:#e6e8ef; --radius:22px;
-      --shadow: 0 18px 50px rgba(15, 23, 42, .12);
-    }
-    body{ color:var(--ink); }
-    .wrap{ max-width:1060px; margin:0 auto; padding:24px 16px 56px; }
-    @media(min-width:881px){ .wrap{ padding:26px 20px 64px; } }
+      --serif:"Noto Serif JP", serif;
 
-    .site-header{
-      position:sticky; top:0; z-index:100;
-      background:rgba(247,247,249,.82); backdrop-filter: blur(12px);
-      border-bottom:1px solid rgba(230,232,239,.9);
+      --paper:#f3efe7;
+      --paper2:#efe8dc;
+      --ink: rgba(0,0,0,.82);
+      --muted: rgba(0,0,0,.58);
+      --line: rgba(0,0,0,.10);
+
+      --shadow-sm: 0 10px 26px rgba(0,0,0,.08);
+      --shadow-md: 0 20px 60px rgba(0,0,0,.10);
+
+      --radius: 18px;
+      --radius-xl: 26px;
+
+      --green-1:#4b4f36;
+      --green-2:#2f3322;
     }
-    .site-header-inner{
-      max-width:1060px; margin:0 auto; padding:12px 20px;
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      color: var(--ink);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP",
+        "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+
+      background:
+        repeating-linear-gradient(to bottom, rgba(0,0,0,.035) 0px, rgba(0,0,0,.035) 1px, transparent 1px, transparent 44px),
+        radial-gradient(1200px 700px at 30% 10%, rgba(255,255,255,.55), transparent 60%),
+        linear-gradient(180deg, var(--paper), var(--paper2));
+    }
+
+    a{ color: inherit; text-decoration:none; }
+    a:hover{ opacity:.96; }
+
+    .shell{ max-width:1080px; margin:0 auto; padding:0 18px; }
+
+    /* ===== Deep green topbar ===== */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      background: linear-gradient(180deg, var(--green-1) 0%, var(--green-2) 100%);
+      border-bottom: 1px solid rgba(255,255,255,.14);
+    }
+    .topbar-inner{
+      height: 62px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+    }
+
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      color: rgba(255,255,255,.92);
+      min-width: 180px;
+    }
+    .brand-kanji{
+      width:34px; height:34px;
+      display:grid; place-items:center;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.18);
+      background:
+        radial-gradient(16px 16px at 30% 30%, rgba(255,255,255,.22), rgba(255,255,255,.06)),
+        linear-gradient(180deg, rgba(255,255,255,.10), rgba(0,0,0,.12));
+      font-family: var(--serif);
+      font-size:18px;
+      letter-spacing:.06em;
+    }
+    .brand-name{
+      font-family: var(--serif);
+      font-size:13px;
+      letter-spacing:.18em;
+      opacity:.92;
+      white-space: nowrap;
+    }
+
+    .nav{
+      display:flex; align-items:center; gap:16px;
+      font-family: var(--serif);
+      font-size:13px;
+      letter-spacing:.06em;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .nav a{
+      color: rgba(255,255,255,.82);
+      padding:10px 6px;
+      border-bottom:2px solid transparent;
+      transition:.18s ease;
+    }
+    .nav a:hover{ color:#fff; }
+
+    .social{ display:flex; gap:8px; }
+    .sbtn{
+      width:28px; height:28px;
+      display:grid; place-items:center;
+      border-radius:999px;
+      color: rgba(255,255,255,.90);
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.10);
+      font-size:13px;
+      transition:.18s ease;
+    }
+    .sbtn:hover{ background: rgba(255,255,255,.18); }
+    @media (max-width: 860px){
+      .social{ display:none; }
+      .nav{ gap: 10px; }
+    }
+
+    /* ===== Subbar ===== */
+    .subbar{ max-width:1080px; margin:12px auto 0; padding:0 18px; }
+    .subbar-inner{
       display:flex; align-items:center; justify-content:space-between;
-    }
-    .brand{ text-decoration:none; color:var(--ink); line-height:1.1; }
-    .brand strong{ display:block; font-size:15px; }
-    .brand span{ font-size:11px; color:var(--muted); }
-    .site-nav a{
-      text-decoration:none; font-size:14px; padding:8px 12px;
-      border-radius:999px; border:1px solid rgba(230,232,239,.9);
-      background:rgba(255,255,255,.9); color:var(--ink);
-      box-shadow:0 6px 16px rgba(15,23,42,.06);
-    }
-
-    .hero{
-      background: radial-gradient(1200px 700px at 50% 35%, var(--bg1), var(--bg2));
-      border-bottom:1px solid var(--line);
-      padding-bottom:12px;
-    }
-    .hero .wrap{ max-width:980px; padding-top:22px; padding-bottom:12px; }
-    @media(min-width:881px){ .hero .wrap{ padding-top:36px; padding-bottom:24px; } }
-
-    .hero-inner{
-      display:grid; grid-template-columns:1fr; gap:16px;
-      align-items:center; padding:24px 0 18px;
-    }
-    @media(min-width:881px){
-      .hero-inner{ grid-template-columns:1.25fr .75fr; gap:20px; padding:36px 0 28px; }
-    }
-    .hero-inner>div{ text-align:left; }
-    .kicker{ font-size:13px; letter-spacing:.08em; color:var(--muted); text-transform:uppercase; }
-    h1{ margin:10px 0 8px; font-size:clamp(34px,4vw,52px); line-height:1.05; }
-    .lead{ margin:0 0 14px; font-size:15.5px; line-height:1.7; color:var(--muted); max-width:52ch; }
-
-    .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
-    .chip{
-      font-size:12.5px; padding:7px 11px;
-      border:1px solid rgba(230,232,239,.9);
-      border-radius:999px; background:rgba(255,255,255,.65);
+      gap:12px; flex-wrap:wrap;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.55);
+      box-shadow: var(--shadow-sm);
+      padding:10px 12px;
       backdrop-filter: blur(10px);
     }
+    .crumb{
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+      color: rgba(0,0,0,.60);
+      font-size:12.5px;
+    }
+    .crumb a{
+      color: rgba(0,0,0,.68);
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid transparent;
+    }
+    .crumb a:hover{
+      background: rgba(255,255,255,.70);
+      border-color: rgba(0,0,0,.08);
+    }
+    .crumb b{
+      color: rgba(0,0,0,.76);
+      font-weight:700;
+      font-family: var(--serif);
+    }
 
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:9px 12px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.65);
+      color: rgba(0,0,0,.74);
+      box-shadow: 0 10px 26px rgba(0,0,0,.07);
+      font-size:12.5px;
+      transition:.18s ease;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+
+    main{ max-width:1080px; margin:0 auto; padding:14px 18px 56px; }
+
+    /* ===== Hero ===== */
+    .hero{
+      margin-top:12px;
+      border-radius: var(--radius-xl);
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.62);
+      box-shadow: var(--shadow-md);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:-60px -60px auto -60px;
+      height:280px;
+      background:
+        radial-gradient(420px 180px at 18% 35%, rgba(255,255,255,.78), transparent 60%),
+        radial-gradient(520px 240px at 75% 25%, rgba(152,165,129,.18), transparent 65%);
+      pointer-events:none;
+    }
+    .hero-inner{
+      position:relative; z-index:1;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+      padding:18px;
+      align-items:center;
+    }
+    @media (max-width: 900px){
+      .hero-inner{ grid-template-columns: 1fr; }
+    }
+    .kicker{
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,.55);
+    }
+    h1{
+      margin:10px 0 10px;
+      font-family: var(--serif);
+      font-size: clamp(34px, 4vw, 54px);
+      line-height:1.05;
+      letter-spacing:-.02em;
+    }
+    .lead{
+      margin:0;
+      color: rgba(0,0,0,.62);
+      line-height:1.85;
+      font-size:14.8px;
+      max-width:58ch;
+    }
+    .chips{
+      display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;
+    }
+    .chip{
+      font-size:12.5px;
+      padding:7px 11px;
+      border:1px solid rgba(0,0,0,.10);
+      border-radius:999px;
+      background: rgba(255,255,255,.55);
+      box-shadow: 0 10px 26px rgba(0,0,0,.06);
+      white-space: nowrap;
+    }
     .hero-media{
-      max-width:100%; margin:0 auto;
-      border-radius:var(--radius);
-      background: radial-gradient(900px 500px at 50% 30%, #fff, #eef0f6);
-      border:1px solid rgba(230,232,239,.9);
-      box-shadow:var(--shadow);
-      padding:14px;
+      border-radius:22px;
+      border:1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.55);
+      box-shadow: 0 20px 60px rgba(0,0,0,.12);
+      padding:12px;
+      overflow:hidden;
+      max-width:460px;
+      margin-left:auto;
     }
-    @media(min-width:881px){ .hero-media{ max-width:400px; margin-left:auto; } }
+    @media (max-width: 900px){
+      .hero-media{ margin: 6px auto 0; max-width: 560px; }
+    }
     .hero-media img{
-      width:100%; display:block; border-radius:16px;
-      aspect-ratio:4/5; object-fit:cover;
+      width:100%;
+      display:block;
+      border-radius:16px;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      transform: scale(1.02);
     }
 
-    .section{ margin-top:28px; }
-    .hero + main .section:first-child{ margin-top:12px; }
-    @media(min-width:881px){ .hero + main .section:first-child{ margin-top:16px; } }
-
+    /* ===== Cards ===== */
+    .section{ margin-top:14px; }
     .card{
-      background:var(--card); border:1px solid var(--line);
-      border-radius:var(--radius); box-shadow:0 10px 28px rgba(15,23,42,.06);
-      padding:20px;
+      border-radius: var(--radius-xl);
+      border:1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.70);
+      box-shadow: var(--shadow-md);
+      padding:16px;
+      overflow:hidden;
+      position:relative;
     }
-    @media(min-width:881px){ .card{ padding:26px; } }
-    .section h2{ margin:0 0 12px; font-size:18px; letter-spacing:.02em; }
-    .muted{ color:var(--muted); line-height:1.85; font-size:14.5px; }
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(420px 220px at 30% 0%, rgba(255,255,255,.50), transparent 55%),
+        radial-gradient(520px 260px at 85% 20%, rgba(152,165,129,.12), transparent 60%);
+      pointer-events:none;
+    }
+    .card > *{ position:relative; z-index:1; }
 
-    .grid3{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:12px; }
-    @media(min-width:881px){ .grid3{ grid-template-columns:repeat(3,1fr); } }
+    .card h2{
+      margin:0 0 10px;
+      font-family: var(--serif);
+      font-size:18px;
+      letter-spacing:.02em;
+    }
+
+    .grid3{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:12px;
+      margin-top:12px;
+    }
+    @media (max-width: 980px){ .grid3{ grid-template-columns: 1fr; } }
 
     .shot{
-      border-radius:18px; border:1px solid var(--line);
-      background:#fff; overflow:hidden;
+      border-radius:18px;
+      border:1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.62);
+      overflow:hidden;
       transition: transform .18s ease, box-shadow .18s ease;
     }
-    .shot:hover{ transform: translateY(-2px); box-shadow:0 14px 30px rgba(15,23,42,.10); }
-    .shot img{ width:100%; display:block; aspect-ratio:4/3; object-fit:cover; }
-    .cap{ padding:10px 12px; font-size:13px; color:var(--muted); }
-
-    .nav-links{ display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; }
-    .nav-links a{
-      display:inline-block; padding:10px 12px;
-      border-radius:999px; border:1px solid var(--line);
-      text-decoration:none; color:var(--ink); background:#fff;
+    .shot:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 18px 44px rgba(0,0,0,.14);
     }
-    .nav-links a:hover{ filter:brightness(.98); }
+    .shot img{
+      width:100%;
+      display:block;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      transform: scale(1.02);
+      transition: transform .22s ease;
+    }
+    .shot:hover img{ transform: scale(1.06); }
+    .cap{
+      padding:10px 12px;
+      color: rgba(0,0,0,.60);
+      font-size:13px;
+      line-height:1.6;
+      border-top: 1px solid rgba(0,0,0,.08);
+      background: rgba(255,255,255,.55);
+    }
+
+    .muted{ color: rgba(0,0,0,.60); line-height:1.85; font-size:14px; margin:0; }
+
+    .links{ display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; }
+    .pill-link{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:9px 12px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.60);
+      color: rgba(0,0,0,.74);
+      box-shadow: 0 10px 26px rgba(0,0,0,.06);
+      font-size:12.8px;
+      transition:.18s ease;
+      white-space: nowrap;
+    }
+    .pill-link:hover{ transform: translateY(-1px); }
+
+    .footer{
+      margin-top: 18px;
+      padding: 18px 0 0;
+      text-align:center;
+      color: rgba(0,0,0,.55);
+      font-family: var(--serif);
+    }
   </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="index.html" aria-label="Home">
+        <span class="brand-kanji">兜</span>
+        <span class="brand-name">KABUTOMARU</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="care.html">Care Tips</a>
+        <a href="shop.html">Shop</a>
+      </nav>
+
+      <div class="social" aria-label="Social">
+        <a class="sbtn" href="#" aria-label="Facebook">f</a>
+        <a class="sbtn" href="#" aria-label="X">x</a>
+        <a class="sbtn" href="#" aria-label="Instagram">◎</a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="subbar" aria-label="Breadcrumb">
+    <div class="subbar-inner">
+      <div class="crumb">
+        <a href="types.html">種類別</a>
+        <span aria-hidden="true">›</span>
+        <b>瑠璃兜</b>
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn" href="types.html">一覧に戻る</a>
+        <a class="btn" href="gallery.html">ギャラリー</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero" aria-label="Type hero">
+      <div class="hero-inner">
+        <div>
+          <div class="kicker">Types / Astrophytum asterias</div>
+          <h1>瑠璃兜</h1>
+          <p class="lead">
+            地肌が深く、瑠璃色っぽく見えるタイプ。白点とのコントラストで立体感が強く出ます。
+            光の角度で色味が変わるので、写真で“表情の違い”を残すのが楽しい兜です。
+          </p>
+
+          <div class="chips">
+            <span class="chip">深い地肌</span>
+            <span class="chip">コントラスト</span>
+            <span class="chip">Hero + 3 Detail</span>
+          </div>
+        </div>
+
+        <figure class="hero-media">
+          <img src="images/types/types-ruri-hero.png" alt="瑠璃兜 ヒーロー写真" loading="eager">
+        </figure>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card">
+        <h2>ディテール写真</h2>
+
+        <div class="grid3">
+          <div class="shot">
+            <img src="images/types/types-ruri-top.png" alt="瑠璃兜 上から" loading="lazy">
+            <div class="cap">上から：稜と模様</div>
+          </div>
+
+          <div class="shot">
+            <img src="images/types/types-ruri-close.png" alt="瑠璃兜 アップ" loading="lazy">
+            <div class="cap">アップ：白点の粒と地肌</div>
+          </div>
+
+          <div class="shot">
+            <img src="images/types/types-ruri-angle.png" alt="瑠璃兜 別角度" loading="lazy">
+            <div class="cap">別角度：陰影の出方</div>
+          </div>
+        </div>
+
+        <p class="muted" style="margin-top:12px;">
+          ※瑠璃系は「色が濃い＝強光に強い」とは限らない。急な置き場変更は焼けの原因になるので慣らしが安全。
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card">
+        <h2>関連タイプ</h2>
+        <p class="muted">比較すると違いが分かりやすいタイプをまとめました。</p>
+
+        <div class="links">
+          <a class="pill-link" href="types-normal.html">通常兜</a>
+          <a class="pill-link" href="types-isw.html">ISW兜</a>
+          <a class="pill-link" href="types-super.html">スーパー兜</a>
+          <a class="pill-link" href="types-miracle.html">ミラクル兜</a>
+          <a class="pill-link" href="types-ruri-nishiki.html">瑠璃錦兜</a>
+          <a class="pill-link" href="types-hanazono.html">花園兜</a>
+          <a class="pill-link" href="types-royal-super.html">ロイヤルスーパー兜</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      © <span id="y"></span> Astro Kabuto
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
+
