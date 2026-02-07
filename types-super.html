@@ -1,474 +1,294 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>スーパー兜 | Astro Kabuto</title>
-  <meta name="description" content="スーパー兜（Astrophytum asterias）の特徴・写真。白点の強さや見え方を記録。" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>スーパー兜 | Astro Kabuto</title>
+<meta name="description" content="スーパー兜（Astrophytum asterias）の特徴・写真。白点の強さや見え方を記録。" />
 
-  <link rel="icon" href="images/logo-folder/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" href="images/logo-folder/favicon-32.png" sizes="32x32">
-  <link rel="apple-touch-icon" href="images/logo-folder/favicon-180.png">
+<link rel="icon" href="images/logo-folder/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="images/logo-folder/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="images/logo-folder/favicon-180.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    :root{
-      --serif:"Noto Serif JP", serif;
+<style>
+:root{
+  --serif:"Noto Serif JP", serif;
 
-      --paper:#f3efe7;
-      --paper2:#efe8dc;
-      --ink: rgba(0,0,0,.82);
-      --muted: rgba(0,0,0,.58);
-      --line: rgba(0,0,0,.10);
+  --paper:#f3efe7;
+  --paper2:#efe8dc;
+  --ink: rgba(0,0,0,.82);
+  --muted: rgba(0,0,0,.58);
+  --line: rgba(0,0,0,.10);
 
-      --shadow-sm: 0 10px 26px rgba(0,0,0,.08);
-      --shadow-md: 0 20px 60px rgba(0,0,0,.10);
+  --shadow-sm: 0 10px 26px rgba(0,0,0,.08);
+  --shadow-md: 0 20px 60px rgba(0,0,0,.10);
 
-      --radius: 18px;
-      --radius-xl: 26px;
+  --radius: 18px;
+  --radius-xl: 26px;
 
-      --green-1:#4b4f36;
-      --green-2:#2f3322;
-    }
+  /* ✅ 共通Topbar変数 */
+  --topbar1:#4b4f36;
+  --topbar2:#2f3322;
+}
 
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      color: var(--ink);
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP",
-        "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+*{ box-sizing:border-box; }
+body{
+  margin:0;
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP",
+    "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
 
-      background:
-        repeating-linear-gradient(to bottom, rgba(0,0,0,.035) 0px, rgba(0,0,0,.035) 1px, transparent 1px, transparent 44px),
-        radial-gradient(1200px 700px at 30% 10%, rgba(255,255,255,.55), transparent 60%),
-        linear-gradient(180deg, var(--paper), var(--paper2));
-    }
+  background:
+    repeating-linear-gradient(to bottom, rgba(0,0,0,.035) 0px, rgba(0,0,0,.035) 1px, transparent 1px, transparent 44px),
+    radial-gradient(1200px 700px at 30% 10%, rgba(255,255,255,.55), transparent 60%),
+    linear-gradient(180deg, var(--paper), var(--paper2));
+}
 
-    a{ color: inherit; text-decoration:none; }
-    a:hover{ opacity:.96; }
+a{ color:inherit; text-decoration:none; }
 
-    .shell{ max-width:1080px; margin:0 auto; padding:0 18px; }
+.shell{
+  width:min(1060px, calc(100% - 40px));
+  margin:0 auto;
+}
 
-    /* ===== Deep green topbar ===== */
-    .topbar{
-      position: sticky;
-      top: 0;
-      z-index: 80;
-      background: linear-gradient(180deg, var(--green-1) 0%, var(--green-2) 100%);
-      border-bottom: 1px solid rgba(255,255,255,.14);
-    }
-    .topbar-inner{
-      height: 62px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 14px;
-    }
+/* =========================
+   共通Topbar（統一版）
+   ========================= */
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:80;
+  background:linear-gradient(180deg,var(--topbar1),var(--topbar2));
+  border-bottom:1px solid rgba(255,255,255,.14);
+  backdrop-filter:blur(10px);
+}
+.topbar-inner{
+  height:62px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
 
-    .brand{
-      display:flex; align-items:center; gap:10px;
-      color: rgba(255,255,255,.92);
-      min-width: 180px;
-    }
-    .brand-kanji{
-      width:34px; height:34px;
-      display:grid; place-items:center;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.18);
-      background:
-        radial-gradient(16px 16px at 30% 30%, rgba(255,255,255,.22), rgba(255,255,255,.06)),
-        linear-gradient(180deg, rgba(255,255,255,.10), rgba(0,0,0,.12));
-      font-family: var(--serif);
-      font-size:18px;
-      letter-spacing:.06em;
-    }
-    .brand-name{
-      font-family: var(--serif);
-      font-size:13px;
-      letter-spacing:.18em;
-      opacity:.92;
-      white-space: nowrap;
-    }
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:rgba(255,255,255,.92);
+}
+.brand-kanji{
+  font-family:var(--serif);
+  font-size:30px;
+  letter-spacing:.06em;
+}
+.brand-name{
+  font-family:var(--serif);
+  font-size:13px;
+  letter-spacing:.18em;
+}
 
-    .nav{
-      display:flex; align-items:center; gap:16px;
-      font-family: var(--serif);
-      font-size:13px;
-      letter-spacing:.06em;
-      flex-wrap:wrap;
-      justify-content:center;
-    }
-    .nav a{
-      color: rgba(255,255,255,.82);
-      padding:10px 6px;
-      border-bottom:2px solid transparent;
-      transition:.18s ease;
-    }
-    .nav a:hover{ color:#fff; }
+.nav{
+  display:flex;
+  gap:16px;
+  font-family:var(--serif);
+  font-size:13px;
+}
+.nav a{
+  color:rgba(255,255,255,.82);
+  padding:10px 6px;
+  border-bottom:2px solid transparent;
+}
+.nav a:hover{ color:#fff; }
 
-    .social{ display:flex; gap:8px; }
-    .sbtn{
-      width:28px; height:28px;
-      display:grid; place-items:center;
-      border-radius:999px;
-      color: rgba(255,255,255,.90);
-      border: 1px solid rgba(255,255,255,.22);
-      background: rgba(255,255,255,.10);
-      font-size:13px;
-      transition:.18s ease;
-    }
-    .sbtn:hover{ background: rgba(255,255,255,.18); }
-    @media (max-width: 860px){
-      .social{ display:none; }
-      .nav{ gap: 10px; }
-    }
+.social{ display:flex; gap:8px; }
+.sbtn{
+  width:28px;height:28px;
+  display:grid;place-items:center;
+  border-radius:999px;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.22);
+  background:rgba(255,255,255,.10);
+}
 
-    /* ===== Subbar ===== */
-    .subbar{ max-width:1080px; margin:12px auto 0; padding:0 18px; }
-    .subbar-inner{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px; flex-wrap:wrap;
-      border-radius:999px;
-      border:1px solid rgba(0,0,0,.10);
-      background: rgba(255,255,255,.55);
-      box-shadow: var(--shadow-sm);
-      padding:10px 12px;
-      backdrop-filter: blur(10px);
-    }
-    .crumb{
-      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
-      color: rgba(0,0,0,.60);
-      font-size:12.5px;
-    }
-    .crumb a{
-      color: rgba(0,0,0,.68);
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid transparent;
-    }
-    .crumb a:hover{
-      background: rgba(255,255,255,.70);
-      border-color: rgba(0,0,0,.08);
-    }
-    .crumb b{
-      color: rgba(0,0,0,.76);
-      font-weight:700;
-      font-family: var(--serif);
-    }
+/* ===== Layout ===== */
+main{ max-width:1080px; margin:0 auto; padding:20px; }
 
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      padding:9px 12px;
-      border-radius:999px;
-      border:1px solid rgba(0,0,0,.12);
-      background: rgba(255,255,255,.65);
-      color: rgba(0,0,0,.74);
-      box-shadow: 0 10px 26px rgba(0,0,0,.07);
-      font-size:12.5px;
-      transition:.18s ease;
-      white-space:nowrap;
-    }
-    .btn:hover{ transform: translateY(-1px); }
+/* ===== Hero ===== */
+.hero{
+  border-radius:var(--radius-xl);
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.65);
+  box-shadow:var(--shadow-md);
+}
+.hero-inner{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:16px;
+  padding:20px;
+}
+@media(max-width:900px){
+  .hero-inner{ grid-template-columns:1fr; }
+}
 
-    main{ max-width:1080px; margin:0 auto; padding:14px 18px 56px; }
+h1{
+  font-family:var(--serif);
+  font-size:clamp(34px,4vw,52px);
+  margin:10px 0;
+}
+.lead{ color:var(--muted); line-height:1.8; }
 
-    /* ===== Hero ===== */
-    .hero{
-      margin-top:12px;
-      border-radius: var(--radius-xl);
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.62);
-      box-shadow: var(--shadow-md);
-      overflow:hidden;
-      position:relative;
-    }
-    .hero::before{
-      content:"";
-      position:absolute;
-      inset:-60px -60px auto -60px;
-      height:280px;
-      background:
-        radial-gradient(420px 180px at 18% 35%, rgba(255,255,255,.78), transparent 60%),
-        radial-gradient(520px 240px at 75% 25%, rgba(152,165,129,.18), transparent 65%);
-      pointer-events:none;
-    }
-    .hero-inner{
-      position:relative; z-index:1;
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:16px;
-      padding:18px;
-      align-items:center;
-    }
-    @media (max-width: 900px){
-      .hero-inner{ grid-template-columns: 1fr; }
-    }
-    .kicker{
-      font-size:12px;
-      letter-spacing:.12em;
-      text-transform: uppercase;
-      color: rgba(0,0,0,.55);
-    }
-    h1{
-      margin:10px 0 10px;
-      font-family: var(--serif);
-      font-size: clamp(34px, 4vw, 54px);
-      line-height:1.05;
-      letter-spacing:-.02em;
-    }
-    .lead{
-      margin:0;
-      color: rgba(0,0,0,.62);
-      line-height:1.85;
-      font-size:14.8px;
-      max-width:58ch;
-    }
-    .chips{
-      display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;
-    }
-    .chip{
-      font-size:12.5px;
-      padding:7px 11px;
-      border:1px solid rgba(0,0,0,.10);
-      border-radius:999px;
-      background: rgba(255,255,255,.55);
-      box-shadow: 0 10px 26px rgba(0,0,0,.06);
-      white-space: nowrap;
-    }
-    .hero-media{
-      border-radius:22px;
-      border:1px solid rgba(0,0,0,.10);
-      background: rgba(255,255,255,.55);
-      box-shadow: 0 20px 60px rgba(0,0,0,.12);
-      padding:12px;
-      overflow:hidden;
-      max-width:460px;
-      margin-left:auto;
-    }
-    @media (max-width: 900px){
-      .hero-media{ margin: 6px auto 0; max-width: 560px; }
-    }
-    .hero-media img{
-      width:100%;
-      display:block;
-      border-radius:16px;
-      aspect-ratio: 4 / 5;
-      object-fit: cover;
-      transform: scale(1.02);
-    }
+.hero-media img{
+  width:100%;
+  border-radius:18px;
+}
 
-    /* ===== Cards ===== */
-    .section{ margin-top:14px; }
-    .card{
-      border-radius: var(--radius-xl);
-      border:1px solid rgba(0,0,0,.10);
-      background: rgba(255,255,255,.70);
-      box-shadow: var(--shadow-md);
-      padding:16px;
-      overflow:hidden;
-      position:relative;
-    }
-    .card::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        radial-gradient(420px 220px at 30% 0%, rgba(255,255,255,.50), transparent 55%),
-        radial-gradient(520px 260px at 85% 20%, rgba(152,165,129,.12), transparent 60%);
-      pointer-events:none;
-    }
-    .card > *{ position:relative; z-index:1; }
+/* ===== Cards ===== */
+.section{ margin-top:18px; }
 
-    .card h2{
-      margin:0 0 10px;
-      font-family: var(--serif);
-      font-size:18px;
-      letter-spacing:.02em;
-    }
+.card{
+  border-radius:var(--radius-xl);
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.70);
+  box-shadow:var(--shadow-md);
+  padding:18px;
+}
 
-    .grid3{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap:12px;
-      margin-top:12px;
-    }
-    @media (max-width: 980px){ .grid3{ grid-template-columns: 1fr; } }
+.grid3{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+@media(max-width:980px){
+  .grid3{ grid-template-columns:1fr; }
+}
 
-    .shot{
-      border-radius:18px;
-      border:1px solid rgba(0,0,0,.10);
-      background: rgba(255,255,255,.62);
-      overflow:hidden;
-      transition: transform .18s ease, box-shadow .18s ease;
-    }
-    .shot:hover{
-      transform: translateY(-2px);
-      box-shadow: 0 18px 44px rgba(0,0,0,.14);
-    }
-    .shot img{
-      width:100%;
-      display:block;
-      aspect-ratio: 4 / 3;
-      object-fit: cover;
-      transform: scale(1.02);
-      transition: transform .22s ease;
-    }
-    .shot:hover img{ transform: scale(1.06); }
-    .cap{
-      padding:10px 12px;
-      color: rgba(0,0,0,.60);
-      font-size:13px;
-      line-height:1.6;
-      border-top: 1px solid rgba(0,0,0,.08);
-      background: rgba(255,255,255,.55);
-    }
+.shot img{
+  width:100%;
+  border-radius:14px;
+}
 
-    .muted{ color: rgba(0,0,0,.60); line-height:1.85; font-size:14px; margin:0; }
+.cap{
+  font-size:13px;
+  color:var(--muted);
+  padding-top:6px;
+}
 
-    .links{ display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; }
-    .pill-link{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:9px 12px;
-      border-radius:999px;
-      border:1px solid rgba(0,0,0,.10);
-      background: rgba(255,255,255,.60);
-      color: rgba(0,0,0,.74);
-      box-shadow: 0 10px 26px rgba(0,0,0,.06);
-      font-size:12.8px;
-      transition:.18s ease;
-      white-space: nowrap;
-    }
-    .pill-link:hover{ transform: translateY(-1px); }
+.links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:10px;
+}
+.pill-link{
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:#fff;
+}
 
-    .footer{
-      margin-top: 18px;
-      padding: 18px 0 0;
-      text-align:center;
-      color: rgba(0,0,0,.55);
-      font-family: var(--serif);
-    }
-  </style>
+.footer{
+  text-align:center;
+  margin-top:20px;
+  font-family:var(--serif);
+  color:var(--muted);
+}
+</style>
 </head>
 
 <body>
-  <header class="topbar">
-    <div class="shell topbar-inner">
-      <a class="brand" href="index.html" aria-label="Home">
-        <span class="brand-kanji">兜</span>
-        <span class="brand-name">KABUTOMARU</span>
-      </a>
 
-      <nav class="nav" aria-label="Primary">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="care.html">Care Tips</a>
-        <a href="shop.html">Shop</a>
-      </nav>
+<!-- ===== 共通Topbar ===== -->
+<header class="topbar">
+  <div class="shell topbar-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-kanji">兜</span>
+      <span class="brand-name">KABUTOMARU</span>
+    </a>
 
-      <div class="social" aria-label="Social">
-        <a class="sbtn" href="#" aria-label="Facebook">f</a>
-        <a class="sbtn" href="#" aria-label="X">x</a>
-        <a class="sbtn" href="#" aria-label="Instagram">◎</a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="care.html">Care Tips</a>
+    </nav>
+
+    <div class="social">
+      <a class="sbtn" href="#">f</a>
+      <a class="sbtn" href="#">x</a>
+      <a class="sbtn" href="#">◎</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <h1>スーパー兜</h1>
+      <p class="lead">
+        白点が強く、全体の“白さ”が目立つタイプ。密度・粒の大きさ・配置で表情が大きく変わります。
+      </p>
+    </div>
+
+    <figure class="hero-media">
+      <img src="images/types/types-super-hero.png" alt="">
+    </figure>
+  </div>
+</section>
+
+<section class="section">
+  <div class="card">
+    <h2>ディテール写真</h2>
+
+    <div class="grid3">
+      <div class="shot">
+        <img src="images/types/types-super-top.png">
+        <div class="cap">上から</div>
+      </div>
+
+      <div class="shot">
+        <img src="images/types/types-super-close.png">
+        <div class="cap">アップ</div>
+      </div>
+
+      <div class="shot">
+        <img src="images/types/types-super-angle.png">
+        <div class="cap">別角度</div>
       </div>
     </div>
-  </header>
+  </div>
+</section>
 
-  <nav class="subbar" aria-label="Breadcrumb">
-    <div class="subbar-inner">
-      <div class="crumb">
-        <a href="types.html">種類別</a>
-        <span aria-hidden="true">›</span>
-        <b>スーパー兜</b>
-      </div>
+<section class="section">
+  <div class="card">
+    <h2>関連タイプ</h2>
 
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <a class="btn" href="types.html">一覧に戻る</a>
-        <a class="btn" href="gallery.html">ギャラリー</a>
-      </div>
+    <div class="links">
+      <a class="pill-link" href="types-normal.html">通常兜</a>
+      <a class="pill-link" href="types-isw.html">ISW兜</a>
+      <a class="pill-link" href="types-hanazono.html">花園兜</a>
+      <a class="pill-link" href="types-royal-super.html">ロイヤルスーパー兜</a>
     </div>
-  </nav>
+  </div>
+</section>
 
-  <main>
-    <section class="hero" aria-label="Type hero">
-      <div class="hero-inner">
-        <div>
-          <div class="kicker">Types / Astrophytum asterias</div>
-          <h1>スーパー兜</h1>
-          <p class="lead">
-            白点が強く、全体の“白さ”が目立つタイプ。密度・粒の大きさ・配置で表情が大きく変わります。
-            “白さ”を出すほど、湿度（蒸れ）との戦いになることもあるので「風と乾き」を優先。
-          </p>
+<footer class="footer">
+© <span id="y"></span> Astro Kabuto
+</footer>
 
-          <div class="chips">
-            <span class="chip">白点強め</span>
-            <span class="chip">存在感</span>
-            <span class="chip">Hero + 3 Detail</span>
-          </div>
-        </div>
+</main>
 
-        <figure class="hero-media">
-          <img src="images/types/types-super-hero.png" alt="スーパー兜 ヒーロー写真" loading="eager">
-        </figure>
-      </div>
-    </section>
+<script>
+document.getElementById("y").textContent =
+new Date().getFullYear();
+</script>
 
-    <section class="section">
-      <div class="card">
-        <h2>ディテール写真</h2>
-
-        <div class="grid3">
-          <div class="shot">
-            <img src="images/types/types-super-top.png" alt="スーパー兜 上から" loading="lazy">
-            <div class="cap">上から：模様の全体像</div>
-          </div>
-
-          <div class="shot">
-            <img src="images/types/types-super-close.png" alt="スーパー兜 アップ" loading="lazy">
-            <div class="cap">アップ：白点の粒と毛</div>
-          </div>
-
-          <div class="shot">
-            <img src="images/types/types-super-angle.png" alt="スーパー兜 別角度" loading="lazy">
-            <div class="cap">別角度：丸みと陰影</div>
-          </div>
-        </div>
-
-        <p class="muted" style="margin-top:12px;">
-          ※白さは「光だけ」じゃなく、風・乾き・季節で変わる。焦らず“崩さない”を優先。
-        </p>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="card">
-        <h2>関連タイプ</h2>
-        <p class="muted">比較すると違いが分かりやすいタイプをまとめました。</p>
-
-        <div class="links">
-          <a class="pill-link" href="types-normal.html">通常兜</a>
-          <a class="pill-link" href="types-isw.html">ISW兜</a>
-          <a class="pill-link" href="types-ruri.html">瑠璃兜</a>
-          <a class="pill-link" href="types-miracle.html">ミラクル兜</a>
-          <a class="pill-link" href="types-ruri-nishiki.html">瑠璃錦兜</a>
-          <a class="pill-link" href="types-hanazono.html">花園兜</a>
-          <a class="pill-link" href="types-royal-super.html">ロイヤルスーパー兜</a>
-        </div>
-      </div>
-    </section>
-
-    <footer class="footer">
-      © <span id="y"></span> Astro Kabuto
-    </footer>
-  </main>
-
-  <script>
-    document.getElementById("y").textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>
+
 

@@ -1804,3 +1804,149 @@ a{ color:inherit; text-decoration:none; }
   }
 
 }
+
+
+/* HEROの「兜丸」だけ小さく */
+.hero-title .kabutomaru{
+  font-size: 0.4em;   /* 0.55〜0.75くらいで好み調整 */
+  line-height: 1;
+}
+.qmark{ display: none !important; }
+
+
+/* Link strip をもっと黒く（最後に貼る） */
+.linkstrip a{
+  color: rgba(0,0,0,.88) !important;   /* もっと黒→ .92 / 真っ黒→ #000 */
+  font-weight: 600 !important;         /* 見やすさUP（不要なら消す） */
+}
+
+.linkstrip .sep{
+  color: rgba(0,0,0,.40) !important;   /* 区切りも少し濃く */
+}
+
+/* =========================
+   GLOBAL TEXT: 濃くして読みやすく（最後に貼る）
+   ========================= */
+
+/* まず“基準の黒”を決める（linkstripと同じ） */
+:root{
+  --text-strong: rgba(0,0,0,.88);
+  --text-normal: rgba(0,0,0,.78);
+  --text-muted:  rgba(0,0,0,.66);
+}
+
+/* 全体の基本色（紙ページ側） */
+body{
+  color: var(--text-normal) !important;
+}
+
+/* 見出し・強調は濃く */
+.mag-h2, .mag-h3, .faq-title, .mag-quote-title,
+.why-title, .sec-title, .banner-lead, .script{
+  color: var(--text-strong) !important;
+}
+
+/* 本文は読みやすい濃さ */
+.mag-p, .mag-sub, .why-desc,
+.faq-sub, .faq-atext p,
+.banner-text{
+  color: var(--text-normal) !important;
+}
+
+/* ちょい薄い要素（必要なら） */
+.mag-muted, .faq-qmark, .faq-amark{
+  color: var(--text-muted) !important;
+}
+/* strip（3ボタン）も同じ黒さ */
+.strip .strip-text{
+  color: rgba(0,0,0,.88) !important;
+  font-weight: 600 !important;
+}
+.strip .strip-ico{
+  color: rgba(0,0,0,.78) !important; /* アイコンは少し薄めが上品 */
+}
+/* mag-h2 と mag-h3 を同じフォントに統一 */
+.mag-h2,
+.mag-h3{
+  font-family: "Kaisei Tokumin","Yuji Syuku",serif !important;
+  font-weight: 700 !important;      /* 太さも揃える（不要なら削除） */
+  letter-spacing: .06em !important; /* 字間も揃える（好みで調整） */
+}
+/* Magazine の学名行をくっきり黒に */
+.mag-lead,
+.mag-lead .mag-italic,
+.mag-lead .mag-muted{
+  color: rgba(0,0,0,.88) !important; /* 真っ黒なら #000 */
+  opacity: 1 !important;            /* mag-muted の薄さを解除 */
+}
+
+/* ついでに少し読みやすく（任意） */
+.mag-lead{
+  font-weight: 600 !important;
+}
+/* Why（なぜ兜丸を集めるのか）をくっきり黒に */
+.why-title,
+.why-desc,
+.why-ico{
+  color: rgba(0,0,0,.88) !important;
+  opacity: 1 !important;
+}
+/* FAQ をくっきり黒に（最後に貼る） */
+.faq .faq-qmark,
+.faq .faq-qtext,
+.faq .faq-chev,
+.faq .faq-amark,
+.faq .faq-atext p{
+  color: rgba(0,0,0,.88) !important;
+  opacity: 1 !important;
+}
+.faq .faq-btn{
+  color: rgba(0,0,0,.88) !important;
+}
+/* FAQ 一覧ボタンを黒に */
+.faq .faq-all{
+  color: rgba(0,0,0,.88) !important;
+}
+.faq .faq-all:hover{
+  color: rgba(0,0,0,.88) !important;
+}
+/* Banner（Rare & Beautiful）文字をくっきり黒に */
+.banner .banner-lead,
+.banner .banner-text{
+  color: rgba(0,0,0,.88) !important; /* 真っ黒なら #000 */
+  opacity: 1 !important;
+}
+/* Varieties 4枚カード：文字をくっきり黒に */
+.mag-var .mag-vcap,
+.mag-var .mag-vcard{
+  color: rgba(0,0,0,.88) !important;
+  opacity: 1 !important;
+}
+.mag-var .mag-vcap{
+  background: rgba(255,255,255,.85) !important;
+  border-top-color: rgba(0,0,0,.12) !important;
+}
+/* More → をくっきり黒に */
+.mag-rule--more .mag-more{
+  color: rgba(0,0,0,.88) !important; /* 真っ黒なら #000 */
+  opacity: 1 !important;
+}
+.mag-rule--more .mag-more:hover{
+  color: rgba(0,0,0,.88) !important;
+}
+/* 4枚カードの “ISW KABUTO / RURI...” を黒く・見やすく */
+.mag-vcap{
+  color: rgba(0,0,0,.90) !important;   /* もっと黒→ .95 / 真っ黒→ #000 */
+  font-weight: 700 !important;
+  letter-spacing: .12em !important;
+  background: rgba(255,255,255,.88) !important; /* 文字が沈むなら背景も少し濃く */
+  border-top: 1px solid rgba(0,0,0,.10) !important;
+}
+/* ===== tips icons color (今のHTMLのままでOK) ===== */
+.tips .tip:nth-child(2) .tip-ico{
+  color: #f2c200; /* 太陽：黄色 */
+}
+
+.tips .tip:nth-child(3) .tip-ico{
+  color: #8b5a2b; /* ピッケル：茶色 */
+}
