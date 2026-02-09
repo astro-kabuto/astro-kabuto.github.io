@@ -374,7 +374,11 @@
       letter-spacing:.08em;
       font-size: 12px;
     }
-
+.hero .hero-sub{
+    color: rgba(0,0,0,.90) !important;  /* 黒 */
+    font-weight: 600 !important;       /* 太さ：500〜700で調整 */
+    text-shadow: none !important;      /* 影を消してくっきり */
+  }
     /* responsive */
     @media (max-width: 980px){
       .grid{ grid-template-columns: 1fr; }
@@ -412,10 +416,14 @@
   <section class="hero-bg">
     <main class="wrap">
       <div class="hero-content">
-        <h1 class="hero-title">Astro Kabutoについて</h1>
+        <h1 class="hero-title">白兜庭園について</h1>
         <p class="hero-sub">
-          Astrophytum asterias（兜丸）を主体に、育てた経験＋栽培哲学ベースの情報を発信。<br>
-          このサイト経由で「育てることがもっと楽しく」なれたら嬉しいです。
+          白兜庭園は、兜丸（Astrophytum asterias）を育てながら、
+写真や成長記録をのんびりまとめているサイトです。
+<br>うまくいったことだけでなく、
+実際に栽培して感じたことや管理の工夫、
+うまくいったことだけでなく失敗も含めて記録しています。
+          
         </p>
         <div class="orn" aria-hidden="true"><span></span></div>
       </div>
@@ -427,8 +435,8 @@
             <div class="card-head">
               <div class="card-ico">✿</div>
               <div>
-                <h2 class="card-title">私たちについて</h2>
-                <div class="card-sub">（このサイトの作者）</div>
+                <h2 class="card-title">私について</h2>
+                
               </div>
             </div>
 
@@ -449,7 +457,7 @@
               <div class="card-ico">🔧</div>
               <div>
                 <h2 class="card-title">大切にしていること</h2>
-                <div class="card-sub">（育て方の考え方）</div>
+                
               </div>
             </div>
 
@@ -470,7 +478,7 @@
               <div class="card-ico">❖</div>
               <div>
                 <h2 class="card-title">どんな兜を育てたい？</h2>
-                <div class="card-sub">（目指す姿）</div>
+                
               </div>
             </div>
 
@@ -481,15 +489,12 @@
               写真と記録で“変化”が分かるサイトにしていきます。
             </p>
 
-            <a class="btn" href="contact.html">お問い合わせ</a>
+            <a class="btn" href="gallery.html">ギャラリーを見る</a>
           </div>
         </article>
       </div>
 
-      <div class="cta">
-        <div class="muted">質問・掲載依頼・感想など、気軽にどうぞ。</div>
-        <a class="btn-wide" href="contact.html">お問い合わせ</a>
-      </div>
+      
     </main>
   </section>
 

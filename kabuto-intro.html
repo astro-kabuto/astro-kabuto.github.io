@@ -1,0 +1,642 @@
+<!-- kabuto-intro.html -->
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>はじめての兜丸 | Astro Kabuto</title>
+  <meta name="description" content="兜丸（Astrophytum asterias）をはじめて知る人向けに、特徴・花・育てやすさをやさしく紹介。トゲが目立ちにくい丸いサボテンの魅力と、始め方をまとめました。" />
+
+  <!-- 既存のfaviconがあるなら合わせてOK -->
+  <!--
+  <link rel="icon" href="images/logo-folder/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="images/logo-folder/favicon-32.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="images/logo-folder/favicon-180.png">
+  -->
+
+  <!-- フォント（お好みで） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="kabuto-intro.css" />
+
+   <style>
+    /* kabuto-intro.css */
+
+/* ===== Theme ===== */
+:root{
+  --paper:#efe6cf;
+  --paper2:#f6f0de;
+  --ink: rgba(0,0,0,.82);
+  --muted: rgba(0,0,0,.60);
+  --line: rgba(0,0,0,.12);
+
+  --card: rgba(255,255,255,.62);
+  --card2: rgba(255,255,255,.72);
+
+  --topbar1:#555a4a;
+  --topbar2:#3f4639;
+
+  --shadow: 0 18px 60px rgba(0,0,0,.10);
+  --shadow2: 0 10px 22px rgba(0,0,0,.08);
+
+  --radius-lg: 22px;
+  --radius: 18px;
+
+  --shell: min(1060px, calc(100% - 40px));
+
+  --serif: "Noto Serif JP", serif;
+  --sans: "Noto Sans JP", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+*{ box-sizing: border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  color: var(--ink);
+  font-family: var(--sans);
+  background: radial-gradient(1200px 700px at 20% -10%, rgba(255,255,255,.55), transparent 55%),
+              radial-gradient(900px 700px at 90% 10%, rgba(255,255,255,.35), transparent 60%),
+              linear-gradient(180deg, var(--paper2), var(--paper));
+}
+
+/* ===== Layout ===== */
+.shell{
+  width: var(--shell);
+  margin: 0 auto;
+}
+.main{
+  padding: 20px 0 70px;
+}
+
+/* ===== Topbar ===== */
+.topbar{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: linear-gradient(180deg, var(--topbar1), var(--topbar2));
+  border-bottom: 1px solid rgba(255,255,255,.14);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.topbar-inner{
+  height: 62px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 16px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  color: rgba(255,255,255,.92);
+  text-decoration:none;
+  letter-spacing:.08em;
+  white-space: nowrap;
+}
+.brand-mark{
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 20px;
+  opacity: .95;
+}
+.brand-text{
+  font-size: 12px;
+  font-weight: 700;
+  opacity: .92;
+}
+.nav{
+  display:flex;
+  gap: 18px;
+  align-items:center;
+}
+.nav a{
+  color: rgba(255,255,255,.80);
+  text-decoration:none;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  padding: 8px 8px;
+  border-radius: 10px;
+}
+.nav a:hover{
+  background: rgba(255,255,255,.10);
+}
+
+/* ===== Subnav ===== */
+.subnav{
+  padding: 10px 0 0;
+}
+.subnav-inner{
+  background: rgba(255,255,255,.55);
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 999px;
+  box-shadow: var(--shadow2);
+  padding: 10px;
+  display:flex;
+  gap: 10px;
+  overflow:auto;
+  scrollbar-width: none;
+}
+.subnav-inner::-webkit-scrollbar{ display:none; }
+
+.subnav-pill{
+  flex: 0 0 auto;
+  text-decoration:none;
+  color: rgba(0,0,0,.72);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.10);
+  background: rgba(255,255,255,.55);
+}
+.subnav-pill:hover{ background: rgba(255,255,255,.75); }
+.subnav-pill.is-active{
+  background: rgba(255,255,255,.90);
+  border-color: rgba(0,0,0,.14);
+}
+
+/* ===== Cards / sections ===== */
+.card{
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow2);
+  padding: 18px;
+}
+.card-title{
+  margin: 0 0 8px;
+  font-family: var(--serif);
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+.card-title-sm{
+  margin: 0 0 8px;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 16px;
+}
+.card-text{
+  margin: 0;
+  line-height: 1.95;
+  color: rgba(0,0,0,.72);
+}
+.bullets{
+  margin: 0;
+  padding-left: 1.1em;
+  line-height: 1.95;
+  color: rgba(0,0,0,.72);
+}
+.callout{
+  background: var(--card2);
+}
+
+/* ===== Buttons ===== */
+.btn-primary{
+  display:inline-flex;
+  align-items:center;
+  gap:.45rem;
+  padding: 10px 16px;
+  border-radius: 999px;
+  text-decoration:none;
+  font-weight: 800;
+  border: 1px solid rgba(0,0,0,.16);
+  background: rgba(255,255,255,.78);
+  color: rgba(0,0,0,.82);
+  box-shadow: 0 10px 26px rgba(0,0,0,.08);
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.btn-primary:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 14px 34px rgba(0,0,0,.12);
+  background: rgba(255,255,255,.92);
+}
+
+.btn-ghost{
+  display:inline-flex;
+  align-items:center;
+  gap:.45rem;
+  padding: 10px 16px;
+  border-radius: 999px;
+  text-decoration:none;
+  font-weight: 800;
+  border: 1px solid rgba(0,0,0,.12);
+  background: rgba(255,255,255,.45);
+  color: rgba(0,0,0,.74);
+}
+.btn-ghost:hover{ background: rgba(255,255,255,.68); }
+
+.cta-row{
+  margin-top: 16px; /* ← “ボタンが近すぎる”問題の対策 */
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ===== Hero ===== */
+.hero{
+  margin-top: 16px;
+  display:grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 16px;
+  align-items: stretch;
+}
+.hero-card{
+  background: rgba(255,255,255,.60);
+  border: 1px solid rgba(0,0,0,.10);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 22px;
+}
+.kicker{
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  color: rgba(0,0,0,.55);
+}
+.hero-title{
+  margin: 0 0 10px;
+  font-family: var(--serif);
+  font-size: 34px;
+  letter-spacing: .02em;
+}
+.hero-lead{
+  margin: 0;
+  line-height: 2.05;
+  color: rgba(0,0,0,.72);
+}
+.hero-cta{
+  margin-top: 16px;
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.mini-note{
+  margin-top: 14px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: rgba(0,0,0,.55);
+}
+.hero-media{
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,.10);
+  box-shadow: var(--shadow);
+  background: rgba(255,255,255,.50);
+  min-height: 240px;
+}
+.hero-media img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display:block;
+}
+.hero-media-placeholder{
+  height: 100%;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 18px;
+  text-align:center;
+}
+.ph-title{
+  font-weight: 900;
+  letter-spacing: .04em;
+  margin-bottom: 6px;
+}
+.ph-sub{
+  font-size: 12px;
+  color: rgba(0,0,0,.55);
+  line-height: 1.7;
+}
+
+/* ===== Grids ===== */
+.grid3{
+  margin-top: 16px;
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.grid2{
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+/* ===== Sections ===== */
+.section{
+  margin-top: 18px;
+}
+.section-head{
+  margin: 0 0 12px;
+}
+.section-title{
+  margin: 0 0 4px;
+  font-family: var(--serif);
+  font-size: 22px;
+  letter-spacing: .02em;
+}
+.section-sub{
+  margin: 0;
+  color: rgba(0,0,0,.60);
+  line-height: 1.8;
+}
+
+/* ===== Table ===== */
+.table-wrap{
+  background: rgba(255,255,255,.50);
+  border: 1px solid rgba(0,0,0,.10);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow2);
+  overflow: hidden;
+}
+.compare{
+  width: 100%;
+  border-collapse: collapse;
+}
+.compare th, .compare td{
+  padding: 14px 14px;
+  border-bottom: 1px solid rgba(0,0,0,.08);
+  vertical-align: top;
+  font-size: 14px;
+}
+.compare thead th{
+  background: rgba(255,255,255,.70);
+  font-weight: 900;
+}
+.compare tbody tr:last-child td{ border-bottom: none; }
+.compare td:first-child{
+  width: 22%;
+  font-weight: 900;
+  color: rgba(0,0,0,.72);
+}
+
+/* ===== Footer CTA ===== */
+.footer-cta{
+  margin-top: 22px;
+}
+.footer-cta-inner{
+  background: rgba(255,255,255,.62);
+  border: 1px solid rgba(0,0,0,.10);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+.footer-cta-title{
+  margin: 0 0 6px;
+  font-family: var(--serif);
+}
+.footer-cta-sub{
+  margin: 0;
+  color: rgba(0,0,0,.62);
+  line-height: 1.9;
+}
+.footer-cta-buttons{
+  margin-top: 14px;
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 980px){
+  .hero{ grid-template-columns: 1fr; }
+  .grid3{ grid-template-columns: 1fr; }
+  .grid2{ grid-template-columns: 1fr; }
+  .compare td:first-child{ width: 34%; }
+}
+
+@media (max-width: 520px){
+  .shell{ width: min(1060px, calc(100% - 22px)); }
+  .topbar-inner{ height: 58px; }
+  .nav{ display:none; } /* モバイルで上の英ナビ消したい場合 */
+  .hero-title{ font-size: 28px; }
+}
+
+  </style>
+</head>
+
+
+<body>
+
+  <!-- ===== Topbar ===== -->
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="index.html" aria-label="Astro Kabuto Home">
+        <span class="brand-mark">兜</span>
+        <span class="brand-text">KABUTOMARU</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="index.html">HOME</a>
+        <a href="about.html">ABOUT</a>
+        <a href="gallery.html">GALLERY</a>
+        <a href="care.html">CARE TIPS</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== Subnav (任意：トップにあるメニューっぽく) ===== -->
+  <div class="subnav">
+    <div class="shell subnav-inner">
+      <a class="subnav-pill is-active" href="kabuto-intro.html">育て方（初心者）</a>
+      <a class="subnav-pill" href="care.html">育て方（詳しく）</a>
+      <a class="subnav-pill" href="gallery.html">写真で楽しむ</a>
+      <a class="subnav-pill" href="record.html">成長記録</a>
+      <a class="subnav-pill" href="types.html">種類別</a>
+      <a class="subnav-pill" href="community.html">コミュニティ</a>
+    </div>
+  </div>
+
+  <main class="shell main">
+
+    <!-- ===== Hero ===== -->
+    <section class="hero">
+      <div class="hero-card">
+        <p class="kicker">BEGINNER GUIDE</p>
+        <h1 class="hero-title">はじめての兜丸</h1>
+        <p class="hero-lead">
+          兜丸（かぶとまる）は、星のような白い模様が特徴のサボテンです。<br>
+          トゲが目立ちにくく、ころんと丸い姿で、はじめて育てる人にも人気があります。<br>
+          ゆっくり育ち、条件がそろうと黄色い花を咲かせてくれるのも魅力です。
+        </p>
+
+        <div class="hero-cta">
+          <a class="btn-primary" href="care.html">育て方の基本を見る →</a>
+          <a class="btn-ghost" href="gallery.html">写真を見る →</a>
+        </div>
+
+        
+      </div>
+
+      <div class="hero-media" aria-hidden="true">
+        <!-- 画像を入れたいならここを使う（任意） -->
+        <!-- <img src="images/intro/hero.jpg" alt="" /> -->
+        <img class="hero-img" src="images/kabuto/intro-hero.jpg" alt="兜丸（Astrophytum asterias）の写真">
+
+      </div>
+    </section>
+
+    <!-- ===== Quick Facts ===== -->
+    <section class="grid3">
+      <article class="card">
+        <h2 class="card-title">兜丸ってどんなサボテン？</h2>
+        <p class="card-text">
+          兜丸（Astrophytum asterias）は、白い点々模様（白点）と球形の姿が特徴です。
+          同じ兜丸でも模様のバランスが違い、見比べるのが楽しい種類です。
+        </p>
+      </article>
+
+      <article class="card">
+        <h2 class="card-title">普通のサボテンと違うところ</h2>
+        <ul class="bullets">
+          トゲがなく、見た目がとてもやさしい
+もこもこした刺座（しざ）は、トゲが退化したもの
+丸い形で置きやすく、インテリアにもなじみやすい
+白点や刺座の並び方が株ごとに違い、表情に個性がある
+
+        </ul>
+      </article>
+
+      <article class="card">
+        <h2 class="card-title">花は咲くの？</h2>
+        <p class="card-text">
+          条件が合うと、黄色い花を咲かせます。
+          いつでも咲くわけではないからこそ、咲いた日の喜びは特別です。
+        </p>
+      </article>
+    </section>
+
+    <!-- ===== Comparison ===== -->
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title">普通のサボテンと比べてみる</h2>
+        <p class="section-sub">「何が違うの？」が一番伝わるので、ざっくり比較します。</p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="compare">
+          <thead>
+            <tr>
+              <th></th>
+              <th>一般的なサボテン</th>
+              <th>兜丸</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>印象</td>
+              <td>トゲが目立つ</td>
+              <td>トゲが目立ちにくい</td>
+            </tr>
+            <tr>
+              <td>形</td>
+              <td>縦に伸びる種類も多い</td>
+              <td>丸く育つ</td>
+            </tr>
+            <tr>
+              <td>楽しみ方</td>
+              <td>迫力・トゲ・シルエット</td>
+              <td>白点の表情・丸さ・花</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== Beginner Tips ===== -->
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title">初心者でも育てられる？</h2>
+        <p class="section-sub">細かい話より、まずはこの3つだけ覚えればOK。</p>
+      </div>
+
+      <div class="grid2">
+        <article class="card">
+          <h3 class="card-title-sm">1) 日当たりは「慣らし」から</h3>
+          <p class="card-text">
+            いきなり強い直射日光に当てると焼けることがあります。
+            少しずつ明るい場所に慣らしていくのが安全です。
+          </p>
+        </article>
+
+        <article class="card">
+          <h3 class="card-title-sm">2) 風通しで蒸れを防ぐ</h3>
+          <p class="card-text">
+            兜丸は蒸れが苦手。特に夏は「風が通るか」を意識すると失敗が減ります。
+          </p>
+        </article>
+
+        <article class="card">
+          <h3 class="card-title-sm">3) 水やりは「乾いてから」</h3>
+          <p class="card-text">
+            土がしっかり乾いてから水をあげるのが基本。
+            季節によって量や回数が変わるので、詳しくは Care Tips へ。
+          </p>
+        </article>
+
+        <article class="card callout">
+          <h3 class="card-title-sm">おすすめの楽しみ方</h3>
+          <p class="card-text">
+            月1回でも写真を撮っておくと、成長の変化が分かって楽しくなります。
+            「育ててる実感」が出るので続きやすいです。
+          </p>
+          <div class="cta-row">
+            <a class="btn-primary" href="record.html">成長記録を見る →</a>
+            <a class="btn-ghost" href="gallery.html">ギャラリーを見る →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== Mini Glossary (任意だけどSEOにも効く) ===== -->
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title">ミニ辞典</h2>
+        <p class="section-sub">言葉が分かると、写真を見るのがもっと楽しくなります。</p>
+      </div>
+
+      <div class="grid3">
+        <article class="card">
+          <h3 class="card-title-sm">白点（はくてん）</h3>
+          <p class="card-text">白い点々模様。密度や並び方で雰囲気が変わります。</p>
+        </article>
+
+        <article class="card">
+          <h3 class="card-title-sm">陵（りょう）</h3>
+          <p class="card-text">放射状のライン（山みたいな筋）。ここが整うと姿がきれいに見えます。</p>
+        </article>
+
+        <article class="card">
+          <h3 class="card-title-sm">刺座（しざ）</h3>
+          <p class="card-text">白点が集まるポイント。兜丸では“刺が目立ちにくい”場所でもあります。</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== Footer CTA ===== -->
+    <section class="footer-cta">
+      <div class="footer-cta-inner">
+        <h2 class="footer-cta-title">次はどこを見る？</h2>
+        <p class="footer-cta-sub">
+          育て方を深掘りするなら Care Tips、いろんな表情を見たいなら Gallery がおすすめです。
+        </p>
+        <div class="footer-cta-buttons">
+          <a class="btn-primary" href="care.html">Care Tipsへ →</a>
+          <a class="btn-ghost" href="gallery.html">Galleryへ →</a>
+          <a class="btn-ghost" href="index.html">HOMEへ戻る →</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>
+
+
