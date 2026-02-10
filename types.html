@@ -338,16 +338,19 @@
       overflow: hidden;
       border: 1px solid rgba(0,0,0,.10);
       background: rgba(255,255,255,.65);
-      aspect-ratio: 4 / 3;
-    }
+      
+  aspect-ratio: 5 / 4; /* 4/3より縦が増える。好みで 1/1 もアリ */
+}
+
+    
     .thumb img{
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display:block;
-      transform: scale(1.02);
-      transition: transform .25s ease;
-    }
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 30% 15%; /* ← 上を見せたいので上寄せ（0〜30%で調整） */
+  transform: scale(1);      /* ← 1.02をやめる */
+}
+
     .type-card:hover .thumb img{
       transform: scale(1.06);
     }
